@@ -1,8 +1,8 @@
-import { useFluxo } from '../hooks/useFluxo'
+import { useFlow } from '../hooks/useFlow'
 import { Button } from '../components/atoms/Button'
 
 export function WelcomePage() {
-  const { nextStep } = useFluxo()
+  const { nextStep } = useFlow()
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row antialiased font-sans">

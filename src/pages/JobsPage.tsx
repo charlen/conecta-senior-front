@@ -1,12 +1,12 @@
 import { PageTemplate } from '../components/templates/PageTemplate'
 import { StepTemplate } from '../components/templates/StepTemplate'
-import { useFluxo } from '../hooks/useFluxo'
+import { useFlow } from '../hooks/useFlow'
 import { Button } from '../components/atoms/Button'
 import { mockJobs } from '../mocks/data'
 import { useState } from 'react'
 
-export function VagasPage() {
-  const { prevStep } = useFluxo()
+export function JobsPage() {
+  const { prevStep } = useFlow()
   const [applied, setApplied] = useState<number[]>([])
 
   return (

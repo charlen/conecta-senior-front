@@ -4,7 +4,7 @@ import { Textarea } from '../atoms/Textarea'
 import { Button } from '../atoms/Button'
 import { ButtonRow } from '../molecules/ButtonRow'
 
-type EntrevistaStepProps = {
+type InterviewStepProps = {
   question: string
   answer: string
   onAnswerChange: (v: string) => void
@@ -14,7 +14,7 @@ type EntrevistaStepProps = {
   total: number
 }
 
-export function EntrevistaStep({ question, answer, onAnswerChange, onBack, onNext, current, total }: EntrevistaStepProps) {
+export function InterviewStep({ question, answer, onAnswerChange, onBack, onNext, current, total }: InterviewStepProps) {
   return (
     <Card>
       <Text>{question}</Text>

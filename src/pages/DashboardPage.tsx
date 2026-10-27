@@ -1,7 +1,7 @@
 import { PageTemplate } from '../components/templates/PageTemplate'
 import { StepTemplate } from '../components/templates/StepTemplate'
 
-export function PainelPage() {
+export function DashboardPage() {
   return (
     <PageTemplate>
       <StepTemplate step={8} total={8} title="Painel">

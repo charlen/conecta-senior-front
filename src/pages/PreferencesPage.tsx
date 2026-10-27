@@ -1,14 +1,14 @@
 import { PageTemplate } from '../components/templates/PageTemplate'
 import { StepTemplate } from '../components/templates/StepTemplate'
-import { useFluxo } from '../hooks/useFluxo'
+import { useFlow } from '../hooks/useFlow'
 import { Button } from '../components/atoms/Button'
 import { Container } from '../components/atoms/Container'
 
 const tipos = ["Meio período","Temporário","Remoto","Presencial"]
 const areas = ["Atendimento","Administrativo","Vendas","Educação"]
 
-export function PreferenciasPage() {
-  const { state, updateTipo, updateArea, nextStep, prevStep } = useFluxo()
+export function PreferencesPage() {
+  const { state, updateTipo, updateArea, nextStep, prevStep } = useFlow()
 
   return (
     <PageTemplate>

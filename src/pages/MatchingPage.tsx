@@ -1,10 +1,10 @@
 import { PageTemplate } from '../components/templates/PageTemplate'
 import { StepTemplate } from '../components/templates/StepTemplate'
-import { useFluxo } from '../hooks/useFluxo'
+import { useFlow } from '../hooks/useFlow'
 import { useEffect, useState } from 'react'
 
 export function MatchingPage() {
-  const { nextStep } = useFluxo()
+  const { nextStep } = useFlow()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

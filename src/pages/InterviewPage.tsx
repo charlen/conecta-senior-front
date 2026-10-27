@@ -1,13 +1,13 @@
 import { PageTemplate } from '../components/templates/PageTemplate'
 import { StepTemplate } from '../components/templates/StepTemplate'
-import { useFluxo } from '../hooks/useFluxo'
+import { useFlow } from '../hooks/useFlow'
 import { interviewQuestions } from '../mocks/data'
 import { useState } from 'react'
 import { Button } from '../components/atoms/Button'
 import { Textarea } from '../components/atoms/Textarea'
 
-export function EntrevistaPage() {
-  const { state, updateEntrevista, nextStep, prevStep } = useFluxo()
+export function InterviewPage() {
+  const { state, updateEntrevista, nextStep, prevStep } = useFlow()
   const [index, setIndex] = useState(0)
   const question = interviewQuestions[index] ?? ''
   const answer = state.entrevista[index] ?? ''

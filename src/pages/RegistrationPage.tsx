@@ -1,11 +1,11 @@
 import { PageTemplate } from '../components/templates/PageTemplate'
 import { StepTemplate } from '../components/templates/StepTemplate'
-import { CadastroForm } from '../components/organisms/CadastroForm'
-import { useFluxo } from '../hooks/useFluxo'
+import { RegistrationForm } from '../components/organisms/RegistrationForm'
+import { useFlow } from '../hooks/useFlow'
 import { useState } from 'react'
 
-export function CadastroPage() {
-  const { state, updateCadastro, nextStep } = useFluxo()
+export function RegistrationPage() {
+  const { state, updateCadastro, nextStep } = useFlow()
   const [nome, setNome] = useState(state.nome)
   const [idade, setIdade] = useState(state.idade)
 
@@ -17,7 +17,7 @@ export function CadastroPage() {
   return (
     <PageTemplate>
       <StepTemplate step={2} total={8} title="Cadastro">
-        <CadastroForm nome={nome} idade={idade} onNomeChange={setNome} onIdadeChange={setIdade} onContinue={handleContinue} />
+        <RegistrationForm nome={nome} idade={idade} onNomeChange={setNome} onIdadeChange={setIdade} onContinue={handleContinue} />
       </StepTemplate>
     </PageTemplate>
   )

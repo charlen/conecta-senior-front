@@ -1,34 +1,34 @@
-import { FluxoProvider } from './contexts/FluxoContext'
+import { FlowProvider } from './contexts/FlowContext'
 import { WelcomePage } from './pages/WelcomePage'
-import { CadastroPage } from './pages/CadastroPage'
-import { EntrevistaPage } from './pages/EntrevistaPage'
-import { CurriculoPage } from './pages/CurriculoPage'
-import { PreferenciasPage } from './pages/PreferenciasPage'
+import { RegistrationPage } from './pages/RegistrationPage'
+import { InterviewPage } from './pages/InterviewPage'
+import { ResumePage } from './pages/ResumePage'
+import { PreferencesPage } from './pages/PreferencesPage'
 import { MatchingPage } from './pages/MatchingPage'
-import { VagasPage } from './pages/VagasPage'
-import { PainelPage } from './pages/PainelPage'
-import { useFluxo } from './hooks/useFluxo'
+import { JobsPage } from './pages/JobsPage'
+import { DashboardPage } from './pages/DashboardPage'
+import { useFlow } from './hooks/useFlow'
 
 function FlowRouter() {
-  const { step } = useFluxo()
+  const { step } = useFlow()
   const steps = [
     WelcomePage,
-    CadastroPage,
-    EntrevistaPage,
-    CurriculoPage,
-    PreferenciasPage,
+    RegistrationPage,
+    InterviewPage,
+    ResumePage,
+    PreferencesPage,
     MatchingPage,
-    VagasPage,
-    PainelPage
+    JobsPage,
+    DashboardPage
   ]
-  const Current = steps[step] ?? PainelPage
+  const Current = steps[step] ?? DashboardPage
   return <Current />
 }
 
 export function App() {
   return (
-    <FluxoProvider>
+    <FlowProvider>
       <FlowRouter />
-    </FluxoProvider>
+    </FlowProvider>
   )
 }

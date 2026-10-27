@@ -1,10 +1,10 @@
 import { PageTemplate } from '../components/templates/PageTemplate'
 import { StepTemplate } from '../components/templates/StepTemplate'
-import { useFluxo } from '../hooks/useFluxo'
+import { useFlow } from '../hooks/useFlow'
 import { Button } from '../components/atoms/Button'
 
-export function CurriculoPage() {
-  const { state, nextStep, prevStep } = useFluxo()
+export function ResumePage() {
+  const { state, nextStep, prevStep } = useFlow()
   return (
     <PageTemplate>
       <StepTemplate step={4} total={8} title="Currículo">

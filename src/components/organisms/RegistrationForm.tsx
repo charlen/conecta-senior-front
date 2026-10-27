@@ -2,7 +2,7 @@ import { FormField } from '../molecules/FormField'
 import { Button } from '../atoms/Button'
 import { ButtonRow } from '../molecules/ButtonRow'
 
-type CadastroFormProps = {
+type RegistrationFormProps = {
   nome: string
   idade: string
   onNomeChange: (v: string) => void
@@ -10,7 +10,7 @@ type CadastroFormProps = {
   onContinue: () => void
 }
 
-export function CadastroForm({ nome, idade, onNomeChange, onIdadeChange, onContinue }: CadastroFormProps) {
+export function RegistrationForm({ nome, idade, onNomeChange, onIdadeChange, onContinue }: RegistrationFormProps) {
   return (
     <>
       <FormField label="Seu nome" id="n" value={nome} onChange={onNomeChange} />

@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useState } from 'react'
 
-export type FluxoState = {
+export type FlowState = {
   nome: string
   idade: string
   entrevista: string[]
@@ -10,8 +10,8 @@ export type FluxoState = {
   area: string
 }
 
-export type FluxoContextType = {
-  state: FluxoState
+export type FlowContextType = {
+  state: FlowState
   updateCadastro: (nome: string, idade: string) => void
   updateEntrevista: (index: number, answer: string) => void
   updatePreferencias: (prefs: string[]) => void
@@ -22,9 +22,9 @@ export type FluxoContextType = {
   step: number
 }
 
-const FluxoContext = createContext<FluxoContextType | undefined>(undefined)
+const FlowContext = createContext<FlowContextType | undefined>(undefined)
 
-const initialState: FluxoState = {
+const initialState: FlowState = {
   nome: '',
   idade: '',
   entrevista: [],
@@ -34,8 +34,8 @@ const initialState: FluxoState = {
   area: ''
 }
 
-export function FluxoProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<FluxoState>(initialState)
+export function FlowProvider({ children }: { children: ReactNode }) {
+  const [state, setState] = useState<FlowState>(initialState)
   const [step, setStep] = useState(0)
 
   const updateCadastro = (nome: string, idade: string) => {
@@ -66,11 +66,11 @@ export function FluxoProvider({ children }: { children: ReactNode }) {
   const prevStep = () => setStep(s => Math.max(0, s - 1))
 
   return (
-    <FluxoContext.Provider value={{ state, updateCadastro, updateEntrevista, updatePreferencias, updateTipo, updateArea, nextStep, prevStep, step }}>
+    <FlowContext.Provider value={{ state, updateCadastro, updateEntrevista, updatePreferencias, updateTipo, updateArea, nextStep, prevStep, step }}>
       {children}
-    </FluxoContext.Provider>
+    </FlowContext.Provider>
   )
 }
 
-export { FluxoContext }
+export { FlowContext }
 
