@@ -20,7 +20,7 @@ src/
     atoms/        Button, Input, Textarea, Label, Container, Heading, Pill, Text
     molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader
     organisms/    RegistrationForm, InterviewStep, WelcomeSection
-    templates/    PageTemplate, StepTemplate
+    templates/    PageTemplate, StepTemplate, HeroStepTemplate, HeroPageTemplate
   contexts/      FlowContext
   hooks/         useFlow
   mocks/         data.ts
@@ -39,7 +39,7 @@ src/
 
 ## Fluxo de trabalho
 - Fluxo guiado por `FlowContext` e `useFlow`
-- Páginas seguem StepTemplate com barra de progresso
+- Páginas seguem `StepTemplate` ou `HeroStepTemplate` com barra de progresso e layout fluido duas colunas
 - Landing inicial em `WelcomePage` com layout duas colunas
 - Vagas em cards Tailwind com badges e tag de compatibilidade
 

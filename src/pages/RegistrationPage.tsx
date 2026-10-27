@@ -1,5 +1,4 @@
-import { PageTemplate } from '../components/templates/PageTemplate'
-import { StepTemplate } from '../components/templates/StepTemplate'
+import { HeroPageTemplate } from '../components/templates/HeroPageTemplate'
 import { RegistrationForm } from '../components/organisms/RegistrationForm'
 import { useFlow } from '../hooks/useFlow'
 import { useState } from 'react'
@@ -15,10 +14,13 @@ export function RegistrationPage() {
   }
 
   return (
-    <PageTemplate>
-      <StepTemplate step={2} total={8} title="Cadastro">
-        <RegistrationForm nome={nome} idade={idade} onNomeChange={setNome} onIdadeChange={setIdade} onContinue={handleContinue} />
-      </StepTemplate>
-    </PageTemplate>
+    <HeroPageTemplate
+      step={2}
+      total={8}
+      title="Cadastro"
+      subtitle="Vamos começar conhecendo você. Suas informações ficam seguras e são usadas apenas para conectar você a oportunidades ideais."
+    >
+      <RegistrationForm nome={nome} idade={idade} onNomeChange={setNome} onIdadeChange={setIdade} onContinue={handleContinue} />
+    </HeroPageTemplate>
   )
 }

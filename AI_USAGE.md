@@ -145,6 +145,27 @@ Solicitação natural de padronização de nomenclatura de código para inglês 
 - `AI_USAGE.md` atualizado com Fase 9
 - Instruções de governança adicionadas ao `AGENTS.md` para atualizar artefatos a cada pedido
 
+## Fase 10 - Fluidez visual inspirada na WelcomePage
+
+**O que foi pedido**
+WelcomePage está perfeita com elegância e separação de partes, mas as demais páginas estavam soltas. Quer algo mais fluido e semelhante à WelcomePage, mantendo foco em pessoas 60+.
+
+**Como foi pedido**
+Solicitação natural para comparar e criar plano de ajuste para deixar as páginas tão boas quanto a WelcomePage.
+
+**O que foi entregue**
+- Análise comparativa: WelcomePage usa layout full-screen duas colunas, imagem de fundo com gradientes, tipografia grande, espaçamento generoso; páginas de step estavam em card centralizado com espaçamento pequeno e inline styles
+- `PageTemplate` ampliado para `max-w-5xl`, padding maior, cantos `rounded-[2.5rem]`
+- `StepTemplate` melhorado com tipografia `text-3xl md:text-4xl lg:text-5xl`, gap `10`, barra progresso com `bg-primary`
+- Criado `HeroStepTemplate` com grid `md:grid-cols-[1.1fr_1.9fr]`, painel visual esquerdo com imagem/gradiente e conteúdo direito
+- `RegistrationPage` migrado para `HeroStepTemplate`, formulário com espaçamento `space-y-8`, botão full-width
+- `InterviewPage` com card de pergunta, badge de progresso, textarea destacado e navegação em linha
+- `PreferencesPage` com seleção em grid de botões grandes `min-h-[84px]`, estados ativos com `bg-primary`
+- `ResumePage` com prévia visual de currículo, avatar, competências e interesses em cards
+- Remoção de `style` inline, adoção total de Tailwind
+- Atualização de `AGENTS.md`, `CHANGELOG.md` e `AI_USAGE.md` conforme governança
+- Build validado com sucesso
+
 ---
 
 **Resumo geral**

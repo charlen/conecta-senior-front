@@ -3,15 +3,15 @@ import { StepTemplate } from '../components/templates/StepTemplate'
 import { useFlow } from '../hooks/useFlow'
 import { Button } from '../components/atoms/Button'
 import { mockJobs } from '../mocks/data'
-import { useState } from 'react'
+
 
 export function JobsPage() {
-  const { prevStep } = useFlow()
-  const [applied, setApplied] = useState<number[]>([])
+  const { prevStep, goToStep, state, toggleCandidatura } = useFlow()
+  const applied = state.candidaturas
 
   return (
     <PageTemplate>
-      <StepTemplate step={5} total={6} title="Vagas para você">
+      <StepTemplate step={7} total={8} title="Vagas para você">
         <div className="flex flex-col gap-6">
           {mockJobs.map(j => {
             const isApplied = applied.includes(j.id)
@@ -29,7 +29,7 @@ export function JobsPage() {
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-800 rounded-full text-lg font-semibold border-2 border-emerald-200 w-fit">
                   {j.score}% compatível
                 </div>
-                <Button variant={isApplied?'secondary':'primary'} disabled={isApplied} onClick={()=>setApplied(a=>[...a,j.id])}>
+                <Button variant={isApplied?'secondary':'primary'} disabled={isApplied} onClick={()=>toggleCandidatura(j.id)}>
                   {isApplied?'Candidatura enviada ✓':'Candidatar-me'}
                 </Button>
               </div>
@@ -38,7 +38,7 @@ export function JobsPage() {
         </div>
         <div className="flex justify-between items-center gap-6 mt-10">
           <Button variant="secondary" onClick={prevStep}>Voltar</Button>
-          <Button variant="primary" onClick={()=>{/* go to painel */}}>Minhas candidaturas ({applied.length})</Button>
+          <Button variant="primary" onClick={()=>goToStep(8)}>Minhas candidaturas ({applied.length})</Button>
         </div>
       </StepTemplate>
     </PageTemplate>

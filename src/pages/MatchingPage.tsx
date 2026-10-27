@@ -17,7 +17,7 @@ export function MatchingPage() {
 
   return (
     <PageTemplate>
-      <StepTemplate step={5} total={6} title="Vagas para você">
+      <StepTemplate step={6} total={8} title="Vagas para você">
         <div>
           {loading ? <p>Procurando as melhores vagas…</p> : <p>Encontradas!</p>}
         </div>

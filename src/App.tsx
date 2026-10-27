@@ -1,5 +1,6 @@
 import { FlowProvider } from './contexts/FlowContext'
 import { WelcomePage } from './pages/WelcomePage'
+import { EmailPage } from './pages/EmailPage'
 import { RegistrationPage } from './pages/RegistrationPage'
 import { InterviewPage } from './pages/InterviewPage'
 import { ResumePage } from './pages/ResumePage'
@@ -13,6 +14,7 @@ function FlowRouter() {
   const { step } = useFlow()
   const steps = [
     WelcomePage,
+    EmailPage,
     RegistrationPage,
     InterviewPage,
     ResumePage,

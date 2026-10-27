@@ -10,6 +10,20 @@
 - Manutenção de textos de UI em português
 - Atualização de imports e referências em App.tsx, páginas e componentes
 
+### Changed
+- Refatoração de fluxo para layout fluido inspirado na WelcomePage
+  - `PageTemplate` ampliado para `max-w-5xl` com padding generoso e cantos arredondados `rounded-[2.5rem]`
+  - `StepTemplate` com tipografia maior, espaçamento `gap-10` e barra de progresso usando `bg-primary`
+  - Novo `HeroStepTemplate` com grid duas colunas, painel visual esquerdo com imagem/gradiente e conteúdo direito
+  - Novo `HeroPageTemplate` com layout full-screen, painel visual esquerdo fora do card e card branco alinhado à direita ocupando todo o conteúdo
+  - `RegistrationPage`, `InterviewPage`, `PreferencesPage`, `ResumePage` migrados para `HeroPageTemplate` com card alinhado à direita em desktop
+  - `RegistrationPage` com formulário melhor espaçado, botão full-width
+  - `InterviewPage` com card de pergunta, badge de progresso, textarea destacado e navegação em linha
+  - `PreferencesPage` com seleção em grid de botões grandes, min-h-[84px], estados ativos com `bg-primary`
+  - `ResumePage` com prévia visual de currículo, avatar, competências e interesses em cards
+- Remoção de `style` inline em favor de classes Tailwind
+- Consistência de tamanhos mínimos 56px para botões, textos `text-xl`+
+
 ## [2026-10-27] Refatoração UI para Tailwind v4 e acessibilidade 60+
 
 ### Added
