@@ -5,7 +5,7 @@ build:
 	docker build -t conecta-senior-front:latest .
 
 publish:
-	docker-compose up -d --build front
+	docker compose up -d --build front
 
 up:
 	docker compose up -d
