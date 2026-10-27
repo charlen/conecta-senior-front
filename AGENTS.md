@@ -6,7 +6,40 @@ Ver `PRINCIPLES.md` para modo de trabalho, qualidade e governança.
 
 ## Convenções
 - TypeScript strict
-- Atomic Design
+- Atomic Design: atoms/molecules/organisms/templates/pages
 - Mensagens UI em português, código em inglês
-- TailwindCSS 4 com tokens `@theme`
-- Tokens em localStorage @conecta-senior:token
+- TailwindCSS 4 com `@import "tailwindcss"` e configuração em `tailwind.config.js`
+- Cor primária registrada no tema: `primary: '#2563eb'`
+- Acessibilidade 60+: tamanhos mínimos text-xl, botões min-h-[56px], contraste alto, espaçamento generoso
+- Tokens legados em `src/styles/tokens.css` mantidos para referência
+
+## Estrutura atual
+```
+src/
+  components/
+    atoms/        Button, Input, Textarea, Label, Container, Heading, Pill, Text
+    molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader
+    organisms/    CadastroForm, EntrevistaStep, WelcomeSection
+    templates/    PageTemplate, StepTemplate
+  contexts/      FluxoContext
+  hooks/         useFluxo
+  mocks/         data.ts
+  pages/         WelcomePage, CadastroPage, EntrevistaPage, CurriculoPage, PreferenciasPage, VagasPage, MatchingPage, PainelPage
+  services/      mockApi.ts
+  styles/        tokens.css
+  index.css      Tailwind entry
+  App.tsx
+  main.tsx
+```
+
+## Scripts
+- `npm run dev`   → Vite dev server
+- `npm run build` → produção
+- `npm run lint`  → ESLint
+
+## Fluxo de trabalho
+- Fluxo guiado por `FluxoContext` e `useFluxo`
+- Páginas seguem StepTemplate com barra de progresso
+- Landing inicial em `WelcomePage` com layout duas colunas
+- Vagas em cards Tailwind com badges e tag de compatibilidade
+
