@@ -115,6 +115,36 @@ Instruções naturais de versionamento e documentação.
 - `CHANGELOG.md` atualizado com entrada 2026-10-27 detalhando Added/Changed/Fixed
 - Commits enviados para main
 
+## Fase 9 - Internacionalização de código e governança de artefatos
+
+**O que foi pedido**
+Muitos arquivos e termos de código estavam em português; deveriam estar em inglês, mantendo apenas textos exibidos ao usuário em português. Planejar e executar correções sem quebrar nada. Atualizar artefatos `AGENTS.md`, `CHANGELOG.md` e `AI_USAGE.md`, e incluir instruções no `AGENTS.md` para que isso seja feito a cada pedido.
+
+**Como foi pedido**
+Solicitação natural de padronização de nomenclatura de código para inglês e atualização de documentação de governança.
+
+**O que foi entregue**
+- Tarefa 714 criada: Internacionalizar nomes de código do frontend para inglês
+- Renomeação de arquivos:
+  - `CadastroPage.tsx → RegistrationPage.tsx`
+  - `CadastroForm.tsx → RegistrationForm.tsx`
+  - `EntrevistaPage.tsx → InterviewPage.tsx`
+  - `EntrevistaStep.tsx → InterviewStep.tsx`
+  - `CurriculoPage.tsx → ResumePage.tsx`
+  - `PreferenciasPage.tsx → PreferencesPage.tsx`
+  - `VagasPage.tsx → JobsPage.tsx`
+  - `PainelPage.tsx → DashboardPage.tsx`
+  - `FluxoContext.tsx → FlowContext.tsx`
+  - `useFluxo.ts → useFlow.ts`
+- Atualização de todos os imports, exports e referências em `App.tsx`, páginas e componentes
+- Tipos renomeados: `FluxoState → FlowState`, `FluxoContextType → FlowContextType`, `FluxoProvider → FlowProvider`, `useFluxo → useFlow`
+- Textos de UI mantidos em português
+- Build validado com sucesso
+- `AGENTS.md` atualizado com estrutura em inglês e seção de governança de artefatos
+- `CHANGELOG.md` atualizado com entrada [Unreleased] documentando internacionalização
+- `AI_USAGE.md` atualizado com Fase 9
+- Instruções de governança adicionadas ao `AGENTS.md` para atualizar artefatos a cada pedido
+
 ---
 
 **Resumo geral**

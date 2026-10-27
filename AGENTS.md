@@ -43,3 +43,11 @@ src/
 - Landing inicial em `WelcomePage` com layout duas colunas
 - Vagas em cards Tailwind com badges e tag de compatibilidade
 
+## Governança de artefatos
+- Após cada pedido/entrega, atualizar `AGENTS.md`, `CHANGELOG.md` e `AI_USAGE.md`
+- `AGENTS.md` deve refletir convenções, estrutura atual e padrões de nomenclatura
+- `CHANGELOG.md` deve registrar alterações em [Unreleased] e versões concluídas
+- `AI_USAGE.md` deve registrar: o que foi pedido, como foi pedido e o que foi entregue
+- Código em inglês, textos de UI em português
+- Validação obrigatória: `npm run build` e `npm run lint` sem erros
+
