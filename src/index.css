@@ -3,3 +3,10 @@
 :root {
   color-scheme: light;
 }
+
+
+#home-left {
+  background-image: url("/public/assets/hero.jpeg");
+  background-repeat: no-repeat;
+  background-position: center top;
+}
