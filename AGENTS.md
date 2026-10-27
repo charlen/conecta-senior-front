@@ -19,12 +19,12 @@ src/
   components/
     atoms/        Button, Input, Textarea, Label, Container, Heading, Pill, Text
     molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader
-    organisms/    CadastroForm, EntrevistaStep, WelcomeSection
+    organisms/    RegistrationForm, InterviewStep, WelcomeSection
     templates/    PageTemplate, StepTemplate
-  contexts/      FluxoContext
-  hooks/         useFluxo
+  contexts/      FlowContext
+  hooks/         useFlow
   mocks/         data.ts
-  pages/         WelcomePage, CadastroPage, EntrevistaPage, CurriculoPage, PreferenciasPage, VagasPage, MatchingPage, PainelPage
+  pages/         WelcomePage, RegistrationPage, InterviewPage, ResumePage, PreferencesPage, JobsPage, MatchingPage, DashboardPage
   services/      mockApi.ts
   styles/        tokens.css
   index.css      Tailwind entry
@@ -38,7 +38,7 @@ src/
 - `npm run lint`  → ESLint
 
 ## Fluxo de trabalho
-- Fluxo guiado por `FluxoContext` e `useFluxo`
+- Fluxo guiado por `FlowContext` e `useFlow`
 - Páginas seguem StepTemplate com barra de progresso
 - Landing inicial em `WelcomePage` com layout duas colunas
 - Vagas em cards Tailwind com badges e tag de compatibilidade

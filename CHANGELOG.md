@@ -3,7 +3,12 @@
 ## [Unreleased]
 
 ### Added
-- Estrutura inicial do projeto
+- Internacionalização dos nomes de código para inglês
+  - Páginas: CadastroPage → RegistrationPage, EntrevistaPage → InterviewPage, CurriculoPage → ResumePage, PreferenciasPage → PreferencesPage, VagasPage → JobsPage, PainelPage → DashboardPage
+  - Organisms: CadastroForm → RegistrationForm, EntrevistaStep → InterviewStep
+  - Context/Hook: FluxoContext → FlowContext, useFluxo → useFlow
+- Manutenção de textos de UI em português
+- Atualização de imports e referências em App.tsx, páginas e componentes
 
 ## [2026-10-27] Refatoração UI para Tailwind v4 e acessibilidade 60+
 
