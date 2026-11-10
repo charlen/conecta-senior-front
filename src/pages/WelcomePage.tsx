@@ -12,7 +12,7 @@ export function WelcomePage() {
         
         {/* A Imagem de Fundo Ocupando Todo o Painel */}
         <img 
-          src="/assets/hero.jpeg" 
+          src="/assets/hero.jpg" 
           alt="Atendente sênior sorridente em uma lanchonete elegante" 
           className="absolute inset-0 w-full h-full object-cover object-top pointer-events-none"
         />
