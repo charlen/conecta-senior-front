@@ -1,6 +1,9 @@
-# conecta-senior-front
+# conecta-senior-front v0.0.1
 
 Frontend seguindo Atomic Design e princípios do Titan Ecosystem.
+
+## Contribuindo
+Mais pessoas vão começar a contribuir. Por favor, siga o `AGENTS.md` e mantenha o código alinhado com o padrão do projeto.
 
 ## Estrutura
 - `src/components/atoms/`

@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: conecta-senior-front
+    restart: unless-stopped    
     networks:
       - conecta-senior-network
     ports:
