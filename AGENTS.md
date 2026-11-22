@@ -51,3 +51,28 @@ src/
 - Código em inglês, textos de UI em português
 - Validação obrigatória: `npm run build` e `npm run lint` sem erros
 
+## Operações de produção
+### Purge Cloudflare
+Zona `zoryuz.com` ID: `caa770491f641bf280d7eac3843f6e84`
+Token env: `CLOUDFLARE_PURGE_TOKEN` definido em `~/.zshrc`
+
+Carregar env e purgar arquivos específicos:
+```bash
+source ~/.zshrc
+curl -X POST "https://api.cloudflare.com/client/v4/zones/caa770491f641bf280d7eac3843f6e84/purge_cache" \
+  -H "Authorization: Bearer $CLOUDFLARE_PURGE_TOKEN" \
+  -H "Content-Type: application/json" \
+  --data '{"files":["https://senior-conecta.zoryuz.com/","https://senior-conecta.zoryuz.com/confirm","https://conecta-senior.zoryuz.com/"]}'
+```
+
+Purge total da zona:
+```bash
+source ~/.zshrc
+curl -X POST "https://api.cloudflare.com/client/v4/zones/caa770491f641bf280d7eac3843f6e84/purge_cache" \
+  -H "Authorization: Bearer $CLOUDFLARE_PURGE_TOKEN" \
+  -H "Content-Type: application/json" \
+  --data '{"purge_everything":true}'
+```
+
+Executar purge após cada merge de front/backend que altera assets ou rotas SPA.
+

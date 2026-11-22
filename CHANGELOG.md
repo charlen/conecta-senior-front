@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Added
+- Documentação de Operações de produção em AGENTS.md: procedimento de purge Cloudflare com zona `caa770491f641bf280d7eac3843f6e84` e uso de `CLOUDFLARE_PURGE_TOKEN` via `~/.zshrc`
+
+### Added
 - Internacionalização dos nomes de código para inglês
   - Páginas: CadastroPage → RegistrationPage, EntrevistaPage → InterviewPage, CurriculoPage → ResumePage, PreferenciasPage → PreferencesPage, VagasPage → JobsPage, PainelPage → DashboardPage
   - Organisms: CadastroForm → RegistrationForm, EntrevistaStep → InterviewStep
