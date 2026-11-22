@@ -16,7 +16,7 @@ export function HeroStepTemplate({ step, total, title, subtitle, visual, childre
       {visual && (
         <div className="hidden md:flex flex-col justify-between min-h-[520px] relative overflow-hidden rounded-[2rem] bg-slate-900 text-white p-10">
           <div className="absolute inset-0">
-            <img src="/assets/hero.jpeg" alt="" className="w-full h-full object-cover opacity-40" />
+            <img src="/assets/hero.jpg" alt="" className="w-full h-full object-cover opacity-40" />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/70 to-slate-950/20" />
           </div>
           <div className="relative z-10">
