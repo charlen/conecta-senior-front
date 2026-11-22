@@ -14,6 +14,7 @@ import CadastroPage from './pages/CadastroPage'
 import ConfirmaEmailPage from './pages/ConfirmaEmailPage'
 import EntrarPage from './pages/EntrarPage'
 import VerificarPage from './pages/VerificarPage'
+import MetodoPage from './pages/MetodoPage'
 import { useFlow } from './hooks/useFlow'
 
 function FlowRouter() {
@@ -49,6 +50,9 @@ export function App() {
   }
   if (path === '/entrar') {
     return <EntrarPage />
+  }
+  if (path === '/comecar/metodo') {
+    return <MetodoPage />
   }
   if (path.startsWith('/confirm')) {
     return <ConfirmPage />
