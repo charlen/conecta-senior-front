@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useState, useEffect } from 'react'
 
 export type FlowState = {
   email: string
@@ -42,8 +42,30 @@ const initialState: FlowState = {
 }
 
 export function FlowProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<FlowState>(initialState)
-  const [step, setStep] = useState(0)
+  const [state, setState] = useState<FlowState>(() => {
+    try {
+      const saved = localStorage.getItem('flow_state')
+      return saved ? JSON.parse(saved) : initialState
+    } catch {
+      return initialState
+    }
+  })
+  const [step, setStep] = useState(() => {
+    try {
+      const saved = localStorage.getItem('flow_step')
+      return saved ? parseInt(saved, 10) : 0
+    } catch {
+      return 0
+    }
+  })
+
+  useEffect(() => {
+    localStorage.setItem('flow_state', JSON.stringify(state))
+  }, [state])
+
+  useEffect(() => {
+    localStorage.setItem('flow_step', String(step))
+  }, [step])
 
   const updateEmail = (email: string) => {
     setState(s => ({ ...s, email }))
