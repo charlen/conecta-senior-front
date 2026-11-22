@@ -18,6 +18,7 @@ import MetodoPage from './pages/MetodoPage'
 import WizardPage from './pages/WizardPage'
 import CurriculoPage from './pages/CurriculoPage'
 import VozPage from './pages/VozPage'
+import RevisaoPage from './pages/RevisaoPage'
 import { useFlow } from './hooks/useFlow'
 
 function FlowRouter() {
@@ -62,6 +63,9 @@ export function App() {
   }
   if (path === '/comecar/curriculo') {
     return <CurriculoPage />
+  }
+  if (path === '/comecar/revisao') {
+    return <RevisaoPage />
   }
   if (path.startsWith('/comecar/passo/')) {
     return <WizardPage />
