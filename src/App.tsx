@@ -9,6 +9,7 @@ import { MatchingPage } from './pages/MatchingPage'
 import { JobsPage } from './pages/JobsPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { ConfirmPage } from './pages/ConfirmPage'
+import DevComponentes from './pages/DevComponentes'
 import { useFlow } from './hooks/useFlow'
 
 function FlowRouter() {
@@ -30,6 +31,9 @@ function FlowRouter() {
 
 export function App() {
   const path = window.location.pathname
+  if (path.startsWith('/dev/componentes')) {
+    return <DevComponentes />
+  }
   return (
     <FlowProvider>
       {path.startsWith('/confirm') ? <ConfirmPage /> : <FlowRouter />}
