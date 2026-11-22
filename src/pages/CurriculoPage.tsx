@@ -50,8 +50,8 @@ export default function CurriculoPage() {
       // Preencher rascunho seria feito com dados retornados
       setProgresso('revisao')
       window.location.href = '/comecar/revisao'
-    } catch (err: any) {
-      setError(err.message || 'Erro ao ler currículo')
+    } catch (err: unknown) {
+      setError((err as Error).message || 'Erro ao ler currículo')
     } finally {
       setLoading(false)
     }

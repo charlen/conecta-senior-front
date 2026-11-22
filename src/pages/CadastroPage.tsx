@@ -20,8 +20,8 @@ export default function CadastroPage() {
     try {
       await authApi.register({ email, password })
       setSuccess(true)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError((err as Error).message)
     } finally {
       setLoading(false)
     }

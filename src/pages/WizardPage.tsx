@@ -110,7 +110,11 @@ function StepHabilidades() {
   const sugestoes = ['Comunicação', 'Liderança', 'Atendimento', 'Organização']
   const toggle = (h: string) => {
     const set = new Set(rascunho.perfil.habilidades)
-    set.has(h) ? set.delete(h) : set.add(h)
+    if (set.has(h)) {
+      set.delete(h)
+    } else {
+      set.add(h)
+    }
     atualizarPerfil({ habilidades: Array.from(set) })
   }
   return (

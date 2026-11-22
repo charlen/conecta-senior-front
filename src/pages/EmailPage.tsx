@@ -27,8 +27,8 @@ export function EmailPage() {
       if (!res.ok) throw new Error(data.error || 'Erro ao registrar')
       // Registro feito, avança para coleta de dados
       nextStep()
-    } catch (e:any) {
-      setError(e.message || 'Erro ao registrar')
+    } catch (e: unknown) {
+      setError((e as Error).message || 'Erro ao registrar')
     } finally {
       setLoading(false)
     }

@@ -5,13 +5,11 @@ import { Label } from '../components/atoms/Label'
 import { Heading } from '../components/atoms/Heading'
 import { Alerta } from '../components/molecules/Alerta'
 import { authApi } from '../services/authApi'
-import { useAuth } from '../hooks/useAuth'
 
 export default function EntrarPage() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { setSession } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -20,12 +18,12 @@ export default function EntrarPage() {
     try {
       // Para simplificar, usamos login com senha. Em produção seria envio de link.
       // Aqui mantemos fluxo de login existente do backend.
-      const res = await authApi.login({ email, password: '' })
+      await authApi.login({ email, password: '' })
       // Backend exige senha, então este fluxo é placeholder.
       // Em implementação real, enviar e-mail para novo link.
       setError('Envie seu e-mail para receber link de acesso')
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError((err as Error).message)
     } finally {
       setLoading(false)
     }

@@ -16,7 +16,9 @@ export function useRascunhoPerfil() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) return JSON.parse(raw) as RascunhoPerfil
-    } catch {}
+    } catch {
+      // ignore parse errors
+    }
     return { perfil: defaultPerfil, progresso: 'metodo' }
   })
 
