@@ -1,6 +1,7 @@
 import { HeroPageTemplate } from '../components/templates/HeroPageTemplate'
 import { useEffect, useState } from 'react'
 import { useFlow } from '../hooks/useFlow'
+import { Button } from '../components/atoms/Button'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
 
@@ -22,7 +23,6 @@ export function ConfirmPage() {
     if (existingToken) {
       setStatus('success')
       setMsg('Conta já confirmada. Bem-vindo(a).')
-      setTimeout(() => nextStep(), 1200)
       return
     }
     fetch(`${API_URL}/users/confirm?token=${token}`)
@@ -33,7 +33,6 @@ export function ConfirmPage() {
         localStorage.setItem('user_id', data.user_id)
         setStatus('success')
         setMsg('Conta confirmada! Bem-vindo(a).')
-        setTimeout(() => nextStep(), 1200)
       })
       .catch(e => {
         // Se token já foi consumido, mas temos JWT salvo, trata como sucesso
@@ -41,19 +40,18 @@ export function ConfirmPage() {
         if (savedToken) {
           setStatus('success')
           setMsg('Conta já confirmada. Bem-vindo(a).')
-          setTimeout(() => nextStep(), 1200)
           return
         }
         setStatus('error')
         setMsg(e.message || 'Erro ao confirmar')
       })
-  }, [nextStep])
+  }, [])
 
   return (
     <HeroPageTemplate step={1} total={8} title="Confirmando sua conta" subtitle="Aguarde um instante">
       <div className="max-w-xl text-center space-y-6">
         {status === 'loading' && <p className="text-xl">Confirmando seu e-mail...</p>}
-        {status === 'success' && <p className="text-xl text-green-600">{msg}</p>}
+        {status === 'success' && (<><p className="text-xl text-green-600">{msg}</p><Button variant="primary" onClick={nextStep} className="w-full text-xl py-5">Continuar cadastro</Button></>)}
         {status === 'error' && <p className="text-xl text-red-600">{msg}</p>}
       </div>
     </HeroPageTemplate>
