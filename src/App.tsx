@@ -8,6 +8,7 @@ import { PreferencesPage } from './pages/PreferencesPage'
 import { MatchingPage } from './pages/MatchingPage'
 import { JobsPage } from './pages/JobsPage'
 import { DashboardPage } from './pages/DashboardPage'
+import { ConfirmPage } from './pages/ConfirmPage'
 import { useFlow } from './hooks/useFlow'
 
 function FlowRouter() {
@@ -28,6 +29,14 @@ function FlowRouter() {
 }
 
 export function App() {
+  const path = window.location.pathname
+  if (path.startsWith('/confirm')) {
+    return (
+      <FlowProvider>
+        <ConfirmPage />
+      </FlowProvider>
+    )
+  }
   return (
     <FlowProvider>
       <FlowRouter />
