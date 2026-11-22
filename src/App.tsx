@@ -30,16 +30,9 @@ function FlowRouter() {
 
 export function App() {
   const path = window.location.pathname
-  if (path.startsWith('/confirm')) {
-    return (
-      <FlowProvider>
-        <ConfirmPage />
-      </FlowProvider>
-    )
-  }
   return (
     <FlowProvider>
-      <FlowRouter />
+      {path.startsWith('/confirm') ? <ConfirmPage /> : <FlowRouter />}
     </FlowProvider>
   )
 }
