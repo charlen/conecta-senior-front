@@ -71,6 +71,9 @@ export function App() {
   if (path === '/comecar/confirmado') {
     return <ConfirmadoPage />
   }
+  if (path === '/vagas') {
+    return <JobsPage />
+  }
   if (path.startsWith('/comecar/passo/')) {
     return <WizardPage />
   }
