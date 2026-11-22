@@ -10,6 +10,10 @@ import { JobsPage } from './pages/JobsPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { ConfirmPage } from './pages/ConfirmPage'
 import DevComponentes from './pages/DevComponentes'
+import CadastroPage from './pages/CadastroPage'
+import ConfirmaEmailPage from './pages/ConfirmaEmailPage'
+import EntrarPage from './pages/EntrarPage'
+import VerificarPage from './pages/VerificarPage'
 import { useFlow } from './hooks/useFlow'
 
 function FlowRouter() {
@@ -34,9 +38,24 @@ export function App() {
   if (path.startsWith('/dev/componentes')) {
     return <DevComponentes />
   }
+  if (path.startsWith('/verificar')) {
+    return <VerificarPage />
+  }
+  if (path === '/cadastro') {
+    return <CadastroPage />
+  }
+  if (path === '/confira-seu-email') {
+    return <ConfirmaEmailPage />
+  }
+  if (path === '/entrar') {
+    return <EntrarPage />
+  }
+  if (path.startsWith('/confirm')) {
+    return <ConfirmPage />
+  }
   return (
     <FlowProvider>
-      {path.startsWith('/confirm') ? <ConfirmPage /> : <FlowRouter />}
+      <FlowRouter />
     </FlowProvider>
   )
 }
