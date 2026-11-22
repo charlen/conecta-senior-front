@@ -5,9 +5,15 @@ Pasta `e2e/` para testes end-to-end do front publicado em https://senior-conecta
 ## Executar
 
 ```bash
-npm run cypress:open   # abre o runner interativo
-npm run cypress:run    # headless
+# Produção
+npm run cypress:open
+npm run cypress:run
+
+# Localhost
+CYPRESS_BASE_URL=http://localhost:5173 npm run cypress:run
 ```
+
+## Estrutura
 
 ## Estrutura
 
