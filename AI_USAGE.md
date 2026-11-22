@@ -145,6 +145,22 @@ Solicitação natural de padronização de nomenclatura de código para inglês 
 - `AI_USAGE.md` atualizado com Fase 9
 - Instruções de governança adicionadas ao `AGENTS.md` para atualizar artefatos a cada pedido
 
+## Fase 11 - Documentação de purge Cloudflare e governança de produção
+
+**O que foi pedido**
+Salvar procedimento de purge da Cloudflare em AGENTS.md para não perder novamente, após correção de db error no fluxo de confirmação por e-mail.
+
+**Como foi pedido**
+Solicitação natural para registrar passo-a-passo de purge usando token `CLOUDFLARE_PURGE_TOKEN` em `~/.zshrc`, zona `caa770491f641bf280d7eac3843f6e84`, com curl para `senior-conecta.zoryuz.com` e `conecta-senior.zoryuz.com`.
+
+**O que foi entregue**
+- Verificação de token via `source ~/.zshrc && printenv | grep CLOUDFLARE`
+- Listagem de zona via API Cloudflare confirmando ID `caa770491f641bf280d7eac3843f6e84`
+- Execução de purge por arquivos específicos e purge total da zona, ambos retornando `{"success":true}`
+- Atualização de `AGENTS.md` com seção Operações de produção / Purge Cloudflare
+- Atualização de `CHANGELOG.md` com registro de documentação
+- Atualização de `AI_USAGE.md` com Fase 11
+
 ## Fase 10 - Fluidez visual inspirada na WelcomePage
 
 **O que foi pedido**

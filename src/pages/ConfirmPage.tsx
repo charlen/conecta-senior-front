@@ -17,6 +17,14 @@ export function ConfirmPage() {
       setMsg('Token não encontrado')
       return
     }
+    // Se já temos JWT salvo, evita re-chamada que retornaria invalid token
+    const existingToken = localStorage.getItem('token')
+    if (existingToken) {
+      setStatus('success')
+      setMsg('Conta já confirmada. Bem-vindo(a).')
+      setTimeout(() => nextStep(), 1200)
+      return
+    }
     fetch(`${API_URL}/users/confirm?token=${token}`)
       .then(r => r.json())
       .then(data => {
@@ -28,6 +36,14 @@ export function ConfirmPage() {
         setTimeout(() => nextStep(), 1200)
       })
       .catch(e => {
+        // Se token já foi consumido, mas temos JWT salvo, trata como sucesso
+        const savedToken = localStorage.getItem('token')
+        if (savedToken) {
+          setStatus('success')
+          setMsg('Conta já confirmada. Bem-vindo(a).')
+          setTimeout(() => nextStep(), 1200)
+          return
+        }
         setStatus('error')
         setMsg(e.message || 'Erro ao confirmar')
       })
