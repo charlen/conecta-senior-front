@@ -17,6 +17,7 @@ import VerificarPage from './pages/VerificarPage'
 import MetodoPage from './pages/MetodoPage'
 import WizardPage from './pages/WizardPage'
 import CurriculoPage from './pages/CurriculoPage'
+import VozPage from './pages/VozPage'
 import { useFlow } from './hooks/useFlow'
 
 function FlowRouter() {
@@ -55,6 +56,9 @@ export function App() {
   }
   if (path === '/comecar/metodo') {
     return <MetodoPage />
+  }
+  if (path === '/comecar/voz') {
+    return <VozPage />
   }
   if (path === '/comecar/curriculo') {
     return <CurriculoPage />
