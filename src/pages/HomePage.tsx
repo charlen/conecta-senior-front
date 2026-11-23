@@ -41,7 +41,7 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Heading className="text-2xl">Conecta Sênior</Heading>
           <div className="flex gap-3">
-            <Button variant="secondary" onClick={() => window.location.href = '/meu-perfil'}>Meu Perfil</Button>
+            <Button variant="secondary" onClick={() => window.location.href = '/vagas'}>Meu Perfil</Button>
             <Button variant="primary" onClick={handleLogout}>Sair</Button>
           </div>
         </div>
