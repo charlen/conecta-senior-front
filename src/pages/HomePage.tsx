@@ -6,10 +6,23 @@ import { ConfirmModal } from '../components/molecules/ConfirmModal'
 import { useAuth } from '../contexts/AuthContext'
 import type { Profile } from '../types/profile'
 
+type Job = {
+  id: string
+  title?: string
+  description?: string
+  company?: string
+  location?: string
+  modality?: string
+  salary_min?: number
+  salary_max?: number
+  status?: string
+  score?: number
+}
+
 export function HomePage() {
   const [query, setQuery] = useState('')
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [jobs, setJobs] = useState<unknown[]>([])
+  const [jobs, setJobs] = useState<Job[]>([])
   const { setToken, token, role } = useAuth()
   const [confirmOpen, setConfirmOpen] = useState(false)
 
@@ -44,7 +57,21 @@ export function HomePage() {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())
-      .then(data => setJobs(data.jobs || []))
+      .then(data => {
+        const all = (data.jobs || []).map((j: Record<string, unknown>) => ({
+          id: (j.id as string) ?? (j.ID as string),
+          title: (j.title as string) ?? (j.Title as string),
+          description: (j.description as string) ?? (j.Description as string),
+          company: (j.company as string) ?? (j.Company?.CompanyName as string) ?? '',
+          location: (j.location as string) ?? (j.Location as string),
+          modality: (j.modality as string) ?? (j.Modality as string),
+          salary_min: (j.salary_min as number) ?? (j.SalaryMin as number),
+          salary_max: (j.salary_max as number) ?? (j.SalaryMax as number),
+          status: (j.status as string) ?? (j.Status as string),
+          score: (j.score as number) ?? 0,
+        }))
+        setJobs(all)
+      })
       .catch(() => {})
   }, [token])
 
@@ -54,7 +81,7 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Heading className="text-2xl">Conecta Sênior</Heading>
           <div className="flex gap-3">
-            {role === 'company' && <Button variant="secondary" onClick={() => window.location.href = '/vagas/nova'}>Incluir vaga</Button>}
+            {role === 'company' && <Button variant="secondary" onClick={() => window.location.href = '/minhas-vagas'}>Minhas vagas</Button>}
             <Button variant="primary" onClick={openConfirm}>Sair</Button>
           </div>
         </div>
@@ -92,8 +119,12 @@ export function HomePage() {
           <div className="space-y-4">
             {jobs.filter(j => !query || (j.title?.toLowerCase().includes(query.toLowerCase()) || j.company?.toLowerCase().includes(query.toLowerCase()))).map(j => (
               <div key={j.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-                <h3 className="text-xl font-bold">{j.title} — {j.company}</h3>
+                <h3 className="text-xl font-bold">{j.title} {j.company ? `— ${j.company}` : ''}</h3>
                 <p className="text-slate-600 mt-2">{j.description}</p>
+                <div className="mt-3 flex flex-wrap gap-2 text-sm text-slate-700">
+                  {j.location && <span className="px-3 py-1 bg-slate-100 rounded-full">{j.location}</span>}
+                  {j.modality && <span className="px-3 py-1 bg-slate-100 rounded-full">{j.modality}</span>}
+                </div>
                 <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                   <span className="px-3 py-1 bg-emerald-50 text-emerald-800 rounded-full font-semibold self-start">{j.score ?? 0}% compatível</span>
                   <Button variant="primary" className="w-full md:w-auto">Candidatar-me</Button>

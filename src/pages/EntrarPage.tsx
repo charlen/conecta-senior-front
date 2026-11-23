@@ -106,7 +106,7 @@ export default function EntrarPage() {
                 {loading ? (mode === 'code' ? 'Enviando...' : 'Entrando...') : (mode === 'code' ? 'Enviar código' : 'Entrar')}
               </Button>
             </form>
-            <button type="button" onClick={() => setMode(mode === 'code' ? 'password' : 'code')} className="w-full pt-4 text-blue-600 text-lg hover:underline">
+            <button type="button" onClick={() => setMode(mode === 'code' ? 'password' : 'code')} className="w-full pt-4 text-blue-600 text-lg cursor-pointer hover:text-blue-800 hover:no-underline">
               {mode === 'code' ? 'Entrar com Usuário e Senha' : 'Entrar com código único'}
             </button>
           </>

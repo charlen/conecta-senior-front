@@ -5,6 +5,8 @@ type AuthContextType = {
   setToken: (t: string | null) => void
   isAuthenticated: boolean
   role: string | null
+  userName: string | null
+  userEmail: string | null
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -12,16 +14,25 @@ const AuthContext = createContext<AuthContextType>({
   setToken: () => {},
   isAuthenticated: false,
   role: null,
+  userName: null,
+  userEmail: null,
 })
 
-function decodeRole(token: string | null): string | null {
+function decodePayload(token: string | null) {
   if (!token) return null
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]))
-    return payload.role || null
+    return JSON.parse(atob(token.split('.')[1]))
   } catch {
     return null
   }
+}
+function decodeRole(token: string | null): string | null {
+  const p = decodePayload(token)
+  return p?.role || null
+}
+function decodeUser(token: string | null) {
+  const p = decodePayload(token)
+  return { name: p?.name || p?.companyName || null, email: p?.email || null }
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -42,9 +53,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const role = decodeRole(token)
+  const { name: userName, email: userEmail } = decodeUser(token) || { name: null, email: null }
 
   return (
-    <AuthContext.Provider value={{ token, setToken, isAuthenticated: !!token, role }}>
+    <AuthContext.Provider value={{ token, setToken, isAuthenticated: !!token, role, userName, userEmail }}>
       {children}
     </AuthContext.Provider>
   )

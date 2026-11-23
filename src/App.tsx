@@ -23,6 +23,9 @@ import VozPage from './pages/VozPage'
 import RevisaoPage from './pages/RevisaoPage'
 import ConfirmadoPage from './pages/ConfirmadoPage'
 import PerfilPage from './pages/PerfilPage'
+import MinhasVagasPage from './pages/MinhasVagasPage'
+import IncluirVagaPage from './pages/IncluirVagaPage'
+import EditarVagaPage from './pages/EditarVagaPage'
 import { useFlow } from './hooks/useFlow'
 
 function FlowRouter() {
@@ -46,7 +49,7 @@ function AppRoutes() {
   const path = window.location.pathname
   const { isAuthenticated } = useAuth()
 
-  if (isAuthenticated && path !== '/vagas' && path !== '/meu-perfil' && !path.startsWith('/comecar')) {
+  if (isAuthenticated && path !== '/vagas' && path !== '/meu-perfil' && path !== '/minhas-vagas' && path !== '/vagas/nova' && !path.startsWith('/comecar') && !path.startsWith('/vagas/editar/') && !path.startsWith('/vagas/') ) {
     window.location.href = '/vagas'
     return null
   }
@@ -86,6 +89,18 @@ function AppRoutes() {
   }
   if (path === '/meu-perfil') {
     return <PerfilPage />
+  }
+  if (path === '/minhas-vagas') {
+    return <MinhasVagasPage />
+  }
+  if (path === '/vagas/nova') {
+    return <IncluirVagaPage />
+  }
+  if (path.startsWith('/vagas/editar/')) {
+    return <EditarVagaPage />
+  }
+  if (path.startsWith('/vagas/') && path.split('/').length >= 3) {
+    return <div className="min-h-screen bg-slate-50 p-6"><div className="max-w-2xl mx-auto"><h1 className="text-2xl font-bold">Candidatos</h1><p className="text-slate-600 mt-4">Em breve.</p></div></div>
   }
   if (path.startsWith('/comecar/passo/')) {
     return <WizardPage />
