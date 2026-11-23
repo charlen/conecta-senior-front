@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from 'react'
 import { RascunhoPerfil, Perfil, MetodoPreenchimento } from '../types/perfil'
 
 const STORAGE_KEY = 'cs_rascunho_perfil'
-const AI_KEY = 'cs_resume_ai'
 
 const defaultPerfil: Perfil = {
   dadosBasicos: { nomeCompleto: '', cidade: '', estado: '', telefone: '' },
@@ -52,8 +51,10 @@ export function useRascunhoPerfil() {
     if (!meRes.ok) return
     const me = await meRes.json()
     const profileId = me.id
-    // Mapear rascunho para estrutura parsed/resume
-    const parsed = {
+    const aiRaw = localStorage.getItem('cs_resume_ai')
+    const ai = aiRaw ? JSON.parse(aiRaw) : null
+    // Priorizar dados da IA se existirem
+    const parsed = ai?.parsed || {
       name: rascunho.perfil.dadosBasicos.nomeCompleto || '',
       email: '',
       location: `${rascunho.perfil.dadosBasicos.cidade}, ${rascunho.perfil.dadosBasicos.estado}`,
@@ -69,7 +70,7 @@ export function useRascunhoPerfil() {
         period: ''
       }))
     }
-    const resume = {
+    const resume = ai?.resume || {
       profile_summary: rascunho.perfil.sobreMim || '',
       core_competencies: rascunho.perfil.habilidades,
       ideal_roles: []
