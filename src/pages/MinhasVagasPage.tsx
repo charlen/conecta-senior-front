@@ -35,7 +35,7 @@ export default function MinhasVagasPage() {
         <div className="flex items-center gap-4 mb-6">
           <img src="https://i.pravatar.cc/80?img=12" alt="Empresa" className="w-16 h-16 rounded-full object-cover border-4 border-[#2563eb]/20" />
           <div>
-            <Heading className="text-3xl">{company.name || userName || 'Empresa'}</Heading>
+            <Heading className="text-3xl">{company.name || userName || (userEmail ? userEmail.split('@')[0] : 'Empresa')}</Heading>
             <p className="text-slate-600">{company.email || userEmail || ''}</p>
           </div>
         </div>
