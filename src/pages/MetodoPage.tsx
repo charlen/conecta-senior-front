@@ -23,8 +23,8 @@ export default function MetodoPage() {
           <Heading className="text-2xl">Conecta Sênior</Heading>
         </div>
       </header>
-      <main className="max-w-7xl mx-auto px-6 py-10">
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
+      <main className="max-w-7xl mx-auto px-0 md:px-6 py-10">
+        <div className="bg-white rounded-none md:rounded-3xl p-6 md:p-8 shadow-none md:shadow-sm border-0 md:border border-slate-200">
           <Heading className="text-3xl">Como você prefere preencher?</Heading>
           <Text className="mt-2 text-lg text-slate-600">Escolha a forma mais confortável para você</Text>
           <div className="grid md:grid-cols-3 gap-6 mt-8">
