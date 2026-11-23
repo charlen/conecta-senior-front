@@ -19,6 +19,7 @@ export default function RevisaoPage() {
         <div className="bg-white rounded-xl p-6 mt-4 space-y-4">
           <div>
             <Text className="font-medium">Dados básicos</Text>
+            <p>Nome: {rascunho.perfil.dadosBasicos.nomeCompleto || '-'}</p>
             <p>Cidade: {rascunho.perfil.dadosBasicos.cidade}</p>
             <p>Estado: {rascunho.perfil.dadosBasicos.estado}</p>
             <p>Telefone: {rascunho.perfil.dadosBasicos.telefone}</p>
@@ -47,6 +48,12 @@ export default function RevisaoPage() {
           <div>
             <Text className="font-medium">Sobre</Text>
             <p>{rascunho.perfil.sobreMim}</p>
+          </div>
+          <div>
+            <Text className="font-medium">Resumo extraído</Text>
+            <p>Habilidades: {rascunho.perfil.habilidades.join(', ')}</p>
+            <p>Experiências: {rascunho.perfil.experiencias.map(e=>`${e.cargo} @ ${e.empresa}`).join(' | ')}</p>
+            <p>Formação: {rascunho.perfil.formacao.map(f=>`${f.curso} - ${f.instituicao}`).join(' | ')}</p>
           </div>
         </div>
         <div className="flex justify-between mt-6">

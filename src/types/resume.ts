@@ -25,7 +25,7 @@ export interface ParsedResume {
 
 export interface ResumeAnalysis {
   profile_summary?: string;
-  what_he_does?: string;
+  what_does?: string;
   core_competencies?: string[];
   key_strengths?: string[];
   highlights_for_recruiter?: string[];
