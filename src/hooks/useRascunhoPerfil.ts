@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { RascunhoPerfil, Perfil, MetodoPreenchimento } from '../types/perfil'
 
 const STORAGE_KEY = 'cs_rascunho_perfil'
+const AI_KEY = 'cs_resume_ai'
 
 const defaultPerfil: Perfil = {
   dadosBasicos: { nomeCompleto: '', cidade: '', estado: '', telefone: '' },

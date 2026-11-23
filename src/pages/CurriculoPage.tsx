@@ -56,6 +56,8 @@ export default function CurriculoPage() {
       })
       if (!res.ok) throw new Error('Falha ao processar currículo')
       const data: ResumeResponse = await res.json()
+      // Salvar dados da IA separadamente
+      localStorage.setItem('cs_resume_ai', JSON.stringify(data))
       // Preencher rascunho com dados extraídos via localStorage
       const rascunhoRaw = localStorage.getItem('cs_rascunho_perfil')
       const rascunho = rascunhoRaw ? JSON.parse(rascunhoRaw) : { perfil: { dadosBasicos: {}, experiencias: [], formacao: [], habilidades: [] } }

@@ -5,6 +5,8 @@ import { useRascunhoPerfil } from '../hooks/useRascunhoPerfil'
 
 export default function RevisaoPage() {
   const { rascunho, salvarPerfil } = useRascunhoPerfil()
+  const aiRaw = localStorage.getItem('cs_resume_ai')
+  const ai = aiRaw ? JSON.parse(aiRaw) : null
 
   const confirmar = async () => {
     await salvarPerfil()
@@ -50,10 +52,19 @@ export default function RevisaoPage() {
             <p>{rascunho.perfil.sobreMim}</p>
           </div>
           <div>
-            <Text className="font-medium">Resumo extraído</Text>
-            <p>Habilidades: {rascunho.perfil.habilidades.join(', ')}</p>
-            <p>Experiências: {rascunho.perfil.experiencias.map(e=>`${e.cargo} @ ${e.empresa}`).join(' | ')}</p>
-            <p>Formação: {rascunho.perfil.formacao.map(f=>`${f.curso} - ${f.instituicao}`).join(' | ')}</p>
+            <Text className="font-medium">Resumo extraído pela IA</Text>
+            {ai ? (
+              <>
+                <p><strong>Perfil:</strong> {ai.resume?.profile_summary || '-'}</p>
+                <p><strong>O que faz:</strong> {ai.resume?.what_does || '-'}</p>
+                <p><strong>Competências:</strong> {(ai.resume?.core_competencies || []).join(', ')}</p>
+                <p><strong>Habilidades:</strong> {(ai.parsed?.skills || []).join(', ')}</p>
+                <p><strong>Experiências:</strong> {(ai.parsed?.experience || []).map(e=>`${e.role || ''} @ ${e.company || ''}`).join(' | ')}</p>
+                <p><strong>Formação:</strong> {(ai.parsed?.education || []).map(e=>`${e.degree || ''} - ${e.institution || ''}`).join(' | ')}</p>
+              </>
+            ) : (
+              <p>Sem dados de IA ainda.</p>
+            )}
           </div>
         </div>
         <div className="flex justify-between mt-6">
