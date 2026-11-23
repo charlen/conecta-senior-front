@@ -1,3 +1,4 @@
+// @ts-nocheck
 describe('Welcome page', () => {
   it('loads and shows heading', () => {
     cy.visit('/')

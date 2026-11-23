@@ -19,8 +19,8 @@ export function WelcomePage() {
         />
         
         {/* Filtro Cinematográfico e Camada de Degradê Duplo para Legibilidade */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-950/10 mix-blend-multiply opacity-95 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 via-transparent to-transparent opacity-60 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/60 to-slate-950/10 mix-blend-multiply opacity-95 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-t from-blue-900/50 via-transparent to-transparent opacity-60 pointer-events-none" />
 
         {/* Conteúdo flutuando sobre a imagem */}
         <div className="relative z-10 space-y-6 md:space-y-8">
@@ -44,8 +44,18 @@ export function WelcomePage() {
       </div>
 
       {/* Lado Direito - Área de Ação Principal */}
-      <div className="w-full md:w-7/12 flex flex-col justify-between p-8 md:p-12 lg:p-16 bg-white">
+      <div className="w-full md:w-7/12 flex flex-col justify-between p-8 md:p-12 lg:p-16 bg-white relative">
         
+        {/* Botões topo direito */}
+        <div className="absolute top-6 right-6 md:top-8 md:right-8 flex gap-3">
+          <Button variant="secondary" onClick={() => window.location.href = '/entrar'} className="text-lg py-3 px-6 rounded-xl">
+            Entrar
+          </Button>
+          <Button variant="primary" onClick={() => window.location.href = '/cadastro'} className="text-lg py-3 px-6 rounded-xl">
+            Cadastrar
+          </Button>
+        </div>
+
         {/* Div invisível para ajudar no alinhamento vertical flex-col no desktop */}
         <div className="hidden md:block" />
 
@@ -73,13 +83,7 @@ export function WelcomePage() {
           </div>
         </div>
 
-        {/* Disclaimer Refinado integrado como nota de rodapé discreta */}
-        <div className="mt-8 md:mt-0 pt-6 border-t border-slate-100 flex items-center gap-2.5 text-slate-400 text-sm md:text-base">
-          <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
-          <p>
-            <span className="font-semibold text-slate-500">Versão MVP:</span> Ambiente de demonstração com vagas e perfis ilustrativos.
-          </p>
-        </div>
+
 
       </div>
 

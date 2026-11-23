@@ -3,11 +3,13 @@ import { useFlow } from '../hooks/useFlow'
 import { Button } from '../components/atoms/Button'
 import { Input } from '../components/atoms/Input'
 import { useState } from 'react'
+import { useAuth } from '../hooks/useAuth'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
 
 export function EmailPage() {
-  const { state, updateEmail, nextStep } = useFlow()
+  const { state, updateEmail } = useFlow()
+  const { setSession } = useAuth()
   const email = state.email || ''
   const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   const [loading, setLoading] = useState(false)
@@ -25,10 +27,11 @@ export function EmailPage() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Erro ao registrar')
-      // Registro feito, avança para coleta de dados
-      nextStep()
-    } catch (e:any) {
-      setError(e.message || 'Erro ao registrar')
+      // Cria sessão mock e redireciona para onboarding novo
+      setSession('mock-token-' + Date.now(), 'user-' + Date.now())
+      window.location.href = '/comecar/metodo'
+    } catch (e: unknown) {
+      setError((e as Error).message || 'Erro ao registrar')
     } finally {
       setLoading(false)
     }

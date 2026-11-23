@@ -18,14 +18,14 @@ Ver `PRINCIPLES.md` para modo de trabalho, qualidade e governança.
 src/
   components/
     atoms/        Button, Input, Textarea, Label, Container, Heading, Pill, Text
-    molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader
+    molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader, BarraProgresso
     organisms/    RegistrationForm, InterviewStep, WelcomeSection
     templates/    PageTemplate, StepTemplate, HeroStepTemplate, HeroPageTemplate
   contexts/      FlowContext
-  hooks/         useFlow
+  hooks/         useFlow, useRascunhoPerfil
   mocks/         data.ts
-  pages/         WelcomePage, RegistrationPage, InterviewPage, ResumePage, PreferencesPage, JobsPage, MatchingPage, DashboardPage
-  services/      mockApi.ts
+  pages/         WelcomePage, RegistrationPage, InterviewPage, ResumePage, PreferencesPage, JobsPage, MatchingPage, DashboardPage, WizardPage, CurriculoPage, VozPage, RevisaoPage, ConfirmadoPage
+  services/      mockApi.ts, authApi.ts
   styles/        tokens.css
   index.css      Tailwind entry
   App.tsx
@@ -39,9 +39,11 @@ src/
 
 ## Fluxo de trabalho
 - Fluxo guiado por `FlowContext` e `useFlow`
+- Onboarding manual via `WizardPage` com `BarraProgresso`, navegação Voltar/Continuar, validação gentil e “Adicionar outra” para experiências/formação
 - Páginas seguem `StepTemplate` ou `HeroStepTemplate` com barra de progresso e layout fluido duas colunas
 - Landing inicial em `WelcomePage` com layout duas colunas
 - Vagas em cards Tailwind com badges e tag de compatibilidade
+- Rotas onboarding: `/comecar/metodo`, `/comecar/voz`, `/comecar/curriculo`, `/comecar/passo/:n`, `/comecar/revisao`, `/comecar/confirmado`
 
 ## Governança de artefatos
 - Após cada pedido/entrega, atualizar `AGENTS.md`, `CHANGELOG.md` e `AI_USAGE.md`
@@ -50,6 +52,7 @@ src/
 - `AI_USAGE.md` deve registrar: o que foi pedido, como foi pedido e o que foi entregue
 - Código em inglês, textos de UI em português
 - Validação obrigatória: `npm run build` e `npm run lint` sem erros
+- **Sempre validar build Go antes de commit**: `go build -o /tmp/main ./cmd` deve passar sem erros
 
 ## Operações de produção
 ### Purge Cloudflare
