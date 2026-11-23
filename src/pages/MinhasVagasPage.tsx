@@ -57,7 +57,7 @@ export default function MinhasVagasPage() {
               </div>
             </div>
           ))}
-          {jobs.length === 0 && <p className="text-slate-600">Nenhuma vaga cadastrada.</p>}
+          {jobs.length === 0 && <p className="text-slate-600 text-center py-12">Nenhuma vaga cadastrada.</p>}
         </div>
       </div>
     </div>
