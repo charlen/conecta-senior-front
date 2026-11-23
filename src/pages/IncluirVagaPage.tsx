@@ -40,11 +40,15 @@ export default function IncluirVagaPage() {
         const created = await createRes.json()
         companyId = created.id
       }
-      await fetch(`${API}/jobs`, {
+      const res = await fetch(`${API}/jobs`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ title, description, company_id: companyId, location, modality, salary_min: salaryMin ? Number(salaryMin) : undefined, salary_max: salaryMax ? Number(salaryMax) : undefined, status })
       })
+      if (!res.ok) {
+        const err = await res.text()
+        throw new Error(err || 'Falha ao criar vaga')
+      }
       window.location.href = '/minhas-vagas'
     } finally {
       setLoading(false)
