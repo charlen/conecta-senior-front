@@ -24,7 +24,7 @@ export default function RevisaoPage() {
         <Text className="mt-2">Confira os dados antes de confirmar</Text>
         <div className="bg-white rounded-xl p-6 mt-4 space-y-6">
           <section>
-            <Heading level={3} className="text-xl mb-3">Dados básicos</Heading>
+            <Heading className="text-xl mb-3">Dados básicos</Heading>
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div><span className="text-gray-500">Nome</span><p className="font-medium">{rascunho.perfil.dadosBasicos.nomeCompleto || '-'}</p></div>
               <div><span className="text-gray-500">Cidade</span><p className="font-medium">{rascunho.perfil.dadosBasicos.cidade}</p></div>
@@ -35,7 +35,7 @@ export default function RevisaoPage() {
 
           {ai && (
             <section className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-              <Heading level={3} className="text-xl mb-3">Resumo profissional</Heading>
+              <Heading className="text-xl mb-3">Resumo profissional</Heading>
               <p className="text-sm leading-relaxed mb-3">{ai.resume?.profile_summary || '-'}</p>
               <p className="text-sm text-gray-700"><strong>O que faz:</strong> {ai.resume?.what_does || '-'}</p>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -45,7 +45,7 @@ export default function RevisaoPage() {
           )}
 
           <section>
-            <Heading level={3} className="text-xl mb-3">Experiência</Heading>
+            <Heading className="text-xl mb-3">Experiência</Heading>
             <div className="space-y-3">
               {experiencias.map((exp,i)=>(
                 <div key={i} className="border-l-2 border-primary pl-3">
@@ -57,7 +57,7 @@ export default function RevisaoPage() {
           </section>
 
           <section>
-            <Heading level={3} className="text-xl mb-3">Formação</Heading>
+            <Heading className="text-xl mb-3">Formação</Heading>
             <div className="space-y-2">
               {formacao.map((f,i)=>(
                 <div key={i}>
@@ -69,14 +69,14 @@ export default function RevisaoPage() {
           </section>
 
           <section>
-            <Heading level={3} className="text-xl mb-3">Habilidades</Heading>
+            <Heading className="text-xl mb-3">Habilidades</Heading>
             <div className="flex flex-wrap gap-2">
               {habilidades.map((h,i)=><span key={i} className="px-3 py-1 bg-gray-100 rounded-full text-sm">{h}</span>)}
             </div>
           </section>
 
           <section>
-            <Heading level={3} className="text-xl mb-3">Preferências</Heading>
+            <Heading className="text-xl mb-3">Preferências</Heading>
             <p className="text-sm">Tipo: <strong>{rascunho.perfil.preferencias.tipoVaga}</strong></p>
             <p className="text-sm">Local: <strong>{rascunho.perfil.preferencias.localidade}</strong></p>
           </section>
