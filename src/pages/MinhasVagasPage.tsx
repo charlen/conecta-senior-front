@@ -48,7 +48,12 @@ export default function MinhasVagasPage() {
     <div className="min-h-screen bg-slate-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <Heading className="text-2xl">Conecta Sênior</Heading>
+          <div className="flex items-center gap-4">
+            <button onClick={() => window.history.back()} className="p-2 rounded-full hover:bg-slate-200 cursor-pointer">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <Heading className="text-2xl">Conecta Sênior</Heading>
+          </div>
           <Button variant="primary" onClick={() => window.location.href = '/vagas/nova'}>Incluir vaga</Button>
         </div>
         <div className="flex items-center gap-4 mb-6">
