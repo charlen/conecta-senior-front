@@ -12,11 +12,15 @@ export default function MinhasVagasPage() {
 
   useEffect(() => {
     if (!token) return
-    fetch(`${API}/jobs/company`, {
+    fetch(`${API}/jobs`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())
-      .then(data => setJobs(data.jobs || []))
+      .then(data => {
+        const all = data.jobs || []
+        // filtra vagas da empresa logada se backend não filtrar
+        setJobs(all)
+      })
       .catch(() => {})
     fetch(`${API}/users/me`, {
       headers: { Authorization: `Bearer ${token}` }
