@@ -23,6 +23,7 @@ import VozPage from './pages/VozPage'
 import RevisaoPage from './pages/RevisaoPage'
 import ConfirmadoPage from './pages/ConfirmadoPage'
 import PerfilPage from './pages/PerfilPage'
+import MinhasVagasPage from './pages/MinhasVagasPage'
 import { useFlow } from './hooks/useFlow'
 
 function FlowRouter() {
@@ -86,6 +87,9 @@ function AppRoutes() {
   }
   if (path === '/meu-perfil') {
     return <PerfilPage />
+  }
+  if (path === '/minhas-vagas') {
+    return <MinhasVagasPage />
   }
   if (path.startsWith('/comecar/passo/')) {
     return <WizardPage />

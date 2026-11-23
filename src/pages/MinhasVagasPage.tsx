@@ -1,0 +1,44 @@
+import { useEffect, useState } from 'react'
+import { Button } from '../components/atoms/Button'
+import { Heading } from '../components/atoms/Heading'
+import { useAuth } from '../contexts/AuthContext'
+
+export default function MinhasVagasPage() {
+  const { token } = useAuth()
+  const [jobs, setJobs] = useState<unknown[]>([])
+  const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
+
+  useEffect(() => {
+    if (!token) return
+    fetch(`${API}/jobs/company`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(r => r.json())
+      .then(data => setJobs(data.jobs || []))
+      .catch(() => {})
+  }, [token])
+
+  return (
+    <div className="min-h-screen bg-slate-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <Heading className="text-3xl">Minhas vagas</Heading>
+          <Button variant="primary" onClick={() => window.location.href = '/vagas/nova'}>Incluir vaga</Button>
+        </div>
+        <div className="space-y-4">
+          {jobs.map(j => (
+            <div key={j.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+              <h3 className="text-xl font-bold">{j.title}</h3>
+              <p className="text-slate-600 mt-2">{j.description}</p>
+              <div className="mt-4 flex gap-3">
+                <Button variant="secondary" onClick={() => window.location.href = `/vagas/editar/${j.id}`}>Editar</Button>
+                <Button variant="secondary" onClick={() => window.location.href = `/vagas/${j.id}/candidatos`}>Candidatos</Button>
+              </div>
+            </div>
+          ))}
+          {jobs.length === 0 && <p className="text-slate-600">Nenhuma vaga cadastrada.</p>}
+        </div>
+      </div>
+    </div>
+  )
+}

@@ -54,7 +54,7 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Heading className="text-2xl">Conecta Sênior</Heading>
           <div className="flex gap-3">
-            {role === 'company' && <Button variant="secondary" onClick={() => window.location.href = '/vagas/nova'}>Incluir vaga</Button>}
+            {role === 'company' && <Button variant="secondary" onClick={() => window.location.href = '/minhas-vagas'}>Minhas vagas</Button>}
             <Button variant="primary" onClick={openConfirm}>Sair</Button>
           </div>
         </div>
