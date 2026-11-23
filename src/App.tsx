@@ -1,4 +1,5 @@
 import { FlowProvider } from './contexts/FlowContext'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { WelcomePage } from './pages/WelcomePage'
 import { EmailPage } from './pages/EmailPage'
 import { RegistrationPage } from './pages/RegistrationPage'
@@ -40,8 +41,15 @@ function FlowRouter() {
   return <Current />
 }
 
-export function App() {
+function AppRoutes() {
   const path = window.location.pathname
+  const { isAuthenticated } = useAuth()
+
+  if (isAuthenticated && path !== '/vagas') {
+    window.location.href = '/vagas'
+    return null
+  }
+
   if (path.startsWith('/dev/componentes')) {
     return <DevComponentes />
   }
@@ -85,5 +93,13 @@ export function App() {
     <FlowProvider>
       <FlowRouter />
     </FlowProvider>
+  )
+}
+
+export function App() {
+  return (
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
   )
 }

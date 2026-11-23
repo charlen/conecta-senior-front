@@ -4,7 +4,7 @@ import { Input } from '../components/atoms/Input'
 import { Label } from '../components/atoms/Label'
 import { Heading } from '../components/atoms/Heading'
 import { Alerta } from '../components/molecules/Alerta'
-import { authApi } from '../services/authApi'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function EntrarPage() {
   const [step, setStep] = useState<'email' | 'code'>('email')
@@ -15,6 +15,7 @@ export default function EntrarPage() {
   const [success, setSuccess] = useState<string | null>(null)
 
   const API = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+  const { setToken } = useAuth()
 
   const handleRequestCode = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,7 +30,19 @@ export default function EntrarPage() {
       })
       if (!res.ok) {
         const err = await res.json().catch(() => ({}))
-        throw new Error(err.error || 'Erro ao solicitar código')
+        if (err.error === 'account already confirmed') {
+          // Tenta login por código mesmo para conta ativa
+          const res2 = await fetch(`${API}/users/request-code`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          })
+          if (!res2.ok) {
+            throw new Error('Conta já confirmada. Use o código de acesso.')
+          }
+        } else {
+          throw new Error(err.error || 'Erro ao solicitar código')
+        }
       }
       setSuccess('Código enviado para seu e-mail!')
       setStep('code')
@@ -56,7 +69,7 @@ export default function EntrarPage() {
         throw new Error(err.error || 'Código inválido')
       }
       const data = await res.json()
-      localStorage.setItem('token', data.token)
+      setToken(data.token)
       window.location.href = '/vagas'
     } catch (err: unknown) {
       setError((err as Error).message)
