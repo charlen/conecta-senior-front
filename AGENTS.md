@@ -21,10 +21,10 @@ src/
     molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader, BarraProgresso
     organisms/    RegistrationForm, InterviewStep, WelcomeSection
     templates/    PageTemplate, StepTemplate, HeroStepTemplate, HeroPageTemplate
-  contexts/      FlowContext
+  contexts/      FlowContext, AuthContext
   hooks/         useFlow, useRascunhoPerfil
   mocks/         data.ts
-  pages/         WelcomePage, RegistrationPage, InterviewPage, ResumePage, PreferencesPage, JobsPage, MatchingPage, DashboardPage, WizardPage, CurriculoPage, VozPage, RevisaoPage, ConfirmadoPage
+  pages/         WelcomePage, RegistrationPage, InterviewPage, ResumePage, PreferencesPage, JobsPage, MatchingPage, DashboardPage, WizardPage, CurriculoPage, VozPage, RevisaoPage, ConfirmadoPage, HomePage, PerfilPage
   services/      mockApi.ts, authApi.ts
   styles/        tokens.css
   index.css      Tailwind entry

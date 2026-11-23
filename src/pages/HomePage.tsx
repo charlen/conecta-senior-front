@@ -5,6 +5,7 @@ import { Heading } from '../components/atoms/Heading'
 import { ConfirmModal } from '../components/molecules/ConfirmModal'
 import { mockJobs } from '../mocks/data'
 import { useAuth } from '../contexts/AuthContext'
+import type { Profile } from '../types/profile'
 
 export function HomePage() {
   const [query, setQuery] = useState('')

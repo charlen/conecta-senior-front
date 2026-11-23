@@ -14,7 +14,7 @@ export default function EntrarPage() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
-  const API = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+  const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
   const { setToken } = useAuth()
 
   const handleRequestCode = async (e: React.FormEvent) => {

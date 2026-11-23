@@ -17,7 +17,7 @@ export default function CadastroPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
-  const API = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+  const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
   const { setToken } = useAuth()
 
   const handleEmailCheck = async (e: React.FormEvent) => {

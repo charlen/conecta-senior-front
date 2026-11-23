@@ -11,6 +11,9 @@
 - Adapters backend para STT/TTS/Talker via titan-gateway (0.15→0.60)
 - Handlers `/voice/transcribe`, `/voice/synthesize`, `/voice/talk` no conecta-senior-backend
 
+### Fixed
+- `src/pages/HomePage.tsx`: import do tipo `Profile` adicionado de `../types/profile` para corrigir erro TS "Cannot find name 'Profile'"
+
 ### Added
 - Internacionalização dos nomes de código para inglês
   - Páginas: CadastroPage → RegistrationPage, EntrevistaPage → InterviewPage, CurriculoPage → ResumePage, PreferenciasPage → PreferencesPage, VagasPage → JobsPage, PainelPage → DashboardPage

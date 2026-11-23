@@ -237,6 +237,22 @@ Solicitação explícita de atualização de artefatos.
 - Commit `docs: atualizar AGENTS.md e CHANGELOG.md com onboarding` e push
 - Validação `npm run build` e `npm run lint` sem erros
 
+## Fase 16 - Correção de import do tipo Profile em HomePage
+
+**O que foi pedido**
+Fixar erro TS "Cannot find name 'Profile'" em `src/pages/HomePage.tsx` linha 11.
+
+**Como foi pedido**
+Solicitação natural para corrigir código com conteúdo do arquivo fornecido e problema descrito.
+
+**O que foi entregue**
+- Identificado tipo `Profile` em `src/types/profile.ts` já utilizado em `PerfilPage.tsx`
+- Adicionado `import type { Profile } from '../types/profile'` em `HomePage.tsx`
+- Validação `npm run lint` e `npm run build` sem erros
+- `CHANGELOG.md` atualizado com Fixed
+- `AI_USAGE.md` atualizado com Fase 16
+- `AGENTS.md` mantido consistente com estrutura atual
+
 ## Fase 11 - Documentação de purge Cloudflare e governança de produção
 
 **O que foi pedido**
