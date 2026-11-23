@@ -19,8 +19,8 @@ export function WelcomePage() {
         />
         
         {/* Filtro Cinematográfico e Camada de Degradê Duplo para Legibilidade */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-950/10 mix-blend-multiply opacity-95 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 via-transparent to-transparent opacity-60 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/60 to-slate-950/10 mix-blend-multiply opacity-95 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-t from-blue-900/50 via-transparent to-transparent opacity-60 pointer-events-none" />
 
         {/* Conteúdo flutuando sobre a imagem */}
         <div className="relative z-10 space-y-6 md:space-y-8">
