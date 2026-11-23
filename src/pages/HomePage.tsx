@@ -41,14 +41,14 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Heading className="text-2xl">Conecta Sênior</Heading>
           <div className="flex gap-3">
-            <Button variant="secondary" onClick={() => window.location.href = '/vagas'}>Meu Perfil</Button>
+            <Button variant="secondary" onClick={() => document.getElementById('perfil')?.scrollIntoView({behavior:'smooth'})}>Meu Perfil</Button>
             <Button variant="primary" onClick={handleLogout}>Sair</Button>
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-8">
-        <aside className="md:col-span-1 space-y-6">
+        <aside id="perfil" className="md:col-span-1 space-y-6">
           <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
             <div className="flex flex-col items-center gap-4">
               <img src="https://i.pravatar.cc/150?img=12" alt="Foto" className="w-28 h-28 rounded-full object-cover border-4 border-[#2563eb]/20" />
