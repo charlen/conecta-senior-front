@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext'
 export default function MinhasVagasPage() {
   const { token } = useAuth()
   const [jobs, setJobs] = useState<unknown[]>([])
+  const [company, setCompany] = useState<{name?: string; email?: string}>({})
   const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
 
   useEffect(() => {
@@ -15,6 +16,12 @@ export default function MinhasVagasPage() {
     })
       .then(r => r.json())
       .then(data => setJobs(data.jobs || []))
+      .catch(() => {})
+    fetch(`${API}/users/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(r => r.json())
+      .then(data => setCompany({ name: data.companyName || data.name, email: data.email }))
       .catch(() => {})
   }, [token])
 
@@ -28,8 +35,8 @@ export default function MinhasVagasPage() {
         <div className="flex items-center gap-4 mb-6">
           <img src="https://i.pravatar.cc/80?img=12" alt="Empresa" className="w-16 h-16 rounded-full object-cover border-4 border-[#2563eb]/20" />
           <div>
-            <Heading className="text-3xl">Empresa Exemplo Ltda</Heading>
-            <p className="text-slate-600">contato@empresa.com</p>
+            <Heading className="text-3xl">{company.name || 'Empresa'}</Heading>
+            <p className="text-slate-600">{company.email || ''}</p>
           </div>
         </div>
         <div className="space-y-4">
