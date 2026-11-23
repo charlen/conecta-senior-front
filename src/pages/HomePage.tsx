@@ -108,6 +108,11 @@ export function HomePage() {
               <div key={j.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
                 <h3 className="text-xl font-bold">{j.title} — {j.company}</h3>
                 <p className="text-slate-600 mt-2">{j.description}</p>
+                <div className="mt-3 flex flex-wrap gap-2 text-sm text-slate-700">
+                  {j.location && <span className="px-3 py-1 bg-slate-100 rounded-full">{j.location}</span>}
+                  {j.modality && <span className="px-3 py-1 bg-slate-100 rounded-full">{j.modality}</span>}
+                  {(j.salary_min || j.salary_max) && <span className="px-3 py-1 bg-slate-100 rounded-full">R$ {j.salary_min ?? ''} - {j.salary_max ?? ''}</span>}
+                </div>
                 <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                   <span className="px-3 py-1 bg-emerald-50 text-emerald-800 rounded-full font-semibold self-start">{j.score ?? 0}% compatível</span>
                   <Button variant="primary" className="w-full md:w-auto">Candidatar-me</Button>
