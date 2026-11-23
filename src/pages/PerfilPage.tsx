@@ -3,9 +3,10 @@ import { Heading } from '../components/atoms/Heading'
 import { Input } from '../components/atoms/Input'
 import { Label } from '../components/atoms/Label'
 import { Button } from '../components/atoms/Button'
+import type { Profile } from '../types/profile'
 
 export default function PerfilPage() {
-  const [profile, setProfile] = useState<unknown>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')

@@ -5,11 +5,10 @@ import { Heading } from '../components/atoms/Heading'
 import { ConfirmModal } from '../components/molecules/ConfirmModal'
 import { mockJobs } from '../mocks/data'
 import { useAuth } from '../contexts/AuthContext'
-import { useState } from 'react'
 
 export function HomePage() {
   const [query, setQuery] = useState('')
-  const [profile, setProfile] = useState<unknown>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
   const { setToken, token } = useAuth()
   const [confirmOpen, setConfirmOpen] = useState(false)
   const jobs = mockJobs.filter(j => !query || j.cargo.toLowerCase().includes(query.toLowerCase()) || j.empresa.toLowerCase().includes(query.toLowerCase()))
