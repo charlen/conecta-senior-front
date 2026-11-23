@@ -11,6 +11,7 @@ export default function CadastroPage() {
   const [tipo, setTipo] = useState<'candidato' | 'empresa' | null>(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
@@ -18,6 +19,10 @@ export default function CadastroPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    if (password !== confirmPassword) {
+      setError('As senhas não coincidem')
+      return
+    }
     setLoading(true)
     try {
       await authApi.register({ email, password })
@@ -59,6 +64,10 @@ export default function CadastroPage() {
               <div>
                 <Label htmlFor="password">Senha</Label>
                 <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+              </div>
+              <div>
+                <Label htmlFor="confirmPassword">Confirmar senha</Label>
+                <Input id="confirmPassword" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required />
               </div>
               <Button type="submit" variant="primary" className="w-full" disabled={loading}>
                 {loading ? 'Enviando...' : 'Cadastrar'}
