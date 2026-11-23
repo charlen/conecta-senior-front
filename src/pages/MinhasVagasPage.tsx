@@ -21,6 +21,7 @@ export default function MinhasVagasPage() {
   return (
     <div className="min-h-screen bg-slate-50 p-6">
       <div className="max-w-7xl mx-auto">
+        <Heading className="text-2xl mb-6">Conecta Sênior</Heading>
         <div className="flex items-center gap-4 mb-6">
           <img src="https://i.pravatar.cc/80?img=12" alt="Empresa" className="w-16 h-16 rounded-full object-cover border-4 border-[#2563eb]/20" />
           <div>
