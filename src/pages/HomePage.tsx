@@ -6,10 +6,23 @@ import { ConfirmModal } from '../components/molecules/ConfirmModal'
 import { useAuth } from '../contexts/AuthContext'
 import type { Profile } from '../types/profile'
 
+type Job = {
+  id: string
+  title?: string
+  description?: string
+  company?: string
+  location?: string
+  modality?: string
+  salary_min?: number
+  salary_max?: number
+  status?: string
+  score?: number
+}
+
 export function HomePage() {
   const [query, setQuery] = useState('')
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [jobs, setJobs] = useState<unknown[]>([])
+  const [jobs, setJobs] = useState<Job[]>([])
   const { setToken, token, role } = useAuth()
   const [confirmOpen, setConfirmOpen] = useState(false)
 

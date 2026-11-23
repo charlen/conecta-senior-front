@@ -3,9 +3,21 @@ import { Button } from '../components/atoms/Button'
 import { Heading } from '../components/atoms/Heading'
 import { useAuth } from '../contexts/AuthContext'
 
+type Job = {
+  id: string
+  title?: string
+  description?: string
+  location?: string
+  modality?: string
+  salary_min?: number
+  salary_max?: number
+  status?: string
+  company?: string
+}
+
 export default function MinhasVagasPage() {
   const { token, userName, userEmail } = useAuth()
-  const [jobs, setJobs] = useState<unknown[]>([])
+  const [jobs, setJobs] = useState<Job[]>([])
   const [company, setCompany] = useState<{name?: string; email?: string}>({})
   const [profile, setProfile] = useState<{name?: string; email?: string}>({})
   const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
