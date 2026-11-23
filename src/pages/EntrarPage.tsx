@@ -16,12 +16,16 @@ export default function EntrarPage() {
     setError(null)
     setLoading(true)
     try {
-      // Para simplificar, usamos login com senha. Em produção seria envio de link.
-      // Aqui mantemos fluxo de login existente do backend.
-      await authApi.login({ email, password: '' })
-      // Backend exige senha, então este fluxo é placeholder.
-      // Em implementação real, enviar e-mail para novo link.
-      setError('Envie seu e-mail para receber link de acesso')
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/users/resend-confirmation`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.error || 'Erro ao enviar link')
+      }
+      setError('Link de acesso enviado! Verifique seu e-mail.')
     } catch (err: unknown) {
       setError((err as Error).message)
     } finally {
