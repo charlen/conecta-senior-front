@@ -9,6 +9,7 @@ export default function PerfilPage() {
   const [loading, setLoading] = useState(true)
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
+  const [bio, setBio] = useState('')
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export default function PerfilPage() {
         setProfile(data)
         setName(data.name || '')
         setPhone(data.phone || '')
+        setBio(data.bio || '')
         setLoading(false)
       })
       .catch(() => setLoading(false))
@@ -41,7 +43,7 @@ export default function PerfilPage() {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, phone })
+        body: JSON.stringify({ name, phone, bio })
       })
       window.location.href = '/vagas'
     } catch {}
@@ -69,7 +71,7 @@ export default function PerfilPage() {
           </div>
           <div>
             <Label>Experiência profissional</Label>
-            <Input placeholder="Ex: 30 anos em..." />
+            <Input value={bio} onChange={e => setBio(e.target.value)} placeholder="Ex: 30 anos em..." />
           </div>
           <div className="flex gap-3">
             <Button variant="primary" onClick={handleSave} disabled={saving}>{saving ? 'Salvando...' : 'Salvar e voltar'}</Button>
