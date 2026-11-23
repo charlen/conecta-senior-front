@@ -47,7 +47,7 @@ function AppRoutes() {
   const path = window.location.pathname
   const { isAuthenticated } = useAuth()
 
-  if (isAuthenticated && path !== '/vagas' && path !== '/meu-perfil' && !path.startsWith('/comecar')) {
+  if (isAuthenticated && path !== '/vagas' && path !== '/meu-perfil' && path !== '/minhas-vagas' && !path.startsWith('/comecar')) {
     window.location.href = '/vagas'
     return null
   }
