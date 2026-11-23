@@ -23,7 +23,7 @@ export function EmailPage() {
       const res = await fetch(`${API_URL}/users/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password: 'Temp@1234' })
+        body: JSON.stringify({ email, password: 'Temp@1234', role: 'candidate' })
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Erro ao registrar')

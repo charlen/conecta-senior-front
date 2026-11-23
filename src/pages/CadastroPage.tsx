@@ -56,7 +56,7 @@ export default function CadastroPage() {
     }
     setLoading(true)
     try {
-      await authApi.register({ email, password })
+      await authApi.register({ email, password, role: tipo === 'empresa' ? 'company' : 'candidate' })
       setSuccess(true)
     } catch (err: unknown) {
       setError((err as Error).message)
