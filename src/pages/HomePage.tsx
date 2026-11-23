@@ -63,6 +63,9 @@ export function HomePage() {
                 <p className="text-sm text-slate-500 uppercase tracking-wide">Olá</p>
                 <h2 className="text-2xl font-bold mt-1">{profile?.name || 'Usuário'}</h2>
                 <p className="text-slate-600 mt-1">{profile?.email || ''}</p>
+                {profile?.bio && (
+                  <p className="text-slate-700 mt-3 text-sm leading-relaxed">{profile.bio}</p>
+                )}
               </div>
               <Button variant="primary" className="w-full" onClick={() => window.location.href = '/meu-perfil'}>Atualizar perfil profissional</Button>
             </div>
