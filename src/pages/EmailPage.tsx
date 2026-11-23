@@ -3,13 +3,11 @@ import { useFlow } from '../hooks/useFlow'
 import { Button } from '../components/atoms/Button'
 import { Input } from '../components/atoms/Input'
 import { useState } from 'react'
-import { useAuth } from '../hooks/useAuth'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
 
 export function EmailPage() {
   const { state, updateEmail } = useFlow()
-  const { setSession } = useAuth()
   const email = state.email || ''
   const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   const [loading, setLoading] = useState(false)
@@ -20,16 +18,24 @@ export function EmailPage() {
     setLoading(true)
     setError('')
     try {
+      // Verifica se usuário existe, se não, cria com senha temporária e envia código
       const res = await fetch(`${API_URL}/users/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password: 'Temp@1234' })
+        body: JSON.stringify({ email, password: 'Temp@1234', role: 'candidate' })
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Erro ao registrar')
-      // Cria sessão mock e redireciona para onboarding novo
-      setSession('mock-token-' + Date.now(), 'user-' + Date.now())
-      window.location.href = '/comecar/metodo'
+      if (!res.ok && data.error !== 'user already exists') {
+        throw new Error(data.error || 'Erro ao registrar')
+      }
+      // Solicita código de verificação
+      await fetch(`${API_URL}/users/request-code`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+      // Redireciona para página de verificação de código
+      window.location.href = `/verificar?email=${encodeURIComponent(email)}`
     } catch (e: unknown) {
       setError((e as Error).message || 'Erro ao registrar')
     } finally {
@@ -55,7 +61,7 @@ export function EmailPage() {
             className="text-xl"
           />
           <p className="text-slate-600 mt-3 text-lg">
-            Mock: neste momento aceitamos qualquer e-mail. Em breve verificaremos cadastro e pediremos senha.
+            Enviaremos um código de verificação para este e-mail.
           </p>
           {error && <p className="text-red-600 mt-3 text-lg">{error}</p>}
         </div>

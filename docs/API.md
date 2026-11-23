@@ -10,8 +10,8 @@ Modelo de registro:
 ## Autenticação
 
 ### POST /users/register
-- Uso: Cadastro de usuário candidato 60+
-- Entrada: `{ email: string, password: string }`
+- Uso: Cadastro de usuário candidato 60+ ou empresa
+- Entrada: `{ email: string, password: string, role?: 'candidate' | 'company' }`
 - Saída: `{ message: "registered, confirmation email sent" }`
 - Status: existente
 

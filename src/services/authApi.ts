@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
 
-export type RegisterInput = { email: string; password: string }
+export type RegisterInput = { email: string; password: string; role?: 'candidate' | 'company' }
 export type LoginInput = { email: string; password: string }
 
 export const authApi = {
