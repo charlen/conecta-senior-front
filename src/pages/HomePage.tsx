@@ -1,20 +1,21 @@
 import { useState, useEffect } from 'react'
 import { Button } from '../components/atoms/Button'
 import { Input } from '../components/atoms/Input'
-import { Label } from '../components/atoms/Label'
 import { Heading } from '../components/atoms/Heading'
 import { mockJobs } from '../mocks/data'
 import { useAuth } from '../contexts/AuthContext'
 
 export function HomePage() {
   const [query, setQuery] = useState('')
-  const [profile, setProfile] = useState<any>(null)
+  const [profile, setProfile] = useState<unknown>(null)
   const { setToken, token } = useAuth()
   const jobs = mockJobs.filter(j => !query || j.cargo.toLowerCase().includes(query.toLowerCase()) || j.empresa.toLowerCase().includes(query.toLowerCase()))
 
   const handleLogout = () => {
-    setToken(null)
-    window.location.href = '/'
+    if (confirm('Tem certeza que deseja sair?')) {
+      setToken(null)
+      window.location.href = '/'
+    }
   }
 
   useEffect(() => {

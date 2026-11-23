@@ -5,7 +5,7 @@ import { Label } from '../components/atoms/Label'
 import { Button } from '../components/atoms/Button'
 
 export default function PerfilPage() {
-  const [profile, setProfile] = useState<any>(null)
+  const [profile, setProfile] = useState<unknown>(null)
   const [loading, setLoading] = useState(true)
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
@@ -46,7 +46,9 @@ export default function PerfilPage() {
         body: JSON.stringify({ name, phone, bio })
       })
       window.location.href = '/vagas'
-    } catch {}
+    } catch {
+      // ignore
+    }
     setSaving(false)
   }
 
