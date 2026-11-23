@@ -7,6 +7,7 @@ export default function MinhasVagasPage() {
   const { token, userName, userEmail } = useAuth()
   const [jobs, setJobs] = useState<unknown[]>([])
   const [company, setCompany] = useState<{name?: string; email?: string}>({})
+  const [profile, setProfile] = useState<{name?: string; email?: string}>({})
   const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
 
   useEffect(() => {
@@ -23,7 +24,13 @@ export default function MinhasVagasPage() {
       .then(r => r.json())
       .then(data => setCompany({ name: data.companyName || data.name || userName, email: data.email || userEmail }))
       .catch(() => {})
-  }, [token])
+    fetch(`${API}/profiles/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(r => r.json())
+      .then(data => setProfile({ name: data.name, email: data.email }))
+      .catch(() => {})
+  }, [token, userName, userEmail])
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
@@ -35,8 +42,8 @@ export default function MinhasVagasPage() {
         <div className="flex items-center gap-4 mb-6">
           <img src="https://i.pravatar.cc/80?img=12" alt="Empresa" className="w-16 h-16 rounded-full object-cover border-4 border-[#2563eb]/20" />
           <div>
-            <Heading className="text-3xl">{userName || company.name || (userEmail ? userEmail.split('@')[0] : 'Empresa')}</Heading>
-            <p className="text-slate-600">{company.email || userEmail || ''}</p>
+            <Heading className="text-3xl">{profile.name || company.name || userName || (userEmail ? userEmail.split('@')[0] : 'Empresa')}</Heading>
+            <p className="text-slate-600">{profile.email || company.email || userEmail || ''}</p>
           </div>
         </div>
         <div className="space-y-4">
