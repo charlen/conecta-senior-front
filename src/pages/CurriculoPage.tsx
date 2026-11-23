@@ -38,12 +38,12 @@ export default function CurriculoPage() {
     setLoading(true)
     setError(null)
     try {
-      // Simulação: backend precisa de profileID. Usaremos placeholder.
       const form = new FormData()
       form.append('file', file)
-      // Em produção, profileID viria do contexto
-      const res = await fetch(`${API_URL}/profiles/temp/resumes`, {
+      const token = localStorage.getItem('cs_token')
+      const res = await fetch(`${API_URL}/profiles/me/resumes`, {
         method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         body: form,
       })
       if (!res.ok) throw new Error('Falha ao processar currículo')
