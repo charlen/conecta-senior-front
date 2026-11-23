@@ -10,7 +10,7 @@ export function HomePage() {
   const [query, setQuery] = useState('')
   const [profile, setProfile] = useState<Profile | null>(null)
   const [jobs, setJobs] = useState<unknown[]>([])
-  const { setToken, token } = useAuth()
+  const { setToken, token, role } = useAuth()
   const [confirmOpen, setConfirmOpen] = useState(false)
 
   const handleLogout = () => {
@@ -54,6 +54,7 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Heading className="text-2xl">Conecta Sênior</Heading>
           <div className="flex gap-3">
+            {role === 'company' && <Button variant="secondary" onClick={() => window.location.href = '/vagas/nova'}>Incluir vaga</Button>}
             <Button variant="primary" onClick={openConfirm}>Sair</Button>
           </div>
         </div>
