@@ -8,6 +8,7 @@ export default function PerfilPage() {
   const [profile, setProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [name, setName] = useState('')
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -26,6 +27,24 @@ export default function PerfilPage() {
       })
       .catch(() => setLoading(false))
   }, [])
+
+  const handleSave = async () => {
+    const token = localStorage.getItem('token')
+    if (!token) return
+    setSaving(true)
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL || ''}/profiles/me`, {
+        method: 'PATCH',
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name })
+      })
+      window.location.href = '/vagas'
+    } catch {}
+    setSaving(false)
+  }
 
   if (loading) return <div className="p-8">Carregando...</div>
 
@@ -51,7 +70,7 @@ export default function PerfilPage() {
             <Input placeholder="Ex: 30 anos em..." />
           </div>
           <div className="flex gap-3">
-            <Button variant="primary" onClick={() => window.location.href = '/vagas'}>Salvar e voltar</Button>
+            <Button variant="primary" onClick={handleSave} disabled={saving}>{saving ? 'Salvando...' : 'Salvar e voltar'}</Button>
             <Button variant="secondary" onClick={() => window.location.href = '/comecar/metodo'}>Continuar preenchimento</Button>
           </div>
         </div>
