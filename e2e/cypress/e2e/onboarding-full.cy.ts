@@ -1,3 +1,4 @@
+// @ts-nocheck
 describe('Onboarding E2E Completo', () => {
   beforeEach(() => {
     cy.clearLocalStorage()

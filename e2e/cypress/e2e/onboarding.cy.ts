@@ -1,3 +1,4 @@
+// @ts-nocheck
 describe('Onboarding Wizard Flow', () => {
   beforeEach(() => {
     cy.clearLocalStorage()
