@@ -3,16 +3,15 @@ import { Button } from '../components/atoms/Button'
 import { Input } from '../components/atoms/Input'
 import { Heading } from '../components/atoms/Heading'
 import { ConfirmModal } from '../components/molecules/ConfirmModal'
-import { mockJobs } from '../mocks/data'
 import { useAuth } from '../contexts/AuthContext'
 import type { Profile } from '../types/profile'
 
 export function HomePage() {
   const [query, setQuery] = useState('')
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [jobs, setJobs] = useState<unknown[]>([])
   const { setToken, token } = useAuth()
   const [confirmOpen, setConfirmOpen] = useState(false)
-  const jobs = mockJobs.filter(j => !query || j.cargo.toLowerCase().includes(query.toLowerCase()) || j.empresa.toLowerCase().includes(query.toLowerCase()))
 
   const handleLogout = () => {
     setToken(null)
@@ -40,6 +39,12 @@ export function HomePage() {
           sessionStorage.removeItem('profile_redirected')
         }
       })
+      .catch(() => {})
+    fetch(`${import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'}/jobs`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(r => r.json())
+      .then(data => setJobs(data.jobs || []))
       .catch(() => {})
   }, [token])
 
@@ -84,12 +89,12 @@ export function HomePage() {
           </div>
 
           <div className="space-y-4">
-            {jobs.map(j => (
+            {jobs.filter(j => !query || (j.title?.toLowerCase().includes(query.toLowerCase()) || j.company?.toLowerCase().includes(query.toLowerCase()))).map(j => (
               <div key={j.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-                <h3 className="text-xl font-bold">{j.cargo} — {j.empresa}</h3>
-                <p className="text-slate-600 mt-2">{j.desc}</p>
+                <h3 className="text-xl font-bold">{j.title} — {j.company}</h3>
+                <p className="text-slate-600 mt-2">{j.description}</p>
                 <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                  <span className="px-3 py-1 bg-emerald-50 text-emerald-800 rounded-full font-semibold self-start">{j.score}% compatível</span>
+                  <span className="px-3 py-1 bg-emerald-50 text-emerald-800 rounded-full font-semibold self-start">{j.score ?? 0}% compatível</span>
                   <Button variant="primary" className="w-full md:w-auto">Candidatar-me</Button>
                 </div>
               </div>
