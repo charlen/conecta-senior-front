@@ -21,10 +21,29 @@ export default function IncluirVagaPage() {
     e.preventDefault()
     setLoading(true)
     try {
+      // tenta obter company_id do usuário
+      let companyId = undefined
+      try {
+        const meRes = await fetch(`${API}/users/me`, { headers: { Authorization: `Bearer ${token}` } })
+        const me = await meRes.json()
+        companyId = me.company_id || me.companyId
+      } catch {
+        // ignore
+      }
+      if (!companyId) {
+        // fallback: cria empresa com nome do usuário
+        const createRes = await fetch(`${API}/companies`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ name: 'Empresa' })
+        })
+        const created = await createRes.json()
+        companyId = created.id
+      }
       await fetch(`${API}/jobs`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ title, description, location, modality, salary_min: salaryMin ? Number(salaryMin) : undefined, salary_max: salaryMax ? Number(salaryMax) : undefined, status })
+        body: JSON.stringify({ title, description, company_id: companyId, location, modality, salary_min: salaryMin ? Number(salaryMin) : undefined, salary_max: salaryMax ? Number(salaryMax) : undefined, status })
       })
       window.location.href = '/minhas-vagas'
     } finally {
