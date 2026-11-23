@@ -21,7 +21,7 @@ export default function MinhasVagasPage() {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())
-      .then(data => setCompany({ name: data.companyName || data.name, email: data.email }))
+      .then(data => setCompany({ name: data.companyName || data.name || userName, email: data.email || userEmail }))
       .catch(() => {})
   }, [token])
 
