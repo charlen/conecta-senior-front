@@ -55,6 +55,12 @@ export default function MinhasVagasPage() {
             <div key={j.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
               <h3 className="text-xl font-bold">{j.title}</h3>
               <p className="text-slate-600 mt-2">{j.description}</p>
+              <div className="mt-3 flex flex-wrap gap-2 text-sm text-slate-700">
+                {j.location && <span className="px-3 py-1 bg-slate-100 rounded-full">{j.location}</span>}
+                {j.modality && <span className="px-3 py-1 bg-slate-100 rounded-full">{j.modality}</span>}
+                {j.status && <span className={`px-3 py-1 rounded-full ${j.status === 'open' ? 'bg-emerald-50 text-emerald-800' : 'bg-slate-100 text-slate-700'}`}>{j.status}</span>}
+                {(j.salary_min || j.salary_max) && <span className="px-3 py-1 bg-slate-100 rounded-full">R$ {j.salary_min ?? ''} - {j.salary_max ?? ''}</span>}
+              </div>
               <div className="mt-4 flex gap-3">
                 <Button variant="secondary" onClick={() => window.location.href = `/vagas/editar/${j.id}`}>Editar</Button>
                 <Button variant="secondary" onClick={() => window.location.href = `/vagas/${j.id}/candidatos`}>Candidatos</Button>
