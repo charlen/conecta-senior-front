@@ -2,21 +2,25 @@ import { useState, useEffect } from 'react'
 import { Button } from '../components/atoms/Button'
 import { Input } from '../components/atoms/Input'
 import { Heading } from '../components/atoms/Heading'
+import { ConfirmModal } from '../components/molecules/ConfirmModal'
 import { mockJobs } from '../mocks/data'
 import { useAuth } from '../contexts/AuthContext'
+import { useState } from 'react'
 
 export function HomePage() {
   const [query, setQuery] = useState('')
   const [profile, setProfile] = useState<unknown>(null)
   const { setToken, token } = useAuth()
+  const [confirmOpen, setConfirmOpen] = useState(false)
   const jobs = mockJobs.filter(j => !query || j.cargo.toLowerCase().includes(query.toLowerCase()) || j.empresa.toLowerCase().includes(query.toLowerCase()))
 
   const handleLogout = () => {
-    if (confirm('Tem certeza que deseja sair?')) {
-      setToken(null)
-      window.location.href = '/'
-    }
+    setToken(null)
+    window.location.href = '/'
   }
+
+  const openConfirm = () => setConfirmOpen(true)
+  const closeConfirm = () => setConfirmOpen(false)
 
   useEffect(() => {
     if (!token) return
@@ -45,7 +49,7 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Heading className="text-2xl">Conecta Sênior</Heading>
           <div className="flex gap-3">
-            <Button variant="primary" onClick={handleLogout}>Sair</Button>
+            <Button variant="primary" onClick={openConfirm}>Sair</Button>
           </div>
         </div>
       </header>
@@ -93,6 +97,13 @@ export function HomePage() {
           </div>
         </section>
       </main>
+      <ConfirmModal
+        open={confirmOpen}
+        title="Sair"
+        message="Tem certeza que deseja sair?"
+        onConfirm={handleLogout}
+        onCancel={closeConfirm}
+      />
     </div>
   )
 }
