@@ -4,10 +4,17 @@ import { Input } from '../components/atoms/Input'
 import { Label } from '../components/atoms/Label'
 import { Heading } from '../components/atoms/Heading'
 import { mockJobs } from '../mocks/data'
+import { useAuth } from '../contexts/AuthContext'
 
 export function HomePage() {
   const [query, setQuery] = useState('')
+  const { setToken } = useAuth()
   const jobs = mockJobs.filter(j => !query || j.cargo.toLowerCase().includes(query.toLowerCase()) || j.empresa.toLowerCase().includes(query.toLowerCase()))
+
+  const handleLogout = () => {
+    setToken(null)
+    window.location.href = '/entrar'
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -16,7 +23,7 @@ export function HomePage() {
           <Heading className="text-2xl">Conecta Sênior</Heading>
           <div className="flex gap-3">
             <Button variant="secondary" onClick={() => window.location.href = '/meu-perfil'}>Meu Perfil</Button>
-            <Button variant="primary" onClick={() => window.location.href = '/entrar'}>Sair</Button>
+            <Button variant="primary" onClick={handleLogout}>Sair</Button>
           </div>
         </div>
       </header>
