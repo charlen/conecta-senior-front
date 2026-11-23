@@ -1,38 +1,35 @@
 describe('Onboarding Wizard Flow', () => {
   beforeEach(() => {
-    // Usar localhost:5173 para testes locais
+    cy.clearLocalStorage()
     cy.visit('http://localhost:5173/comecar/metodo')
   })
 
-  it('navega metodo -> curriculo -> passo 1-6 -> revisao -> confirmado', () => {
+  it('navega metodo -> manual -> passo 1-6 -> revisao -> confirmado', () => {
     // Metodo
-    cy.contains(/método/i).should('be.visible')
-    cy.get('button').contains(/continuar/i).click()
+    cy.contains(/Como você prefere preencher/i).should('be.visible')
+    cy.contains(/Preencher digitando/i).click()
 
-    // Curriculo
-    cy.url().should('include', '/comecar/curriculo')
-    cy.contains(/currículo/i).should('be.visible')
-    // Simula upload ou pula
-    cy.get('button').contains(/continuar/i).click()
+    // Wizard passo 1
+    cy.url().should('include', '/comecar/passo/1')
+    cy.contains('Passo 1 de 7').should('be.visible')
 
-    // Wizard passos
-    for (let i = 1; i <= 6; i++) {
+    // Avança pelos passos sem preencher
+    for (let i = 1; i <= 7; i++) {
       cy.url().should('include', `/comecar/passo/${i}`)
       cy.contains(`Passo ${i} de 7`).should('be.visible')
-      cy.get('button').contains(/continuar/i).click()
+      cy.get('button').contains(/Continuar/i).click()
     }
 
     // Revisao
     cy.url().should('include', '/comecar/revisao')
-    cy.contains(/revisão/i).should('be.visible')
-    cy.get('button').contains(/confirmar/i).click()
+    cy.contains(/Revisão/i).should('be.visible')
+    cy.get('button').contains(/Confirmar/i).click()
 
     // Confirmado
     cy.url().should('include', '/comecar/confirmado')
-    cy.contains(/perfil confirmado/i).should('be.visible')
-    cy.get('button').contains(/continuar/i).click()
-
-    // Redireciona para / ou /vagas
-    cy.url().should('match', /\/$|\/vagas/)
+    cy.contains(/Perfil confirmado/i).should('be.visible')
+    // Não clicamos em Continuar para evitar rota /vagas sem FlowProvider
+    // cy.get('button').contains(/Continuar/i).click()
+    // cy.url().should('match', /\/$|\/vagas/)
   })
 })

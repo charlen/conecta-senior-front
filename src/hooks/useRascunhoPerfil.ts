@@ -41,5 +41,11 @@ export function useRascunhoPerfil() {
     setRascunho(prev => ({ ...prev, progresso }))
   }, [])
 
-  return { rascunho, setRascunho, atualizarPerfil, setMetodo, setProgresso }
+  const salvarPerfil = useCallback(async () => {
+    // Simula salvamento; em produção enviaria para API
+    // Mantém rascunho em localStorage
+    return Promise.resolve()
+  }, [])
+
+  return { rascunho, setRascunho, atualizarPerfil, setMetodo, setProgresso, salvarPerfil }
 }
