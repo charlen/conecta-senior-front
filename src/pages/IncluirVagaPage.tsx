@@ -43,7 +43,7 @@ export default function IncluirVagaPage() {
       const res = await fetch(`${API}/jobs`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ title, description, company_id: companyId })
+        body: JSON.stringify({ title, description, company_id: companyId, location, modality, salary_min: salaryMin ? Number(salaryMin) : null, salary_max: salaryMax ? Number(salaryMax) : null, status })
       })
       if (!res.ok) {
         const err = await res.text()
