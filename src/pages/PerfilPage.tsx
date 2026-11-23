@@ -8,6 +8,7 @@ export default function PerfilPage() {
   const [profile, setProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function PerfilPage() {
       .then(data => {
         setProfile(data)
         setName(data.name || '')
+        setPhone(data.phone || '')
         setLoading(false)
       })
       .catch(() => setLoading(false))
@@ -39,7 +41,7 @@ export default function PerfilPage() {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name })
+        body: JSON.stringify({ name, phone })
       })
       window.location.href = '/vagas'
     } catch {}
@@ -63,7 +65,7 @@ export default function PerfilPage() {
           </div>
           <div>
             <Label>Telefone</Label>
-            <Input placeholder="(11) 99999-9999" />
+            <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="(11) 99999-9999" />
           </div>
           <div>
             <Label>Experiência profissional</Label>
