@@ -17,6 +17,6 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"],
-  "exclude": ["e2e", "node_modules"],
+  "exclude": ["e2e/**", "node_modules", "**/e2e/**"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
