@@ -47,8 +47,8 @@ export default function MetodoPage() {
               onClick={() => escolher('voz')}
             />
           </div>
-          <div className="mt-6 md:mt-8 px-6 md:px-0">
-            <Button variant="secondary" onClick={() => window.location.href = '/meu-perfil'}>Voltar</Button>
+          <div className="mt-6 md:mt-8 px-0 md:px-0">
+            <Button variant="secondary" className="w-full md:w-auto" onClick={() => window.location.href = '/meu-perfil'}>Voltar</Button>
           </div>
         </div>
       </main>
