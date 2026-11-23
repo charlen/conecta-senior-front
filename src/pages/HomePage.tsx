@@ -27,7 +27,9 @@ export function HomePage() {
       .then(data => {
         setProfile(data)
         if (!data || !data.name) {
-          window.location.href = '/comecar/metodo'
+          if (window.location.pathname !== '/comecar/metodo') {
+            window.location.href = '/comecar/metodo'
+          }
         }
       })
       .catch(() => {})
