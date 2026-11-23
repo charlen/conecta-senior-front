@@ -5,6 +5,7 @@ import { Label } from '../components/atoms/Label'
 import { Heading } from '../components/atoms/Heading'
 import { Alerta } from '../components/molecules/Alerta'
 import { authApi } from '../services/authApi'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function CadastroPage() {
   const [step, setStep] = useState<'tipo' | 'email' | 'form' | 'code'>('tipo')
@@ -17,6 +18,7 @@ export default function CadastroPage() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const API = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+  const { setToken } = useAuth()
 
   const handleEmailCheck = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -112,6 +114,8 @@ export default function CadastroPage() {
                   body: JSON.stringify({ email, code })
                 })
                 if (!res.ok) throw new Error('Código inválido')
+                const data = await res.json()
+                setToken(data.token)
                 window.location.href = '/vagas'
               } catch (err: unknown) {
                 setError((err as Error).message)

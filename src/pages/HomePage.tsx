@@ -9,7 +9,7 @@ import { useAuth } from '../contexts/AuthContext'
 export function HomePage() {
   const [query, setQuery] = useState('')
   const [profile, setProfile] = useState<any>(null)
-  const { setToken } = useAuth()
+  const { setToken, token } = useAuth()
   const jobs = mockJobs.filter(j => !query || j.cargo.toLowerCase().includes(query.toLowerCase()) || j.empresa.toLowerCase().includes(query.toLowerCase()))
 
   const handleLogout = () => {
@@ -18,7 +18,6 @@ export function HomePage() {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
     if (!token) return
     fetch(`${import.meta.env.VITE_API_URL || ''}/profiles/me`, {
       headers: { Authorization: `Bearer ${token}` }
@@ -37,7 +36,7 @@ export function HomePage() {
         }
       })
       .catch(() => {})
-  }, [])
+  }, [token])
 
   return (
     <div className="min-h-screen bg-slate-50">
