@@ -26,6 +26,7 @@ export default function MinhasVagasPage() {
           salary_min: (j.salary_min as number) ?? (j.SalaryMin as number),
           salary_max: (j.salary_max as number) ?? (j.SalaryMax as number),
           status: (j.status as string) ?? (j.Status as string),
+          company: (j.company as string) ?? (j.Company?.CompanyName as string) ?? '',
         }))
         setJobs(all)
       })
@@ -66,7 +67,7 @@ export default function MinhasVagasPage() {
         <div className="space-y-4">
           {jobs.map(j => (
             <div key={j.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-              <h3 className="text-xl font-bold">{j.title}</h3>
+              <h3 className="text-xl font-bold">{j.title} {j.company ? `— ${j.company}` : ''}</h3>
               <p className="text-slate-600 mt-2">{j.description}</p>
               <div className="mt-3 flex flex-wrap gap-2 text-sm text-slate-700">
                 {j.location && <span className="px-3 py-1 bg-slate-100 rounded-full">{j.location}</span>}
