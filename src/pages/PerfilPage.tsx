@@ -19,7 +19,7 @@ export default function PerfilPage() {
       window.location.href = '/'
       return
     }
-    fetch(`${import.meta.env.VITE_API_URL || ''}/profiles/me`, {
+    fetch(`${import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'}/profiles/me`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())
@@ -38,7 +38,7 @@ export default function PerfilPage() {
     if (!token) return
     setSaving(true)
     try {
-      await fetch(`${import.meta.env.VITE_API_URL || ''}/profiles/me`, {
+      await fetch(`${import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'}/profiles/me`, {
         method: 'PATCH',
         headers: { 
           Authorization: `Bearer ${token}`,

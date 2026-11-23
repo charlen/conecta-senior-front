@@ -24,7 +24,7 @@ export function HomePage() {
 
   useEffect(() => {
     if (!token) return
-    fetch(`${import.meta.env.VITE_API_URL || ''}/profiles/me`, {
+    fetch(`${import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'}/profiles/me`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())
