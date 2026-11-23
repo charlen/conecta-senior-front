@@ -19,9 +19,8 @@ export default function MetodoPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <Heading className="text-2xl">Conecta Sênior</Heading>
-          <Button variant="secondary" onClick={() => window.location.href = '/meu-perfil'}>Voltar</Button>
         </div>
       </header>
       <main className="max-w-7xl mx-auto px-6 py-10">
@@ -47,6 +46,9 @@ export default function MetodoPage() {
               selecionado={metodo === 'voz'}
               onClick={() => escolher('voz')}
             />
+          </div>
+          <div className="mt-8">
+            <Button variant="secondary" onClick={() => window.location.href = '/meu-perfil'}>Voltar</Button>
           </div>
         </div>
       </main>
