@@ -5,6 +5,7 @@ import { Button } from '../components/atoms/Button'
 import { Spinner } from '../components/atoms/Spinner'
 import { Alerta } from '../components/molecules/Alerta'
 import { useRascunhoPerfil } from '../hooks/useRascunhoPerfil'
+import type { ResumeResponse } from '../types/resume'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
 
@@ -40,7 +41,6 @@ export default function CurriculoPage() {
     try {
       const token = localStorage.getItem('token')
       if (!token) throw new Error('Não autenticado')
-      // Buscar profile ID
       const meRes = await fetch(`${API_URL}/profiles/me`, {
         headers: { Authorization: `Bearer ${token}` }
       })
@@ -55,7 +55,25 @@ export default function CurriculoPage() {
         body: form,
       })
       if (!res.ok) throw new Error('Falha ao processar currículo')
-      // Preencher rascunho seria feito com dados retornados
+      const data: ResumeResponse = await res.json()
+      // Preencher rascunho com dados extraídos via localStorage
+      const rascunhoRaw = localStorage.getItem('cs_rascunho_perfil')
+      const rascunho = rascunhoRaw ? JSON.parse(rascunhoRaw) : { perfil: { dadosBasicos: {}, experiencias: [], formacao: [], habilidades: [] } }
+      if (data.parsed) {
+        rascunho.perfil.dadosBasicos.nomeCompleto = data.parsed.name || ''
+        rascunho.perfil.habilidades = data.parsed.skills || []
+        rascunho.perfil.experiencias = (data.parsed.experience || []).map(e => ({
+          empresa: e.company || '',
+          cargo: e.role || '',
+          inicio: e.period || ''
+        }))
+        rascunho.perfil.formacao = (data.parsed.education || []).map(e => ({
+          instituicao: e.institution || '',
+          curso: e.degree || ''
+        }))
+        rascunho.perfil.sobreMim = data.resume.profile_summary || ''
+      }
+      localStorage.setItem('cs_rascunho_perfil', JSON.stringify(rascunho))
       setProgresso('revisao')
       window.location.href = '/comecar/revisao'
     } catch (err: unknown) {
