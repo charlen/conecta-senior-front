@@ -83,9 +83,9 @@ export function HomePage() {
               <div key={j.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
                 <h3 className="text-xl font-bold">{j.cargo} — {j.empresa}</h3>
                 <p className="text-slate-600 mt-2">{j.desc}</p>
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="px-3 py-1 bg-emerald-50 text-emerald-800 rounded-full font-semibold">{j.score}% compatível</span>
-                  <Button variant="primary">Candidatar-me</Button>
+                <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                  <span className="px-3 py-1 bg-emerald-50 text-emerald-800 rounded-full font-semibold self-start">{j.score}% compatível</span>
+                  <Button variant="primary" className="w-full md:w-auto">Candidatar-me</Button>
                 </div>
               </div>
             ))}
