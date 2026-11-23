@@ -77,9 +77,9 @@ export default function PerfilPage() {
             <Label>Experiência profissional</Label>
             <Input value={bio} onChange={e => setBio(e.target.value)} placeholder="Ex: 30 anos em..." />
           </div>
-          <div className="flex gap-3">
-            <Button variant="primary" onClick={handleSave} disabled={saving}>{saving ? 'Salvando...' : 'Salvar e voltar'}</Button>
-            <Button variant="secondary" onClick={() => window.location.href = '/comecar/metodo'}>Continuar preenchimento</Button>
+          <div className="flex flex-col gap-3">
+            <Button variant="primary" className="w-full" onClick={handleSave} disabled={saving}>{saving ? 'Salvando...' : 'Salvar e voltar'}</Button>
+            <Button variant="secondary" className="w-full" onClick={() => window.location.href = '/comecar/metodo'}>Continuar preenchimento</Button>
           </div>
         </div>
       </div>
