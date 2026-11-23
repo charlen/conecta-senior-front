@@ -7,8 +7,10 @@ import { Alerta } from '../components/molecules/Alerta'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function EntrarPage() {
+  const [mode, setMode] = useState<'code' | 'password'>('code')
   const [step, setStep] = useState<'email' | 'code'>('email')
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [code, setCode] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -17,35 +19,37 @@ export default function EntrarPage() {
   const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
   const { setToken } = useAuth()
 
-  const handleRequestCode = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     setSuccess(null)
     setLoading(true)
     try {
-      const res = await fetch(`${API}/users/request-code`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      })
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}))
-        if (err.error === 'account already confirmed') {
-          // Tenta login por código mesmo para conta ativa
-          const res2 = await fetch(`${API}/users/request-code`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
-          })
-          if (!res2.ok) {
-            throw new Error('Conta já confirmada. Use o código de acesso.')
-          }
-        } else {
+      if (mode === 'password') {
+        const res = await fetch(`${API}/users/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        })
+        if (!res.ok) {
+          throw new Error('Usuário e/ou senha inválidos')
+        }
+        const data = await res.json()
+        setToken(data.token)
+        window.location.href = '/vagas'
+      } else {
+        const res = await fetch(`${API}/users/request-code`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        })
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}))
           throw new Error(err.error || 'Erro ao solicitar código')
         }
+        setSuccess('Código enviado para seu e-mail!')
+        setStep('code')
       }
-      setSuccess('Código enviado para seu e-mail!')
-      setStep('code')
     } catch (err: unknown) {
       setError((err as Error).message)
     } finally {
@@ -81,21 +85,30 @@ export default function EntrarPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface p-6">
       <div className="w-full max-w-md bg-white rounded-xl p-8 shadow">
-        <Heading className="text-3xl">Entrar</Heading>
+        <Heading className="text-3xl">{mode === 'code' ? 'Entrar com código único' : 'Entrar com usuário e senha'}</Heading>
         {step === 'email' ? (
           <>
-            <p className="text-lg text-text-secondary mt-2">Informe seu e-mail para receber código de acesso</p>
+            <p className="text-lg text-text-secondary mt-2">{mode === 'code' ? 'Informe seu e-mail para receber código de acesso' : 'Informe seu e-mail e senha para entrar'}</p>
             {error && <Alerta tipo="erro" className="mt-4">{error}</Alerta>}
             {success && <Alerta tipo="sucesso" className="mt-4">{success}</Alerta>}
-            <form onSubmit={handleRequestCode} className="mt-6 space-y-4">
+            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               <div>
                 <Label htmlFor="email">E-mail</Label>
                 <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
               </div>
+              {mode === 'password' && (
+                <div>
+                  <Label htmlFor="password">Senha</Label>
+                  <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+                </div>
+              )}
               <Button type="submit" variant="primary" className="w-full" disabled={loading}>
-                {loading ? 'Enviando...' : 'Enviar código'}
+                {loading ? (mode === 'code' ? 'Enviando...' : 'Entrando...') : (mode === 'code' ? 'Enviar código' : 'Entrar')}
               </Button>
             </form>
+            <button type="button" onClick={() => setMode(mode === 'code' ? 'password' : 'code')} className="w-full pt-4 text-blue-600 text-lg hover:underline">
+              {mode === 'code' ? 'Entrar com Usuário e Senha' : 'Entrar com código único'}
+            </button>
           </>
         ) : (
           <>
