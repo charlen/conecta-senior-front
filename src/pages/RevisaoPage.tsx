@@ -2,11 +2,12 @@ import { Heading } from '../components/atoms/Heading'
 import { Text } from '../components/atoms/Text'
 import { Button } from '../components/atoms/Button'
 import { useRascunhoPerfil } from '../hooks/useRascunhoPerfil'
+import type { ResumeResponse } from '../types/resume'
 
 export default function RevisaoPage() {
   const { rascunho, salvarPerfil } = useRascunhoPerfil()
   const aiRaw = localStorage.getItem('cs_resume_ai')
-  const ai = aiRaw ? JSON.parse(aiRaw) : null
+  const ai = aiRaw ? JSON.parse(aiRaw) as ResumeResponse : null
 
   const confirmar = async () => {
     await salvarPerfil()
@@ -39,7 +40,7 @@ export default function RevisaoPage() {
               <p className="text-sm leading-relaxed mb-3">{ai.resume?.profile_summary || '-'}</p>
               <p className="text-sm text-gray-700"><strong>O que faz:</strong> {ai.resume?.what_does || '-'}</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {(ai.resume?.core_competencies || []).map((c,i)=><span key={i} className="px-2 py-1 bg-white rounded-full text-xs border">{c}</span>)}
+                {(ai.resume?.core_competencies || []).map((c: string,i: number)=><span key={i} className="px-2 py-1 bg-white rounded-full text-xs border">{c}</span>)}
               </div>
             </section>
           )}
@@ -47,7 +48,7 @@ export default function RevisaoPage() {
           <section>
             <Heading className="text-xl mb-3">Experiência</Heading>
             <div className="space-y-3">
-              {experiencias.map((exp,i)=>(
+              {experiencias.map((exp: {role?: string; cargo?: string; company?: string; empresa?: string; period?: string; periodo?: string},i: number)=>(
                 <div key={i} className="border-l-2 border-primary pl-3">
                   <p className="font-medium">{exp.role || exp.cargo} @ {exp.company || exp.empresa}</p>
                   <p className="text-sm text-gray-600">{exp.period || exp.periodo}</p>
@@ -59,7 +60,7 @@ export default function RevisaoPage() {
           <section>
             <Heading className="text-xl mb-3">Formação</Heading>
             <div className="space-y-2">
-              {formacao.map((f,i)=>(
+              {formacao.map((f: {degree?: string; curso?: string; institution?: string; instituicao?: string},i: number)=>(
                 <div key={i}>
                   <p className="font-medium">{f.degree || f.curso}</p>
                   <p className="text-sm text-gray-600">{f.institution || f.instituicao}</p>
@@ -71,7 +72,7 @@ export default function RevisaoPage() {
           <section>
             <Heading className="text-xl mb-3">Habilidades</Heading>
             <div className="flex flex-wrap gap-2">
-              {habilidades.map((h,i)=><span key={i} className="px-3 py-1 bg-gray-100 rounded-full text-sm">{h}</span>)}
+              {habilidades.map((h: string,i: number)=><span key={i} className="px-3 py-1 bg-gray-100 rounded-full text-sm">{h}</span>)}
             </div>
           </section>
 
