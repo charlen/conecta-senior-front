@@ -81,7 +81,7 @@ export default function EntrarPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface p-6">
       <div className="w-full max-w-md bg-white rounded-xl p-8 shadow">
-        <Heading>Entrar</Heading>
+        <Heading className="text-3xl">Entrar</Heading>
         {step === 'email' ? (
           <>
             <p className="text-lg text-text-secondary mt-2">Informe seu e-mail para receber código de acesso</p>

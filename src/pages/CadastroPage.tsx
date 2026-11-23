@@ -70,7 +70,7 @@ export default function CadastroPage() {
       <div className="w-full max-w-md bg-white rounded-xl p-8 shadow">
         {step === 'tipo' ? (
           <>
-            <Heading>Cadastro</Heading>
+            <Heading className="text-3xl">Cadastro</Heading>
             <p className="text-lg text-text-secondary mt-2">Como você quer se cadastrar?</p>
             <div className="mt-6 space-y-4">
               <Button variant="primary" className="w-full text-xl py-5" onClick={() => { setTipo('candidato'); setStep('email') }}>
@@ -83,7 +83,7 @@ export default function CadastroPage() {
           </>
         ) : step === 'email' ? (
           <>
-            <Heading>Cadastro {tipo === 'empresa' ? 'Empresa' : 'Candidato'}</Heading>
+            <Heading className="text-3xl">Cadastro {tipo === 'empresa' ? 'Empresa' : 'Candidato'}</Heading>
             <p className="text-lg text-text-secondary mt-2">Informe seu e-mail para continuar</p>
             {error && <Alerta tipo="erro" className="mt-4">{error}</Alerta>}
             <form onSubmit={handleEmailCheck} className="mt-6 space-y-4">
@@ -101,7 +101,7 @@ export default function CadastroPage() {
           </>
         ) : step === 'code' ? (
           <>
-            <Heading>E-mail já cadastrado</Heading>
+            <Heading className="text-3xl">E-mail já cadastrado</Heading>
             <p className="text-lg text-text-secondary mt-2">Enviamos um código para {email}</p>
             {error && <Alerta tipo="erro" className="mt-4">{error}</Alerta>}
             <form onSubmit={async e => {
@@ -137,7 +137,7 @@ export default function CadastroPage() {
           </>
         ) : (
           <>
-            <Heading>Cadastro {tipo === 'empresa' ? 'Empresa' : 'Candidato'}</Heading>
+            <Heading className="text-3xl">Cadastro {tipo === 'empresa' ? 'Empresa' : 'Candidato'}</Heading>
             <p className="text-lg text-text-secondary mt-2">Crie sua conta para começar</p>
             {success && <Alerta tipo="sucesso" className="mt-4">Cadastro realizado! Confira seu e-mail para confirmar.</Alerta>}
             {error && <Alerta tipo="erro" className="mt-4">{error}</Alerta>}
