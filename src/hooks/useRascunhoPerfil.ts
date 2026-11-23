@@ -45,7 +45,7 @@ export function useRascunhoPerfil() {
     const token = localStorage.getItem('token')
     if (!token) return
     // Buscar profile id
-    const meRes = await fetch(`${import.meta.env.VITE_API_URL || ''}/profiles/me`, {
+    const meRes = await fetch(`${import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'}/profiles/me`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     if (!meRes.ok) return
@@ -75,7 +75,7 @@ export function useRascunhoPerfil() {
       core_competencies: rascunho.perfil.habilidades,
       ideal_roles: []
     }
-    await fetch(`${import.meta.env.VITE_API_URL || ''}/profiles/${profileId}/resumes`, {
+    await fetch(`${import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'}/profiles/${profileId}/resumes`, {
       method: 'PATCH',
       headers: {
         Authorization: `Bearer ${token}`,
