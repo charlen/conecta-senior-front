@@ -22,14 +22,15 @@ export default function MinhasVagasPage() {
     <div className="min-h-screen bg-slate-50 p-6">
       <div className="max-w-7xl mx-auto">
         <Heading className="text-2xl mb-6">Conecta Sênior</Heading>
+        <div className="flex items-center justify-between mb-6">
+          <div></div>
+          <Button variant="primary" onClick={() => window.location.href = '/vagas/nova'}>Incluir vaga</Button>
+        </div>
         <div className="flex items-center gap-4 mb-6">
           <img src="https://i.pravatar.cc/80?img=12" alt="Empresa" className="w-16 h-16 rounded-full object-cover border-4 border-[#2563eb]/20" />
           <div>
             <Heading className="text-3xl">Empresa Exemplo Ltda</Heading>
             <p className="text-slate-600">contato@empresa.com</p>
-          </div>
-          <div className="ml-auto">
-            <Button variant="primary" onClick={() => window.location.href = '/vagas/nova'}>Incluir vaga</Button>
           </div>
         </div>
         <div className="space-y-4">
