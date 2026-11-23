@@ -38,10 +38,18 @@ export default function CurriculoPage() {
     setLoading(true)
     setError(null)
     try {
+      const token = localStorage.getItem('token')
+      if (!token) throw new Error('Não autenticado')
+      // Buscar profile ID
+      const meRes = await fetch(`${API_URL}/profiles/me`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      if (!meRes.ok) throw new Error('Falha ao buscar perfil')
+      const me = await meRes.json()
+      const profileId = me.id
       const form = new FormData()
       form.append('file', file)
-      const token = localStorage.getItem('token')
-      const res = await fetch(`${API_URL}/profiles/me/resumes`, {
+      const res = await fetch(`${API_URL}/profiles/${profileId}/resumes`, {
         method: 'POST',
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         body: form,
