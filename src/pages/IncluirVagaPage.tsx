@@ -9,6 +9,11 @@ export default function IncluirVagaPage() {
   const { token } = useAuth()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [location, setLocation] = useState('')
+  const [modality, setModality] = useState('')
+  const [salaryMin, setSalaryMin] = useState('')
+  const [salaryMax, setSalaryMax] = useState('')
+  const [status, setStatus] = useState('open')
   const [loading, setLoading] = useState(false)
   const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
 
@@ -19,7 +24,7 @@ export default function IncluirVagaPage() {
       await fetch(`${API}/jobs`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ title, description })
+        body: JSON.stringify({ title, description, location, modality, salary_min: salaryMin ? Number(salaryMin) : undefined, salary_max: salaryMax ? Number(salaryMax) : undefined, status })
       })
       window.location.href = '/minhas-vagas'
     } finally {
@@ -39,6 +44,34 @@ export default function IncluirVagaPage() {
           <div>
             <Label htmlFor="description">Descrição</Label>
             <textarea id="description" value={description} onChange={e => setDescription(e.target.value)} className="w-full border rounded-xl p-3" rows={6} required />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="location">Localização</Label>
+              <Input id="location" value={location} onChange={e => setLocation(e.target.value)} />
+            </div>
+            <div>
+              <Label htmlFor="modality">Modalidade</Label>
+              <Input id="modality" value={modality} onChange={e => setModality(e.target.value)} placeholder="Presencial/Remoto/Híbrido" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="salaryMin">Salário mínimo</Label>
+              <Input id="salaryMin" type="number" value={salaryMin} onChange={e => setSalaryMin(e.target.value)} />
+            </div>
+            <div>
+              <Label htmlFor="salaryMax">Salário máximo</Label>
+              <Input id="salaryMax" type="number" value={salaryMax} onChange={e => setSalaryMax(e.target.value)} />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="status">Status</Label>
+            <select id="status" value={status} onChange={e => setStatus(e.target.value)} className="w-full border rounded-xl p-3">
+              <option value="open">Aberta</option>
+              <option value="freeze">Congelada</option>
+              <option value="close">Fechada</option>
+            </select>
           </div>
           <div className="flex gap-3">
             <Button type="button" variant="secondary" onClick={() => window.location.href = '/minhas-vagas'}>Cancelar</Button>
