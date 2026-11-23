@@ -21,9 +21,8 @@ export default function MinhasVagasPage() {
   return (
     <div className="min-h-screen bg-slate-50 p-6">
       <div className="max-w-7xl mx-auto">
-        <Heading className="text-2xl mb-6">Conecta Sênior</Heading>
         <div className="flex items-center justify-between mb-6">
-          <div></div>
+          <Heading className="text-2xl">Conecta Sênior</Heading>
           <Button variant="primary" onClick={() => window.location.href = '/vagas/nova'}>Incluir vaga</Button>
         </div>
         <div className="flex items-center gap-4 mb-6">
