@@ -40,7 +40,7 @@ export default function CurriculoPage() {
     try {
       const form = new FormData()
       form.append('file', file)
-      const token = localStorage.getItem('cs_token')
+      const token = localStorage.getItem('token')
       const res = await fetch(`${API_URL}/profiles/me/resumes`, {
         method: 'POST',
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
