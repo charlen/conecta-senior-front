@@ -27,9 +27,13 @@ export function HomePage() {
       .then(data => {
         setProfile(data)
         if (!data || !data.name) {
-          if (window.location.pathname !== '/comecar/metodo') {
+          const alreadyRedirected = sessionStorage.getItem('profile_redirected')
+          if (!alreadyRedirected && window.location.pathname !== '/comecar/metodo') {
+            sessionStorage.setItem('profile_redirected', '1')
             window.location.href = '/comecar/metodo'
           }
+        } else {
+          sessionStorage.removeItem('profile_redirected')
         }
       })
       .catch(() => {})
