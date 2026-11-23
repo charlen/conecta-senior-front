@@ -56,7 +56,6 @@ export function HomePage() {
           <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
             <div className="flex flex-col items-center gap-4">
               <img src="https://i.pravatar.cc/150?img=12" alt="Foto" className="w-28 h-28 rounded-full object-cover border-4 border-[#2563eb]/20" />
-              <Button variant="secondary" className="w-full">Atualizar foto</Button>
             </div>
             <div className="mt-6 space-y-4">
               <div className="text-center">

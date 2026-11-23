@@ -57,6 +57,10 @@ export default function PerfilPage() {
       <div className="max-w-3xl mx-auto">
         <Heading className="text-3xl mb-6">Meu Perfil</Heading>
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-6">
+          <div className="flex flex-col items-center gap-4 mb-4">
+            <img src="https://i.pravatar.cc/150?img=12" alt="Foto" className="w-28 h-28 rounded-full object-cover border-4 border-[#2563eb]/20" />
+            <Button variant="secondary" className="w-full">Atualizar foto</Button>
+          </div>
           <div>
             <Label>Nome</Label>
             <Input value={name} onChange={e => setName(e.target.value)} placeholder="Seu nome completo" />
