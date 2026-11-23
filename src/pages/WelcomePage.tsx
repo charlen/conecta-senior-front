@@ -46,10 +46,13 @@ export function WelcomePage() {
       {/* Lado Direito - Área de Ação Principal */}
       <div className="w-full md:w-7/12 flex flex-col justify-between p-8 md:p-12 lg:p-16 bg-white relative">
         
-        {/* Botão Login topo direito */}
-        <div className="absolute top-6 right-6 md:top-8 md:right-8">
+        {/* Botões topo direito */}
+        <div className="absolute top-6 right-6 md:top-8 md:right-8 flex gap-3">
           <Button variant="secondary" onClick={() => window.location.href = '/entrar'} className="text-lg py-3 px-6 rounded-xl">
             Entrar
+          </Button>
+          <Button variant="primary" onClick={() => window.location.href = '/cadastro'} className="text-lg py-3 px-6 rounded-xl">
+            Cadastrar
           </Button>
         </div>
 
