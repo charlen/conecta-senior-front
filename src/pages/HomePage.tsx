@@ -59,15 +59,12 @@ export function HomePage() {
               <Button variant="secondary" className="w-full">Atualizar foto</Button>
             </div>
             <div className="mt-6 space-y-4">
-              <div>
-                <Label>Nome</Label>
-                <Input value={profile?.name || ''} readOnly />
+              <div className="text-center">
+                <p className="text-sm text-slate-500 uppercase tracking-wide">Olá</p>
+                <h2 className="text-2xl font-bold mt-1">{profile?.name || 'Usuário'}</h2>
+                <p className="text-slate-600 mt-1">{profile?.email || ''}</p>
               </div>
-              <div>
-                <Label>E-mail</Label>
-                <Input value={profile?.email || ''} readOnly />
-              </div>
-              <Button variant="primary" className="w-full" onClick={() => window.location.href = '/comecar/metodo'}>Atualizar perfil profissional</Button>
+              <Button variant="primary" className="w-full" onClick={() => window.location.href = '/meu-perfil'}>Atualizar perfil profissional</Button>
             </div>
           </div>
         </aside>
