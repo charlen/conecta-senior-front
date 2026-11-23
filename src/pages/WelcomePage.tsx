@@ -83,13 +83,7 @@ export function WelcomePage() {
           </div>
         </div>
 
-        {/* Disclaimer Refinado integrado como nota de rodapé discreta */}
-        <div className="mt-8 md:mt-0 pt-6 border-t border-slate-100 flex items-center gap-2.5 text-slate-400 text-sm md:text-base">
-          <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
-          <p>
-            <span className="font-semibold text-slate-500">Versão MVP:</span> Ambiente de demonstração com vagas e perfis ilustrativos.
-          </p>
-        </div>
+
 
       </div>
 
