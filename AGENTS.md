@@ -52,6 +52,7 @@ src/
 - `AI_USAGE.md` deve registrar: o que foi pedido, como foi pedido e o que foi entregue
 - Código em inglês, textos de UI em português
 - Validação obrigatória: `npm run build` e `npm run lint` sem erros
+- **Sempre validar build Go antes de commit**: `go build -o /tmp/main ./cmd` deve passar sem erros
 
 ## Operações de produção
 ### Purge Cloudflare
