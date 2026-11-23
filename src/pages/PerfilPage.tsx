@@ -7,6 +7,7 @@ import { Button } from '../components/atoms/Button'
 export default function PerfilPage() {
   const [profile, setProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [name, setName] = useState('')
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -20,6 +21,7 @@ export default function PerfilPage() {
       .then(r => r.json())
       .then(data => {
         setProfile(data)
+        setName(data.name || '')
         setLoading(false)
       })
       .catch(() => setLoading(false))
@@ -34,7 +36,7 @@ export default function PerfilPage() {
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-6">
           <div>
             <Label>Nome</Label>
-            <Input value={profile?.name || ''} placeholder="Seu nome completo" />
+            <Input value={name} onChange={e => setName(e.target.value)} placeholder="Seu nome completo" />
           </div>
           <div>
             <Label>E-mail</Label>
