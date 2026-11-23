@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '../components/atoms/Button'
 import { Input } from '../components/atoms/Input'
 import { Label } from '../components/atoms/Label'
@@ -8,13 +8,30 @@ import { useAuth } from '../contexts/AuthContext'
 
 export function HomePage() {
   const [query, setQuery] = useState('')
+  const [profile, setProfile] = useState<any>(null)
   const { setToken } = useAuth()
   const jobs = mockJobs.filter(j => !query || j.cargo.toLowerCase().includes(query.toLowerCase()) || j.empresa.toLowerCase().includes(query.toLowerCase()))
 
   const handleLogout = () => {
     setToken(null)
-    window.location.href = '/entrar'
+    window.location.href = '/'
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) return
+    fetch(`${import.meta.env.VITE_API_URL || ''}/profiles/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(r => r.json())
+      .then(data => {
+        setProfile(data)
+        if (!data || !data.name) {
+          window.location.href = '/comecar/metodo'
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -38,11 +55,11 @@ export function HomePage() {
             <div className="mt-6 space-y-4">
               <div>
                 <Label>Nome</Label>
-                <Input value="Maria Silva" readOnly />
+                <Input value={profile?.name || ''} readOnly />
               </div>
               <div>
                 <Label>E-mail</Label>
-                <Input value="maria@email.com" readOnly />
+                <Input value={profile?.email || ''} readOnly />
               </div>
               <Button variant="primary" className="w-full" onClick={() => window.location.href = '/comecar/metodo'}>Atualizar perfil profissional</Button>
             </div>
