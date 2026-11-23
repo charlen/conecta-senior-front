@@ -14,9 +14,10 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "types": ["cypress"]
   },
-  "include": ["src"],
-  "exclude": ["e2e/**", "node_modules", "**/e2e/**"],
+  "include": ["src", "e2e"],
+  "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
