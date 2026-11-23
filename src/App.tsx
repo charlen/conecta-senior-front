@@ -24,6 +24,7 @@ import RevisaoPage from './pages/RevisaoPage'
 import ConfirmadoPage from './pages/ConfirmadoPage'
 import PerfilPage from './pages/PerfilPage'
 import MinhasVagasPage from './pages/MinhasVagasPage'
+import IncluirVagaPage from './pages/IncluirVagaPage'
 import { useFlow } from './hooks/useFlow'
 
 function FlowRouter() {
@@ -47,7 +48,7 @@ function AppRoutes() {
   const path = window.location.pathname
   const { isAuthenticated } = useAuth()
 
-  if (isAuthenticated && path !== '/vagas' && path !== '/meu-perfil' && path !== '/minhas-vagas' && !path.startsWith('/comecar')) {
+  if (isAuthenticated && path !== '/vagas' && path !== '/meu-perfil' && path !== '/minhas-vagas' && path !== '/vagas/nova' && !path.startsWith('/comecar')) {
     window.location.href = '/vagas'
     return null
   }
@@ -90,6 +91,9 @@ function AppRoutes() {
   }
   if (path === '/minhas-vagas') {
     return <MinhasVagasPage />
+  }
+  if (path === '/vagas/nova') {
+    return <IncluirVagaPage />
   }
   if (path.startsWith('/comecar/passo/')) {
     return <WizardPage />
