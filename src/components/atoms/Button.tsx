@@ -5,7 +5,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 }
 
 export function Button({ variant = 'secondary', className = '', ...props }: ButtonProps) {
-  const base = 'appearance-none px-8 py-4 text-xl font-semibold rounded-2xl transition-all min-h-[56px] shadow-sm focus:outline-none focus:ring-4 focus:ring-[#2563eb]/30'
+  const base = 'appearance-none px-8 py-4 text-xl font-semibold rounded-2xl transition-all min-h-[56px] shadow-sm focus:outline-none focus:ring-4 focus:ring-[#2563eb]/30 cursor-pointer'
   const variantClass =
     variant === 'primary'
       ? 'bg-[#2563eb] text-white hover:brightness-95 active:scale-[0.98] border-0'
