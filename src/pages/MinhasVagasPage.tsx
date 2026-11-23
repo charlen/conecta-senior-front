@@ -17,8 +17,16 @@ export default function MinhasVagasPage() {
     })
       .then(r => r.json())
       .then(data => {
-        const all = data.jobs || []
-        // filtra vagas da empresa logada se backend não filtrar
+        const all = (data.jobs || []).map((j: Record<string, unknown>) => ({
+          id: (j.id as string) ?? (j.ID as string),
+          title: (j.title as string) ?? (j.Title as string),
+          description: (j.description as string) ?? (j.Description as string),
+          location: (j.location as string) ?? (j.Location as string),
+          modality: (j.modality as string) ?? (j.Modality as string),
+          salary_min: (j.salary_min as number) ?? (j.SalaryMin as number),
+          salary_max: (j.salary_max as number) ?? (j.SalaryMax as number),
+          status: (j.status as string) ?? (j.Status as string),
+        }))
         setJobs(all)
       })
       .catch(() => {})
