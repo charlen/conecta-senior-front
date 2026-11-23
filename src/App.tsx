@@ -7,6 +7,7 @@ import { ResumePage } from './pages/ResumePage'
 import { PreferencesPage } from './pages/PreferencesPage'
 import { MatchingPage } from './pages/MatchingPage'
 import { JobsPage } from './pages/JobsPage'
+import { HomePage } from './pages/HomePage'
 import { DashboardPage } from './pages/DashboardPage'
 import { ConfirmPage } from './pages/ConfirmPage'
 import DevComponentes from './pages/DevComponentes'
@@ -72,7 +73,7 @@ export function App() {
     return <ConfirmadoPage />
   }
   if (path === '/vagas') {
-    return <JobsPage />
+    return <HomePage />
   }
   if (path.startsWith('/comecar/passo/')) {
     return <WizardPage />
