@@ -14,7 +14,11 @@ export default function WizardPage() {
   const passo = match ? Number(match[1]) : 1
 
   const voltar = () => {
-    if (passo > 1) window.location.href = `/comecar/passo/${passo - 1}`
+    if (passo > 1) {
+      window.location.href = `/comecar/passo/${passo - 1}`
+    } else {
+      window.location.href = '/comecar/metodo'
+    }
   }
   const continuar = () => {
     if (passo < TOTAL) window.location.href = `/comecar/passo/${passo + 1}`
@@ -42,7 +46,7 @@ export default function WizardPage() {
           {renderStep()}
         </div>
         <div className="flex justify-between mt-6">
-          <Button variant="secondary" onClick={voltar} disabled={passo === 1}>Voltar</Button>
+          <Button variant="secondary" onClick={voltar}>Voltar</Button>
           <Button variant="primary" onClick={continuar}>Continuar</Button>
         </div>
       </div>
