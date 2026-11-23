@@ -24,7 +24,7 @@ export default function IncluirVagaPage() {
       // tenta obter company_id do usuário
       let companyId = undefined
       try {
-        const meRes = await fetch(`${API}/users/me`, { headers: { Authorization: `Bearer ${token}` } })
+        const meRes = await fetch(`${API}/profiles/me`, { headers: { Authorization: `Bearer ${token}` } })
         const me = await meRes.json()
         companyId = me.company_id || me.companyId
       } catch {

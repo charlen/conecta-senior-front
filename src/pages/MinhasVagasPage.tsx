@@ -22,7 +22,7 @@ export default function MinhasVagasPage() {
         setJobs(all)
       })
       .catch(() => {})
-    fetch(`${API}/users/me`, {
+    fetch(`${API}/profiles/me`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())
