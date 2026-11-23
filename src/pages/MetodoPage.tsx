@@ -21,7 +21,7 @@ export default function MetodoPage() {
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Heading className="text-2xl">Conecta Sênior</Heading>
-          <Button variant="secondary" onClick={() => window.history.back()}>Voltar</Button>
+          <Button variant="secondary" onClick={() => window.location.href = '/meu-perfil'}>Voltar</Button>
         </div>
       </header>
       <main className="max-w-7xl mx-auto px-6 py-10">
