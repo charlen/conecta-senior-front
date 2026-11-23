@@ -58,10 +58,16 @@ export default function CurriculoPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface p-6">
-      <div className="max-w-2xl mx-auto">
-        <Heading>Enviar currículo em PDF</Heading>
-        <Text className="mt-2">Arraste o arquivo aqui ou clique para selecionar</Text>
+    <div className="min-h-screen bg-slate-50">
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <Heading className="text-2xl">Conecta Sênior</Heading>
+        </div>
+      </header>
+      <main className="max-w-7xl mx-auto px-0 md:px-6 py-0 md:py-10">
+        <div className="bg-white rounded-none md:rounded-3xl p-6 md:p-8 shadow-none md:shadow-sm border-0 md:border border-slate-200">
+          <Heading className="text-3xl">Enviar currículo em PDF</Heading>
+          <Text className="mt-2 text-lg text-slate-600">Arraste o arquivo aqui ou clique para selecionar</Text>
         {error && <Alerta tipo="erro" className="mt-4">{error}</Alerta>}
         <div
           onDragOver={e => e.preventDefault()}
@@ -72,14 +78,15 @@ export default function CurriculoPage() {
           <input type="file" accept="application/pdf" className="hidden" id="fileInput" onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
           <Button variant="secondary" className="mt-4" onClick={() => document.getElementById('fileInput')?.click()}>Escolher arquivo</Button>
         </div>
-        <div className="flex justify-between mt-6">
-          <Button variant="secondary" onClick={() => window.location.href = '/comecar/metodo'}>Voltar</Button>
-          <Button variant="primary" onClick={upload} disabled={!file || loading}>
+        <div className="flex flex-col md:flex-row gap-3 mt-6">
+          <Button variant="secondary" className="w-full md:w-auto" onClick={() => window.location.href = '/comecar/metodo'}>Voltar</Button>
+          <Button variant="primary" className="w-full md:w-auto" onClick={upload} disabled={!file || loading}>
             {loading ? <><Spinner className="mr-2" /> Lendo seu currículo...</> : 'Enviar'}
           </Button>
         </div>
         {loading && <Text className="mt-4">Lendo seu currículo...</Text>}
-      </div>
+        </div>
+      </main>
     </div>
   )
 }
