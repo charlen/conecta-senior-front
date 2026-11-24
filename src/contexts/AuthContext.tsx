@@ -43,6 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!raw) {
       localStorage.clear()
       setTokenState(null)
+      window.location.reload()
       return
     }
     try {
@@ -50,12 +51,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!payload) {
         localStorage.clear()
         setTokenState(null)
+        window.location.reload()
         return
       }
       setTokenState(raw)
     } catch {
       localStorage.clear()
       setTokenState(null)
+      window.location.reload()
     }
   }, [])
 
