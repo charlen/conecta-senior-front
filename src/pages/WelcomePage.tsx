@@ -46,12 +46,22 @@ export function WelcomePage() {
       {/* Lado Direito - Área de Ação Principal */}
       <div className="w-full md:w-7/12 flex flex-col justify-between p-8 md:p-12 lg:p-16 bg-white relative">
         
-        {/* Botões topo direito */}
-        <div className="absolute top-6 right-6 md:top-8 md:right-8 flex gap-3 flex-col md:flex-row">
-          <Button variant="secondary" onClick={() => window.location.href = '/entrar'} className="text-lg py-3 px-6 rounded-xl w-full md:w-auto">
+        {/* Botões topo direito - Desktop */}
+        <div className="hidden md:flex absolute top-8 right-8 gap-3">
+          <Button variant="secondary" onClick={() => window.location.href = '/entrar'} className="text-lg py-3 px-6 rounded-xl">
             Entrar
           </Button>
-          <Button variant="primary" onClick={() => window.location.href = '/cadastro'} className="text-lg py-3 px-6 rounded-xl w-full md:w-auto">
+          <Button variant="primary" onClick={() => window.location.href = '/cadastro'} className="text-lg py-3 px-6 rounded-xl">
+            Cadastrar
+          </Button>
+        </div>
+
+        {/* Botões topo - Mobile */}
+        <div className="md:hidden flex gap-3 mb-6">
+          <Button variant="secondary" onClick={() => window.location.href = '/entrar'} className="flex-1 text-lg py-3 px-6 rounded-xl">
+            Entrar
+          </Button>
+          <Button variant="primary" onClick={() => window.location.href = '/cadastro'} className="flex-1 text-lg py-3 px-6 rounded-xl">
             Cadastrar
           </Button>
         </div>
