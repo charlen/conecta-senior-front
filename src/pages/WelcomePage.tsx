@@ -10,6 +10,15 @@ export function WelcomePage() {
       
       {/* Lado Esquerdo - Painel Hero com Imagem e Texto Totalmente Integrados */}
       <div className="w-full md:w-5/12 min-h-[60vh] md:min-h-screen relative flex flex-col justify-end p-8 md:p-12 lg:p-16 text-white overflow-hidden bg-slate-900">
+        {/* Botões mobile no topo da primeira div */}
+        <div className="md:hidden absolute top-4 left-4 right-4 flex gap-3 z-20">
+          <Button variant="secondary" onClick={() => window.location.href = '/entrar'} className="flex-1 text-lg py-3 px-6 rounded-xl">
+            Entrar
+          </Button>
+          <Button variant="primary" onClick={() => window.location.href = '/cadastro'} className="flex-1 text-lg py-3 px-6 rounded-xl">
+            Cadastrar
+          </Button>
+        </div>
         
         {/* A Imagem de Fundo Ocupando Todo o Painel */}
         <img 
@@ -56,15 +65,7 @@ export function WelcomePage() {
           </Button>
         </div>
 
-        {/* Botões topo - Mobile */}
-        <div className="md:hidden flex gap-3 mb-6">
-          <Button variant="secondary" onClick={() => window.location.href = '/entrar'} className="flex-1 text-lg py-3 px-6 rounded-xl">
-            Entrar
-          </Button>
-          <Button variant="primary" onClick={() => window.location.href = '/cadastro'} className="flex-1 text-lg py-3 px-6 rounded-xl">
-            Cadastrar
-          </Button>
-        </div>
+
 
         {/* Div invisível para ajudar no alinhamento vertical flex-col no desktop */}
         <div className="hidden md:block" />
