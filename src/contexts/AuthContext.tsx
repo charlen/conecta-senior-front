@@ -39,8 +39,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setTokenState] = useState<string | null>(null)
 
   useEffect(() => {
-    const t = localStorage.getItem('token')
-    if (t) setTokenState(t)
+    const raw = localStorage.getItem('token')
+    if (!raw) {
+      localStorage.clear()
+      setTokenState(null)
+      return
+    }
+    try {
+      const payload = decodePayload(raw)
+      if (!payload) {
+        localStorage.clear()
+        setTokenState(null)
+        return
+      }
+      setTokenState(raw)
+    } catch {
+      localStorage.clear()
+      setTokenState(null)
+    }
   }, [])
 
   const setToken = (t: string | null) => {
