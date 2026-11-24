@@ -11,12 +11,9 @@ export function WelcomePage() {
       {/* Lado Esquerdo - Painel Hero com Imagem e Texto Totalmente Integrados */}
       <div className="w-full md:w-5/12 min-h-[60vh] md:min-h-screen relative flex flex-col justify-end p-8 md:p-12 lg:p-16 text-white overflow-hidden bg-slate-900">
         {/* Botões mobile no topo da primeira div */}
-        <div className="md:hidden absolute top-4 left-4 right-4 flex gap-3 z-20">
-          <Button variant="secondary" onClick={() => window.location.href = '/entrar'} className="flex-1 text-xl py-4 px-6 rounded-2xl bg-white/90 backdrop-blur-md">
-            Entrar
-          </Button>
-          <Button variant="primary" onClick={() => window.location.href = '/cadastro'} className="flex-1 text-xl py-4 px-6 rounded-2xl bg-[#2563eb]/90 backdrop-blur-md">
-            Cadastrar
+        <div className="md:hidden absolute top-4 left-4 right-4 z-20">
+          <Button variant="primary" onClick={() => window.location.href = '#auth'} className="w-full text-xl py-4 px-6 rounded-2xl bg-[#2563eb]/90 backdrop-blur-md">
+            Entrar / Cadastrar
           </Button>
         </div>
         
