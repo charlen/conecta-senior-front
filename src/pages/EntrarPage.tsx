@@ -84,7 +84,8 @@ export default function EntrarPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface p-6">
-      <div className="w-full max-w-md bg-white rounded-xl p-8 shadow">
+      <div className="w-full max-w-md flex flex-col items-center">
+      <div className="w-full bg-white rounded-xl p-8 shadow">
         <Heading className="text-3xl">{mode === 'code' ? 'Entrar com código único' : 'Entrar com usuário e senha'}</Heading>
         {step === 'email' ? (
           <>
@@ -130,6 +131,7 @@ export default function EntrarPage() {
         )}
       </div>
       <button onClick={() => window.location.href = '/'} className="mt-4 text-slate-600 hover:text-slate-900 cursor-pointer">← Voltar para início</button>
+      </div>
     </div>
   )
 }
