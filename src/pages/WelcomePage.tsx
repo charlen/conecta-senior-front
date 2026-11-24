@@ -1,8 +1,6 @@
-import { useFlow } from '../hooks/useFlow'
 import { Button } from '../components/atoms/Button'
 
 export function WelcomePage() {
-  const { nextStep } = useFlow()
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row antialiased font-sans">
@@ -83,7 +81,7 @@ export function WelcomePage() {
           <div className="pt-2">
             <Button 
               variant="primary" 
-              onClick={nextStep} 
+              onClick={() => window.location.href = '/cadastro'} 
               className="w-full text-xl md:text-2xl py-4 md:py-5 shadow-lg shadow-blue-100 rounded-2xl font-bold transition-all"
             >
               Começar minha jornada
