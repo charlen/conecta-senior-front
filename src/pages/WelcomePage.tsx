@@ -47,11 +47,11 @@ export function WelcomePage() {
       <div className="w-full md:w-7/12 flex flex-col justify-between p-8 md:p-12 lg:p-16 bg-white relative">
         
         {/* Botões topo direito */}
-        <div className="absolute top-6 right-6 md:top-8 md:right-8 flex gap-3">
-          <Button variant="secondary" onClick={() => window.location.href = '/entrar'} className="text-lg py-3 px-6 rounded-xl">
+        <div className="absolute top-6 right-6 md:top-8 md:right-8 flex gap-3 flex-col md:flex-row">
+          <Button variant="secondary" onClick={() => window.location.href = '/entrar'} className="text-lg py-3 px-6 rounded-xl w-full md:w-auto">
             Entrar
           </Button>
-          <Button variant="primary" onClick={() => window.location.href = '/cadastro'} className="text-lg py-3 px-6 rounded-xl">
+          <Button variant="primary" onClick={() => window.location.href = '/cadastro'} className="text-lg py-3 px-6 rounded-xl w-full md:w-auto">
             Cadastrar
           </Button>
         </div>
