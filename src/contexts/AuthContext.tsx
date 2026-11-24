@@ -37,13 +37,14 @@ function decodeUser(token: string | null) {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setTokenState] = useState<string | null>(null)
+  const [checked, setChecked] = useState(false)
 
   useEffect(() => {
     const raw = localStorage.getItem('token')
     if (!raw) {
       localStorage.clear()
       setTokenState(null)
-      window.location.reload()
+      setChecked(true)
       return
     }
     try {
@@ -51,16 +52,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!payload) {
         localStorage.clear()
         setTokenState(null)
-        window.location.reload()
-        return
+      } else {
+        setTokenState(raw)
       }
-      setTokenState(raw)
     } catch {
       localStorage.clear()
       setTokenState(null)
-      window.location.reload()
     }
+    setChecked(true)
   }, [])
+
+  if (!checked) return null
 
   const setToken = (t: string | null) => {
     if (t) {
