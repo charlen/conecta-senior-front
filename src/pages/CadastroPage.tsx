@@ -68,7 +68,6 @@ export default function CadastroPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface p-6">
       <div className="w-full max-w-md bg-white rounded-xl p-8 shadow">
-        <button onClick={() => window.location.href = '/'} className="mb-4 text-slate-600 hover:text-slate-900 cursor-pointer">← Voltar para início</button>
         {step === 'tipo' ? (
           <>
             <Heading className="text-3xl">Cadastro</Heading>
@@ -165,6 +164,7 @@ export default function CadastroPage() {
           </>
         )}
       </div>
+      <button onClick={() => window.location.href = '/'} className="mt-4 text-slate-600 hover:text-slate-900 cursor-pointer">← Voltar para início</button>
     </div>
   )
 }
