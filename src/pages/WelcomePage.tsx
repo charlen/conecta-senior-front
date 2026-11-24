@@ -1,8 +1,6 @@
-import { useFlow } from '../hooks/useFlow'
 import { Button } from '../components/atoms/Button'
 
 export function WelcomePage() {
-  const { nextStep } = useFlow()
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row antialiased font-sans">
@@ -10,6 +8,12 @@ export function WelcomePage() {
       
       {/* Lado Esquerdo - Painel Hero com Imagem e Texto Totalmente Integrados */}
       <div className="w-full md:w-5/12 min-h-[60vh] md:min-h-screen relative flex flex-col justify-end p-8 md:p-12 lg:p-16 text-white overflow-hidden bg-slate-900">
+        {/* Botões mobile no topo da primeira div */}
+        <div className="md:hidden absolute top-4 left-4 right-4 z-20">
+          <Button variant="primary" onClick={() => window.location.href = '#auth'} className="w-full text-xl py-4 px-6 rounded-2xl bg-[#2563eb]/90 backdrop-blur-md">
+            Entrar / Cadastrar
+          </Button>
+        </div>
         
         {/* A Imagem de Fundo Ocupando Todo o Painel */}
         <img 
@@ -46,8 +50,8 @@ export function WelcomePage() {
       {/* Lado Direito - Área de Ação Principal */}
       <div className="w-full md:w-7/12 flex flex-col justify-between p-8 md:p-12 lg:p-16 bg-white relative">
         
-        {/* Botões topo direito */}
-        <div className="absolute top-6 right-6 md:top-8 md:right-8 flex gap-3">
+        {/* Botões topo direito - Desktop */}
+        <div className="hidden md:flex absolute top-8 right-8 gap-3">
           <Button variant="secondary" onClick={() => window.location.href = '/entrar'} className="text-lg py-3 px-6 rounded-xl">
             Entrar
           </Button>
@@ -55,6 +59,8 @@ export function WelcomePage() {
             Cadastrar
           </Button>
         </div>
+
+
 
         {/* Div invisível para ajudar no alinhamento vertical flex-col no desktop */}
         <div className="hidden md:block" />
@@ -75,7 +81,7 @@ export function WelcomePage() {
           <div className="pt-2">
             <Button 
               variant="primary" 
-              onClick={nextStep} 
+              onClick={() => window.location.href = '/cadastro'} 
               className="w-full text-xl md:text-2xl py-4 md:py-5 shadow-lg shadow-blue-100 rounded-2xl font-bold transition-all"
             >
               Começar minha jornada
