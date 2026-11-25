@@ -4,7 +4,6 @@ import { Input } from '../components/atoms/Input'
 import { Label } from '../components/atoms/Label'
 import { Heading } from '../components/atoms/Heading'
 import { Alerta } from '../components/molecules/Alerta'
-import { authApi } from '../services/authApi'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function CadastroPage() {
@@ -25,11 +24,6 @@ export default function CadastroPage() {
     setLoading(true)
     try {
       const key = `cadastro_${email}`
-      if (localStorage.getItem(key) === 'sent') {
-        setError('Código já enviado. Aguarde alguns minutos.')
-        setLoading(false)
-        return
-      }
       const res = await fetch(`${API}/users/request-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -43,6 +37,10 @@ export default function CadastroPage() {
           throw new Error(err.error || 'Erro ao verificar e-mail')
         }
       } else {
+        const data = await res.json()
+        if (data.message === 'code resent') {
+          setError('Código reenviado para o e-mail. Verifique sua caixa de entrada.')
+        }
         localStorage.setItem(key, 'sent')
         setStep('code')
       }
@@ -61,13 +59,24 @@ export default function CadastroPage() {
       return
     }
     const key = `cadastro_${email}`
-    if (localStorage.getItem(key) === 'sent') {
-      setError('Código já enviado para este e-mail. Aguarde alguns minutos ou redefina a senha.')
-      return
-    }
     setLoading(true)
     try {
-      await authApi.register({ email, password, role: tipo === 'empresa' ? 'company' : 'candidate' })
+      const res = await fetch(`${API}/users/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role: tipo === 'empresa' ? 'company' : 'candidate' })
+      })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        if (err.error === 'email already registered') {
+          throw new Error('E-mail já cadastrado. Use reenviar código.')
+        }
+        throw new Error(err.error || 'Erro ao cadastrar')
+      }
+      const data = await res.json()
+      if (data.message === 'code resent for pending account') {
+        setError('Cadastro pendente. Código reenviado para seu e-mail.')
+      }
       localStorage.setItem(key, 'sent')
       setStep('code')
     } catch (err: unknown) {
@@ -117,6 +126,22 @@ export default function CadastroPage() {
             <Heading className="text-3xl">Confirmação</Heading>
             <p className="text-lg text-text-secondary mt-2">Enviamos um código para {email}</p>
             {error && <Alerta tipo="erro" className="mt-4">{error}</Alerta>}
+            <Button variant="secondary" className="mt-4 w-full" onClick={async () => {
+              setLoading(true)
+              try {
+                const res = await fetch(`${API}/users/request-code`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ email })
+                })
+                if (!res.ok) throw new Error('Não foi possível reenviar código')
+                setError('Código reenviado. Verifique seu e-mail.')
+              } catch (err: unknown) {
+                setError((err as Error).message)
+              } finally {
+                setLoading(false)
+              }
+            }} disabled={loading}>Reenviar código</Button>
             <form onSubmit={async e => {
               e.preventDefault()
               setLoading(true)
