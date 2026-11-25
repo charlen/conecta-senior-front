@@ -16,7 +16,6 @@ export default function CadastroPage() {
   const [code, setCode] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
   const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
   const { setToken } = useAuth()
 
@@ -25,6 +24,12 @@ export default function CadastroPage() {
     setError(null)
     setLoading(true)
     try {
+      const key = `cadastro_${email}`
+      if (localStorage.getItem(key) === 'sent') {
+        setError('Código já enviado. Aguarde alguns minutos.')
+        setLoading(false)
+        return
+      }
       const res = await fetch(`${API}/users/request-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -38,6 +43,7 @@ export default function CadastroPage() {
           throw new Error(err.error || 'Erro ao verificar e-mail')
         }
       } else {
+        localStorage.setItem(key, 'sent')
         setStep('code')
       }
     } catch (err: unknown) {
@@ -54,10 +60,16 @@ export default function CadastroPage() {
       setError('As senhas não coincidem')
       return
     }
+    const key = `cadastro_${email}`
+    if (localStorage.getItem(key) === 'sent') {
+      setError('Código já enviado para este e-mail. Aguarde alguns minutos ou redefina a senha.')
+      return
+    }
     setLoading(true)
     try {
       await authApi.register({ email, password, role: tipo === 'empresa' ? 'company' : 'candidate' })
-      setSuccess(true)
+      localStorage.setItem(key, 'sent')
+      setStep('code')
     } catch (err: unknown) {
       setError((err as Error).message)
     } finally {
@@ -102,7 +114,7 @@ export default function CadastroPage() {
           </>
         ) : step === 'code' ? (
           <>
-            <Heading className="text-3xl">E-mail já cadastrado</Heading>
+            <Heading className="text-3xl">Confirmação</Heading>
             <p className="text-lg text-text-secondary mt-2">Enviamos um código para {email}</p>
             {error && <Alerta tipo="erro" className="mt-4">{error}</Alerta>}
             <form onSubmit={async e => {
@@ -140,7 +152,6 @@ export default function CadastroPage() {
           <>
             <Heading className="text-3xl">Cadastro {tipo === 'empresa' ? 'Empresa' : 'Candidato'}</Heading>
             <p className="text-lg text-text-secondary mt-2">Crie sua conta para começar</p>
-            {success && <Alerta tipo="sucesso" className="mt-4">Cadastro realizado! Confira seu e-mail para confirmar.</Alerta>}
             {error && <Alerta tipo="erro" className="mt-4">{error}</Alerta>}
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               <div>
