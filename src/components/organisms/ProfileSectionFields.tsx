@@ -4,6 +4,7 @@ import { UFS } from '../../types/candidate'
 import { ProfileField, inputClass } from '../molecules/ProfileField'
 import { Button } from '../atoms/Button'
 import { ConfirmModal } from '../molecules/ConfirmModal'
+import { Dropdown } from '../molecules/Dropdown'
 
 type SectionProps = {
   value: CandidateProfile
@@ -29,10 +30,8 @@ export function PersonalFields({ value, onChange, errors }: SectionProps) {
         </ProfileField>
         <ProfileField id="state" label="Estado" required error={err(errors, 'state')}>
           {a => (
-            <select {...a} className={inputClass(err(errors, 'state'))} value={value.state} onChange={e => set('state', e.target.value)}>
-              <option value="">Escolha</option>
-              {UFS.map(uf => <option key={uf} value={uf}>{uf}</option>)}
-            </select>
+            <Dropdown {...a} placeholder="Escolha" value={value.state} onChange={v => set('state', v)}
+              options={UFS.map(uf => ({ value: uf, label: uf }))} />
           )}
         </ProfileField>
       </div>
@@ -163,23 +162,25 @@ export function PreferencesFields({ value, onChange, errors }: SectionProps) {
     <div className="space-y-6">
       <ProfileField id="modality" label="Modalidade" error={err(errors, 'preferences.modality')}>
         {a => (
-          <select {...a} className={inputClass()} value={value.preferences.modality} onChange={e => setPref({ modality: e.target.value as Modality })}>
-            <option value="">Tanto faz</option>
-            <option value="presencial">Presencial</option>
-            <option value="remoto">De casa (remoto)</option>
-            <option value="hibrido">Híbrido</option>
-          </select>
+          <Dropdown {...a} value={value.preferences.modality} onChange={v => setPref({ modality: v as Modality })}
+            options={[
+              { value: '', label: 'Tanto faz' },
+              { value: 'presencial', label: 'Presencial', hint: 'Trabalhar no local da empresa' },
+              { value: 'remoto', label: 'De casa (remoto)', hint: 'Trabalhar pelo computador, de casa' },
+              { value: 'hibrido', label: 'Híbrido', hint: 'Alguns dias na empresa, outros em casa' }
+            ]} />
         )}
       </ProfileField>
       <ProfileField id="job_type" label="Tipo de contratação" error={err(errors, 'preferences.job_type')}>
         {a => (
-          <select {...a} className={inputClass()} value={value.preferences.job_type} onChange={e => setPref({ job_type: e.target.value as JobType })}>
-            <option value="">Tanto faz</option>
-            <option value="clt">Carteira assinada (CLT)</option>
-            <option value="pj">Prestação de serviço (PJ)</option>
-            <option value="temporario">Temporário</option>
-            <option value="voluntario">Voluntário</option>
-          </select>
+          <Dropdown {...a} value={value.preferences.job_type} onChange={v => setPref({ job_type: v as JobType })}
+            options={[
+              { value: '', label: 'Tanto faz' },
+              { value: 'clt', label: 'Carteira assinada (CLT)' },
+              { value: 'pj', label: 'Prestação de serviço (PJ)' },
+              { value: 'temporario', label: 'Temporário' },
+              { value: 'voluntario', label: 'Voluntário' }
+            ]} />
         )}
       </ProfileField>
       <ProfileField id="availability" label="Disponibilidade" hint='Exemplo: "manhãs", "meio período", "fins de semana".'>
