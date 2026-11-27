@@ -380,3 +380,13 @@ Todas as solicitações foram interpretadas por linguagem natural, traduzidas pa
 - Fluxo de candidatura (candidato) e visão de inscritos (empresa)
 - Senha mínima unificada, fallback de decodificação de foto
 - Verificação com Cypress e API simulada (3 cenários)
+
+---
+
+## 2026-11-27 Dropdowns customizados (Claude Code)
+
+**O que foi pedido:** customizar os dropdowns das páginas no padrão visual do app.
+**Como foi pedido:** linguagem natural, em sessão com Claude Code (Opus) no VS Code.
+**O que foi entregue:**
+- Molecule `Dropdown` acessível (WAI-ARIA combobox) substituindo os 5 `<select>` nativos
+- Teste Cypress de mouse, teclado (digitação para pular, Enter, Esc), clique fora e valor salvo; verificação de abertura para cima por medição no navegador

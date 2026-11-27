@@ -3,6 +3,12 @@
 ## [Unreleased]
 
 ### Added
+- `Dropdown` (molecule): lista suspensa no tema, padrão WAI-ARIA "select-only combobox" — teclado completo (setas, Home/End, PageUp/PageDown, digitar para pular, Enter/Espaço, Esc, Tab), leitor de tela (`role=combobox`/`listbox`, `aria-activedescendant`, `aria-selected`), opções grandes (≥ 56px) com dica opcional e ✓ no selecionado, abre para cima quando falta espaço, fecha ao clicar fora
+
+### Changed
+- Todos os `<select>` nativos substituídos pelo `Dropdown`: UF, modalidade e tipo de contratação no perfil (com dicas explicando cada opção) e status da vaga em incluir/editar vaga
+
+### Added
 - Candidatura de verdade em `/vagas`: "Candidatar-me" abre `ConfirmModal` explicando o que a empresa verá; depois o card mostra "Você se candidatou a esta vaga" e "Desistir da candidatura" (confirmação `danger`). Perfil incompleto (422) mostra "Completar meu perfil" (`jobsApi.apply`/`withdraw`)
 - Empresa em `/vagas/:id/candidatos`: contagem de quem se candidatou, selo "Candidatou-se em dd/mm/aaaa" e filtro "Só quem se candidatou"
 

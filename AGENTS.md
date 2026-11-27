@@ -18,7 +18,7 @@ Ver `PRINCIPLES.md` para modo de trabalho, qualidade e governança.
 src/
   components/
     atoms/        Avatar, Button, Input, Textarea, Label, Container, Heading, Pill, Text
-    molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader, BarraProgresso, LegalLinks, ProfileField, SummaryCard, Alerta, CartaoOpcao, ConfirmModal, JobCard, CodeField, ResendCode, EmailField, ShowPasswordToggle
+    molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader, BarraProgresso, LegalLinks, ProfileField, SummaryCard, Alerta, CartaoOpcao, ConfirmModal, JobCard, CodeField, ResendCode, EmailField, ShowPasswordToggle, Dropdown
     organisms/    RegistrationForm, InterviewStep, WelcomeSection, ProfileReviewFlow, ProfileSectionFields, PhotoEditor, PasswordChangeForm, CandidateMatchCard
     templates/    PageTemplate, StepTemplate, HeroStepTemplate, HeroPageTemplate, LegalPageTemplate, AuthStepTemplate
   content/       legal.ts (textos da Política de Privacidade e Termos de Uso)
@@ -46,6 +46,7 @@ src/
 - Páginas seguem `StepTemplate` ou `HeroStepTemplate` com barra de progresso e layout fluido duas colunas
 - Landing inicial em `WelcomePage` com layout duas colunas
 - Vagas em cards Tailwind com badges e tag de compatibilidade
+- Listas suspensas sempre via `Dropdown` (molecule, WAI-ARIA combobox); nunca `<select>` nativo
 - Diálogos de confirmação sempre via `ConfirmModal` (molecule); ações destrutivas usam `tone="danger"`. Nunca usar `window.confirm`
 - Perfil do candidato: modelo canônico em `src/types/candidate.ts` (espelha `internal/domain/candidate` do backend); exibido como resumo em cartões (`ProfileReviewFlow`, padrão "confira suas respostas") e editado uma seção por vez em tela focada; cada "Salvar" faz `PUT /profiles/me` (backend aceita perfil incompleto e bloqueia só valores inválidos)
 - Vagas do candidato (`/vagas`): ordenadas por compatibilidade via `GET /match/me` (`jobsApi`); candidatura com confirmação via `POST/DELETE /jobs/:id/apply`

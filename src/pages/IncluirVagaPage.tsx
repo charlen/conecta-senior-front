@@ -4,6 +4,7 @@ import { Input } from '../components/atoms/Input'
 import { Label } from '../components/atoms/Label'
 import { Heading } from '../components/atoms/Heading'
 import { useAuth } from '../contexts/AuthContext'
+import { Dropdown } from '../components/molecules/Dropdown'
 
 export default function IncluirVagaPage() {
   const { token } = useAuth()
@@ -90,11 +91,12 @@ export default function IncluirVagaPage() {
           </div>
           <div>
             <Label htmlFor="status">Status</Label>
-            <select id="status" value={status} onChange={e => setStatus(e.target.value)} className="w-full border rounded-xl p-3">
-              <option value="open">Aberta</option>
-              <option value="freeze">Congelada</option>
-              <option value="close">Fechada</option>
-            </select>
+            <Dropdown id="status" value={status} onChange={setStatus}
+              options={[
+                { value: 'open', label: 'Aberta', hint: 'Recebe candidaturas' },
+                { value: 'freeze', label: 'Congelada', hint: 'Pausada, sem novas candidaturas' },
+                { value: 'close', label: 'Fechada', hint: 'Encerrada' }
+              ]} />
           </div>
           <div className="flex gap-3">
             <Button type="button" variant="secondary" onClick={() => window.location.href = '/minhas-vagas'}>Cancelar</Button>
