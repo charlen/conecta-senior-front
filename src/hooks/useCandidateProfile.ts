@@ -34,12 +34,13 @@ export function useCandidateProfile(seed?: (saved: CandidateProfile) => Candidat
     // seed is intentionally read only on first load (no deps)
   }, [])
 
-  const save = useCallback(async (): Promise<boolean> => {
-    if (!profile) return false
+  const save = useCallback(async (next?: CandidateProfile): Promise<boolean> => {
+    const target = next ?? profile
+    if (!target) return false
     setStatus('saving')
     setMessage(null)
     try {
-      const res = await profileApi.saveMine(profile)
+      const res = await profileApi.saveMine(target)
       setProfile(res.profile)
       setErrors([])
       setStatus('saved')
@@ -49,11 +50,11 @@ export function useCandidateProfile(seed?: (saved: CandidateProfile) => Candidat
         setErrors(err.fields)
         setMessage(
           err.fields.length === 1
-            ? 'Falta 1 informação para salvar. Ela está marcada em vermelho.'
-            : `Faltam ${err.fields.length} informações para salvar. Elas estão marcadas em vermelho.`
+            ? 'Uma informação precisa ser corrigida. Ela está marcada em vermelho.'
+            : `${err.fields.length} informações precisam ser corrigidas. Elas estão marcadas em vermelho.`
         )
         setTimeout(() => {
-          const first = err.fields[0]?.field.replace(/^experiences\.(\d+)\.role$/, 'exp-$1-role').replace('preferences.', '')
+          const first = err.fields[0]?.field.replace(/^experiences\.\d+\.role$/, 'exp-role').replace('preferences.', '')
           document.getElementById(first ?? '')?.focus()
         }, 0)
       } else {
@@ -64,5 +65,11 @@ export function useCandidateProfile(seed?: (saved: CandidateProfile) => Candidat
     }
   }, [profile])
 
-  return { profile, setProfile, errors, status, message, save }
+  const clearFeedback = useCallback(() => {
+    setErrors([])
+    setMessage(null)
+    setStatus(s => (s === 'saved' ? 'ready' : s))
+  }, [])
+
+  return { profile, setProfile, errors, status, message, save, clearFeedback }
 }

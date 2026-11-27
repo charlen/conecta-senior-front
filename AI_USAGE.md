@@ -336,3 +336,14 @@ Todas as solicitações foram interpretadas por linguagem natural, traduzidas pa
 **O que foi entregue:**
 - Evolução do `ConfirmModal` existente (sem criar componente duplicado), compatível com o uso na `HomePage`
 - Confirmação nas remoções do `ProfileEditor` com mensagem nomeando o item
+
+---
+
+## 2026-11-26 Perfil por seções para 60+ (Claude Code)
+
+**O que foi pedido:** avaliar se muitas seções em sequência prejudicam usuários 60+ e aplicar o que o design atual recomenda.
+**Como foi pedido:** linguagem natural, em sessão com Claude Code (Opus) no VS Code.
+**O que foi entregue:**
+- Padrões "uma coisa por página" e "confira suas respostas" (GOV.UK) e revelação progressiva aplicados ao perfil
+- Backend passa a aceitar salvar perfil incompleto (bloqueia só valores inválidos) para permitir salvar por seção
+- Verificação visual com Cypress e API simulada (resumo, edição focada, confirmação de descarte)

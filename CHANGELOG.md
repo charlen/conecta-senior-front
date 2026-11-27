@@ -3,6 +3,11 @@
 ## [Unreleased]
 
 ### Changed
+- Perfil (revisão do onboarding e `/meu-perfil`) reestruturado para 60+: resumo em cartões somente leitura com "Alterar" por seção, faixa com o que falta para completar, obrigatórios primeiro e opcionais em "Quer completar mais?"; edição de uma seção (ou de uma experiência/formação) por vez em tela focada, com "Sair sem salvar?" ao cancelar com alterações
+- `ProfileEditor` substituído por `ProfileReviewFlow` + `ProfileSectionFields` (organisms) e `SummaryCard` (molecule)
+- Remover habilidade também pede confirmação
+
+### Changed
 - `ConfirmModal` (molecule) acessível: `role="alertdialog"`, foco preso no diálogo, Esc e clique fora cancelam, foco devolvido ao fechar, rótulos configuráveis e `tone="danger"` (botão vermelho, foco inicial em Cancelar)
 - `Button` (atom) com `forwardRef`
 - `ProfileEditor`: remover experiência, formação ou habilidade pede confirmação no `ConfirmModal` (itens recém-adicionados e vazios saem direto)
