@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- `/vagas`: cartão do perfil mostra a foto salva (`photo_url` assinada) ou as iniciais, no lugar da imagem fixa do pravatar
+
 ### Changed
 - Foto de perfil enviada direto do navegador para o S3 privado via URL assinada (`profileApi.uploadPhoto`: presign → PUT no S3 → confirmação); exibição usa `photo_url` assinada vinda do perfil. Removido `usePhotoUrl` (blob com header de auth)
 
