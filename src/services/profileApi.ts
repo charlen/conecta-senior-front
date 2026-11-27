@@ -3,6 +3,19 @@ import { emptyProfile } from '../types/candidate'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
 
+export class FieldRequestError extends Error {
+  field?: string
+  constructor(message: string, field?: string) {
+    super(message)
+    this.field = field
+  }
+}
+
+async function errorFrom(res: Response, fallback: string): Promise<FieldRequestError> {
+  const body = (await res.json().catch(() => ({}))) as { error?: string; field?: string }
+  return new FieldRequestError(body.error || fallback, body.field)
+}
+
 export class ProfileValidationError extends Error {
   fields: FieldError[]
   constructor(fields: FieldError[]) {
@@ -52,5 +65,45 @@ export const profileApi = {
     return { ...data, profile: withDefaults(data.profile) }
   },
 
-  withDefaults
+  withDefaults,
+
+  /** Object URL for a profile photo (requires auth header, so it cannot be a plain <img src>). */
+  async photoUrl(profileId: string): Promise<string | null> {
+    const res = await fetch(`${API_URL}/profiles/${profileId}/photo`, { headers: authHeaders() })
+    if (!res.ok) return null
+    return URL.createObjectURL(await res.blob())
+  },
+
+  async uploadPhoto(photo: Blob): Promise<number> {
+    const form = new FormData()
+    form.append('file', photo, 'foto.jpg')
+    const res = await fetch(`${API_URL}/profiles/me/photo`, { method: 'PUT', headers: authHeaders(), body: form })
+    if (!res.ok) throw await errorFrom(res, 'Não conseguimos enviar a foto. Tente novamente.')
+    const data = (await res.json()) as { photo_version: number }
+    return data.photo_version
+  },
+
+  async deletePhoto(): Promise<void> {
+    const res = await fetch(`${API_URL}/profiles/me/photo`, { method: 'DELETE', headers: authHeaders() })
+    if (!res.ok) throw await errorFrom(res, 'Não conseguimos remover a foto. Tente novamente.')
+  },
+
+  /** Sends a 6-digit code to the account e-mail (reuses the passwordless login endpoint). */
+  async requestCode(email: string): Promise<void> {
+    const res = await fetch(`${API_URL}/users/request-code`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    })
+    if (!res.ok) throw await errorFrom(res, 'Não conseguimos enviar o código. Tente novamente em instantes.')
+  },
+
+  async changePassword(input: { current_password?: string; code?: string; new_password: string }): Promise<void> {
+    const res = await fetch(`${API_URL}/users/me/password`, {
+      method: 'PUT',
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(input)
+    })
+    if (!res.ok) throw await errorFrom(res, 'Não conseguimos trocar a senha. Tente novamente.')
+  }
 }

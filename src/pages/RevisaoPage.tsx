@@ -36,6 +36,12 @@ export default function RevisaoPage() {
   return (
     <PageTemplate>
       <div className="space-y-8">
+        <ProfileReviewFlow
+          mode="onboarding"
+          seed={seed}
+          onFinish={finish}
+          header={
+            <div className="space-y-8">
         <header className="space-y-3">
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900">Confira seu perfil</h1>
           <p className="text-xl md:text-2xl text-slate-700 leading-relaxed">
@@ -52,7 +58,9 @@ export default function RevisaoPage() {
           </section>
         )}
 
-        <ProfileReviewFlow mode="onboarding" seed={seed} onFinish={finish} />
+            </div>
+          }
+        />
       </div>
     </PageTemplate>
   )

@@ -13,6 +13,8 @@ export function useCandidateProfile(seed?: (saved: CandidateProfile) => Candidat
   const [errors, setErrors] = useState<FieldError[]>([])
   const [status, setStatus] = useState<Status>('loading')
   const [message, setMessage] = useState<string | null>(null)
+  const [profileId, setProfileId] = useState<string | null>(null)
+  const [photoVersion, setPhotoVersion] = useState(0)
 
   useEffect(() => {
     let active = true
@@ -20,6 +22,8 @@ export function useCandidateProfile(seed?: (saved: CandidateProfile) => Candidat
       .getMine()
       .then(res => {
         if (!active) return
+        setProfileId(res.id)
+        setPhotoVersion(res.photo_version ?? 0)
         setProfile(seed ? seed(res.profile) : res.profile)
         setStatus('ready')
       })
@@ -71,5 +75,5 @@ export function useCandidateProfile(seed?: (saved: CandidateProfile) => Candidat
     setStatus(s => (s === 'saved' ? 'ready' : s))
   }, [])
 
-  return { profile, setProfile, errors, status, message, save, clearFeedback }
+  return { profile, setProfile, errors, status, message, save, clearFeedback, profileId, photoVersion, setPhotoVersion }
 }

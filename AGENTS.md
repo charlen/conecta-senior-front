@@ -8,7 +8,7 @@ Ver `PRINCIPLES.md` para modo de trabalho, qualidade e governança.
 - TypeScript strict
 - Atomic Design: atoms/molecules/organisms/templates/pages
 - Mensagens UI em português, código em inglês
-- TailwindCSS 4 com `@import "tailwindcss"` e configuração em `tailwind.config.js`
+- TailwindCSS 4 com `@import "tailwindcss"` + `@config "../tailwind.config.js"` em `src/index.css` (sem o `@config` as cores do tema não existem); escala de fontes padrão do Tailwind
 - Cor primária registrada no tema: `primary: '#2563eb'`
 - Acessibilidade 60+: tamanhos mínimos text-xl, botões min-h-[56px], contraste alto, espaçamento generoso
 - Tokens legados em `src/styles/tokens.css` mantidos para referência
@@ -17,9 +17,9 @@ Ver `PRINCIPLES.md` para modo de trabalho, qualidade e governança.
 ```
 src/
   components/
-    atoms/        Button, Input, Textarea, Label, Container, Heading, Pill, Text
+    atoms/        Avatar, Button, Input, Textarea, Label, Container, Heading, Pill, Text
     molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader, BarraProgresso, LegalLinks, ProfileField, SummaryCard
-    organisms/    RegistrationForm, InterviewStep, WelcomeSection, ProfileReviewFlow, ProfileSectionFields
+    organisms/    RegistrationForm, InterviewStep, WelcomeSection, ProfileReviewFlow, ProfileSectionFields, PhotoEditor, PasswordChangeForm
     templates/    PageTemplate, StepTemplate, HeroStepTemplate, HeroPageTemplate, LegalPageTemplate
   content/       legal.ts (textos da Política de Privacidade e Termos de Uso)
   contexts/      FlowContext, AuthContext

@@ -18,12 +18,7 @@ export default {
         warning: '#d97706',
         error: '#dc2626',
       },
-      fontSize: {
-        base: ['18px', { lineHeight: '1.6' }],
-        lg: ['20px', { lineHeight: '1.6' }],
-        xl: ['24px', { lineHeight: '1.4' }],
-        '2xl': ['32px', { lineHeight: '1.3' }],
-      },
+      // fontSize: escala padrão do Tailwind (a customizada invertia text-2xl > text-3xl)
       spacing: {
         '18': '4.5rem',
       },

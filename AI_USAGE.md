@@ -347,3 +347,13 @@ Todas as solicitações foram interpretadas por linguagem natural, traduzidas pa
 - Padrões "uma coisa por página" e "confira suas respostas" (GOV.UK) e revelação progressiva aplicados ao perfil
 - Backend passa a aceitar salvar perfil incompleto (bloqueia só valores inválidos) para permitir salvar por seção
 - Verificação visual com Cypress e API simulada (resumo, edição focada, confirmação de descarte)
+
+---
+
+## 2026-11-26 Troca de senha e foto de perfil (Claude Code)
+
+**O que foi pedido:** permitir alterar a senha e a foto do perfil.
+**Como foi pedido:** linguagem natural, em sessão com Claude Code (Opus) no VS Code.
+**O que foi entregue:**
+- Telas focadas de foto e senha integradas ao fluxo do perfil
+- Correção do tema Tailwind 4 (`@config`) descoberta na verificação visual com Cypress
