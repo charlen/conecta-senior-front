@@ -6,17 +6,19 @@ type ProfileFieldProps = {
   required?: boolean
   hint?: string
   error?: string
+  /** Hide the "(obrigatório)/(opcional)" marker — for one-question screens where every field is required. */
+  hideRequirement?: boolean
   children: (aria: { id: string; 'aria-invalid': boolean; 'aria-describedby'?: string; 'aria-required'?: boolean }) => ReactNode
 }
 
 /** Label + control + hint + error, with the accessibility wiring for screen readers. */
-export function ProfileField({ id, label, required, hint, error, children }: ProfileFieldProps) {
+export function ProfileField({ id, label, required, hint, error, hideRequirement, children }: ProfileFieldProps) {
   const describedBy = [hint ? `${id}-hint` : '', error ? `${id}-error` : ''].filter(Boolean).join(' ') || undefined
   return (
     <div className="space-y-2">
       <label htmlFor={id} className="block font-bold text-slate-800 text-xl">
         {label}
-        {required ? (
+        {hideRequirement ? null : required ? (
           <span className="ml-2 text-base font-semibold text-red-700">(obrigatório)</span>
         ) : (
           <span className="ml-2 text-base font-normal text-slate-500">(opcional)</span>

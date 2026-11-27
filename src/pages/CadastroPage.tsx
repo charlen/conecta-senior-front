@@ -1,214 +1,239 @@
 import { useState } from 'react'
 import { Button } from '../components/atoms/Button'
-import { Input } from '../components/atoms/Input'
-import { Label } from '../components/atoms/Label'
-import { Heading } from '../components/atoms/Heading'
 import { Alerta } from '../components/molecules/Alerta'
+import { CartaoOpcao } from '../components/molecules/CartaoOpcao'
+import { CodeField } from '../components/molecules/CodeField'
+import { EmailField } from '../components/molecules/EmailField'
+import { ProfileField, inputClass } from '../components/molecules/ProfileField'
+import { ResendCode } from '../components/molecules/ResendCode'
+import { ShowPasswordToggle } from '../components/molecules/ShowPasswordToggle'
+import { AuthStepTemplate } from '../components/templates/AuthStepTemplate'
 import { useAuth } from '../contexts/AuthContext'
+import { isValidEmail, useFieldError } from '../hooks/useFieldError'
+import { AuthApiError, authApi } from '../services/authApi'
+
+type Step = 'tipo' | 'email' | 'senha' | 'codigo'
+type Field = 'email' | 'password' | 'confirm' | 'code'
+
+const MIN_PASSWORD = 6
+const linkClass = 'font-semibold text-primary underline underline-offset-4 hover:text-primary-dark'
 
 export default function CadastroPage() {
-  const [step, setStep] = useState<'tipo' | 'email' | 'form' | 'code'>('tipo')
+  const [step, setStep] = useState<Step>('tipo')
   const [tipo, setTipo] = useState<'candidato' | 'empresa' | null>(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [code, setCode] = useState('')
+  const [needsPassword, setNeedsPassword] = useState<boolean | null>(null)
+  const [info, setInfo] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
+  const { errorFor, fail, clear, refFor } = useFieldError<Field>()
   const { setToken } = useAuth()
+
+  const go = (next: Step) => {
+    clear()
+    setInfo(null)
+    setStep(next)
+  }
+
+  const codeSent = () => {
+    localStorage.setItem(`cadastro_${email}`, 'sent')
+    setCode('')
+    clear()
+    setStep('codigo')
+  }
+
+  const chooseTipo = (t: 'candidato' | 'empresa') => {
+    setTipo(t)
+    go('email')
+  }
 
   const handleEmailCheck = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError(null)
+    clear()
+    setInfo(null)
+    const value = email.trim()
+    setEmail(value)
+    if (!value) return fail('email', 'Digite seu e-mail para continuar.')
+    if (!isValidEmail(value)) return fail('email', 'Confira o e-mail: ele precisa ter @ e um ponto, como maria.silva@gmail.com.')
     setLoading(true)
     try {
-      const key = `cadastro_${email}`
-      const res = await fetch(`${API}/users/request-code`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      })
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}))
-        if (err.error === 'user not found') {
-          setStep('form')
-        } else {
-          throw new Error(err.error || 'Erro ao verificar e-mail')
-        }
-      } else {
-        const data = await res.json()
-        if (data.message === 'code resent') {
-          setError('Código reenviado para o e-mail. Verifique sua caixa de entrada.')
-        }
-        localStorage.setItem(key, 'sent')
-        setStep('code')
+      const data = await authApi.requestCode(value)
+      setNeedsPassword(false)
+      if (data.message === 'code resent') {
+        setInfo('Você já tinha começado o cadastro com este e-mail. Enviamos um novo código para terminar.')
+      } else if (data.message === 'code sent') {
+        setInfo('Este e-mail já tem cadastro. Enviamos um código para você entrar.')
       }
-    } catch (err: unknown) {
-      setError((err as Error).message)
+      localStorage.setItem(`cadastro_${value}`, 'sent')
+      setCode('')
+      setStep('codigo')
+    } catch (err) {
+      if (err instanceof AuthApiError && err.code === 'user not found') {
+        setNeedsPassword(true)
+        go('senha')
+      } else {
+        fail('general', (err as Error).message)
+      }
     } finally {
       setLoading(false)
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError(null)
-    if (password !== confirmPassword) {
-      setError('As senhas não coincidem')
-      return
-    }
-    const key = `cadastro_${email}`
+    clear()
+    if (password.length < MIN_PASSWORD) return fail('password', `A senha precisa ter pelo menos ${MIN_PASSWORD} caracteres.`)
+    if (password !== confirmPassword) return fail('confirm', 'As duas senhas não estão iguais. Digite a mesma senha de novo.')
     setLoading(true)
     try {
-      const res = await fetch(`${API}/users/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, role: tipo === 'empresa' ? 'company' : 'candidate' })
-      })
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}))
-        if (err.error === 'email already registered') {
-          throw new Error('E-mail já cadastrado. Use reenviar código.')
-        }
-        throw new Error(err.error || 'Erro ao cadastrar')
-      }
-      const data = await res.json()
-      if (data.message === 'code resent for pending account') {
-        setError('Cadastro pendente. Código reenviado para seu e-mail.')
-      }
-      localStorage.setItem(key, 'sent')
-      setStep('code')
-    } catch (err: unknown) {
-      setError((err as Error).message)
+      const data = await authApi.register({ email, password, role: tipo === 'empresa' ? 'company' : 'candidate' })
+      setInfo(data.message === 'code resent for pending account' ? 'Você já tinha começado o cadastro. Enviamos um novo código para terminar.' : null)
+      codeSent()
+    } catch (err) {
+      fail('general', (err as Error).message)
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault()
+    clear()
+    if (code.length !== 6) return fail('code', 'Digite os 6 números do código que chegou no seu e-mail.')
+    setLoading(true)
+    try {
+      const data = await authApi.verifyCode(email, code)
+      setToken(data.token)
+      window.location.href = '/vagas'
+    } catch (err) {
+      const apiCode = err instanceof AuthApiError ? err.code : undefined
+      fail(apiCode === 'invalid code' || apiCode === 'code expired' ? 'code' : 'general', (err as Error).message)
+      setLoading(false)
+    }
+  }
+
+  const resend = async () => {
+    await authApi.requestCode(email)
+    clear()
+    setInfo(null)
+  }
+
+  const general = errorFor('general') && <Alerta tipo="erro" className="mb-6">{errorFor('general')}</Alerta>
+  const footer = (
+    <p>
+      Já tem conta? <a href="/entrar" className={linkClass}>Entrar</a>
+    </p>
+  )
+  const total = needsPassword === false ? 3 : 4
+
+  if (step === 'tipo') {
+    return (
+      <AuthStepTemplate
+        title="Como você quer usar o Conecta Sênior?"
+        description="Escolha uma opção. Você poderá voltar e trocar."
+        step={{ current: 1, total }}
+        onBack={() => (window.location.href = '/')}
+        backLabel="Voltar para o início"
+        footer={footer}
+      >
+        <div className="space-y-4">
+          <CartaoOpcao
+            titulo="Quero encontrar um trabalho"
+            descricao="Para pessoas com 60 anos ou mais que buscam vagas."
+            selecionado={tipo === 'candidato'}
+            aria-pressed={tipo === 'candidato'}
+            onClick={() => chooseTipo('candidato')}
+          />
+          <CartaoOpcao
+            titulo="Quero contratar"
+            descricao="Para empresas que querem divulgar vagas."
+            selecionado={tipo === 'empresa'}
+            aria-pressed={tipo === 'empresa'}
+            onClick={() => chooseTipo('empresa')}
+          />
+        </div>
+      </AuthStepTemplate>
+    )
+  }
+
+  if (step === 'email') {
+    return (
+      <AuthStepTemplate
+        title={tipo === 'empresa' ? 'Qual é o e-mail da empresa?' : 'Qual é o seu e-mail?'}
+        description="Vamos enviar um código para ele. Use um e-mail que você consegue abrir agora."
+        step={{ current: 2, total }}
+        onBack={() => go('tipo')}
+        footer={footer}
+      >
+        {general}
+        <form onSubmit={handleEmailCheck} noValidate className="space-y-8">
+          <EmailField value={email} onChange={setEmail} error={errorFor('email')} inputRef={refFor('email')} />
+          <p className="text-lg leading-relaxed text-slate-700">
+            Ao continuar, você concorda com os{' '}
+            <a href="/termos" target="_blank" rel="noopener" className="underline underline-offset-4 text-primary">Termos de Uso</a>{' '}
+            e com a{' '}
+            <a href="/privacidade" target="_blank" rel="noopener" className="underline underline-offset-4 text-primary">Política de Privacidade</a>.
+          </p>
+          <Button type="submit" variant="primary" className="w-full" disabled={loading}>
+            {loading ? 'Verificando...' : 'Continuar'}
+          </Button>
+        </form>
+      </AuthStepTemplate>
+    )
+  }
+
+  if (step === 'senha') {
+    const type = showPassword ? 'text' : 'password'
+    return (
+      <AuthStepTemplate
+        title="Crie uma senha"
+        description={<>Ela será usada para entrar na conta <strong className="[overflow-wrap:anywhere]">{email}</strong>. Se esquecer, dá para entrar com um código por e-mail.</>}
+        step={{ current: 3, total }}
+        onBack={() => go('email')}
+        footer={footer}
+      >
+        {general}
+        <form onSubmit={handleRegister} noValidate className="space-y-6">
+          <ProfileField id="password" label="Senha" hint={`Pelo menos ${MIN_PASSWORD} caracteres.`} error={errorFor('password')} required hideRequirement>
+            {a => <input {...a} ref={refFor('password')} type={type} autoComplete="new-password" className={inputClass(errorFor('password'))} value={password} onChange={e => setPassword(e.target.value)} />}
+          </ProfileField>
+          <ProfileField id="confirmPassword" label="Digite a senha de novo" error={errorFor('confirm')} required hideRequirement>
+            {a => <input {...a} ref={refFor('confirm')} type={type} autoComplete="new-password" className={inputClass(errorFor('confirm'))} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />}
+          </ProfileField>
+          <ShowPasswordToggle checked={showPassword} onChange={setShowPassword} label="Mostrar as senhas" />
+          <Button type="submit" variant="primary" className="w-full" disabled={loading}>
+            {loading ? 'Enviando...' : 'Criar conta'}
+          </Button>
+        </form>
+      </AuthStepTemplate>
+    )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-surface p-6">
-      <div className="w-full max-w-md flex flex-col items-center">
-      <div className="w-full bg-white rounded-xl p-8 shadow">
-        {step === 'tipo' ? (
-          <>
-            <Heading className="text-3xl">Cadastro</Heading>
-            <p className="text-lg text-text-secondary mt-2">Como você quer se cadastrar?</p>
-            <div className="mt-6 space-y-4">
-              <Button variant="primary" className="w-full text-xl py-5" onClick={() => { setTipo('candidato'); setStep('email') }}>
-                Sou candidato
-              </Button>
-              <Button variant="secondary" className="w-full text-xl py-5" onClick={() => { setTipo('empresa'); setStep('email') }}>
-                Sou empresa
-              </Button>
-            </div>
-          </>
-        ) : step === 'email' ? (
-          <>
-            <Heading className="text-3xl">Cadastro {tipo === 'empresa' ? 'Empresa' : 'Candidato'}</Heading>
-            <p className="text-lg text-text-secondary mt-2">Informe seu e-mail para continuar</p>
-            {error && <Alerta tipo="erro" className="mt-4">{error}</Alerta>}
-            <form onSubmit={handleEmailCheck} className="mt-6 space-y-4">
-              <div>
-                <Label htmlFor="email">E-mail</Label>
-                <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
-              </div>
-              <p className="text-lg text-slate-600 leading-relaxed">
-                Ao continuar, você concorda com os{' '}
-                <a href="/termos" target="_blank" rel="noopener" className="underline underline-offset-4 text-primary">Termos de Uso</a>{' '}
-                e com a{' '}
-                <a href="/privacidade" target="_blank" rel="noopener" className="underline underline-offset-4 text-primary">Política de Privacidade</a>.
-              </p>
-              <Button type="submit" variant="primary" className="w-full" disabled={loading}>
-                {loading ? 'Verificando...' : 'Continuar'}
-              </Button>
-              <Button variant="secondary" className="w-full" onClick={() => setStep('tipo')}>
-                Voltar
-              </Button>
-            </form>
-          </>
-        ) : step === 'code' ? (
-          <>
-            <Heading className="text-3xl">Confirmação</Heading>
-            <p className="text-lg text-text-secondary mt-2">Enviamos um código para {email}</p>
-            {error && <Alerta tipo="erro" className="mt-4">{error}</Alerta>}
-            <Button variant="secondary" className="mt-4 w-full" onClick={async () => {
-              setLoading(true)
-              try {
-                const res = await fetch(`${API}/users/request-code`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ email })
-                })
-                if (!res.ok) throw new Error('Não foi possível reenviar código')
-                setError('Código reenviado. Verifique seu e-mail.')
-              } catch (err: unknown) {
-                setError((err as Error).message)
-              } finally {
-                setLoading(false)
-              }
-            }} disabled={loading}>Reenviar código</Button>
-            <form onSubmit={async e => {
-              e.preventDefault()
-              setLoading(true)
-              try {
-                const res = await fetch(`${API}/users/verify-code`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ email, code })
-                })
-                if (!res.ok) throw new Error('Código inválido')
-                const data = await res.json()
-                setToken(data.token)
-                window.location.href = '/vagas'
-              } catch (err: unknown) {
-                setError((err as Error).message)
-              } finally {
-                setLoading(false)
-              }
-            }} className="mt-6 space-y-4">
-              <div>
-                <Label htmlFor="code">Código de 6 dígitos</Label>
-                <Input id="code" value={code} onChange={e => setCode(e.target.value)} required />
-              </div>
-              <Button type="submit" variant="primary" className="w-full" disabled={loading}>
-                {loading ? 'Verificando...' : 'Entrar'}
-              </Button>
-              <Button variant="secondary" className="w-full" onClick={() => window.location.href = '/'}>
-                Ir para login
-              </Button>
-            </form>
-          </>
-        ) : (
-          <>
-            <Heading className="text-3xl">Cadastro {tipo === 'empresa' ? 'Empresa' : 'Candidato'}</Heading>
-            <p className="text-lg text-text-secondary mt-2">Crie sua conta para começar</p>
-            {error && <Alerta tipo="erro" className="mt-4">{error}</Alerta>}
-            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-              <div>
-                <Label htmlFor="email">E-mail</Label>
-                <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
-              </div>
-              <div>
-                <Label htmlFor="password">Senha</Label>
-                <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-              </div>
-              <div>
-                <Label htmlFor="confirmPassword">Confirmar senha</Label>
-                <Input id="confirmPassword" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required />
-              </div>
-              <Button type="submit" variant="primary" className="w-full" disabled={loading}>
-                {loading ? 'Enviando...' : 'Cadastrar'}
-              </Button>
-              <Button variant="secondary" className="w-full" onClick={() => setStep('email')}>
-                Voltar
-              </Button>
-            </form>
-          </>
-        )}
+    <AuthStepTemplate
+      title="Digite o código que enviamos"
+      description={<>Enviamos um código de 6 números para <strong className="[overflow-wrap:anywhere]">{email}</strong>.</>}
+      step={{ current: total, total }}
+      onBack={() => go(needsPassword ? 'senha' : 'email')}
+      footer={footer}
+    >
+      {info && <Alerta tipo="info" className="mb-6">{info}</Alerta>}
+      {general}
+      <form onSubmit={handleVerify} noValidate className="space-y-8">
+        <CodeField value={code} onChange={setCode} error={errorFor('code')} inputRef={refFor('code')} />
+        <Button type="submit" variant="primary" className="w-full" disabled={loading}>
+          {loading ? 'Verificando...' : 'Confirmar e entrar'}
+        </Button>
+      </form>
+      <div className="mt-8 space-y-4">
+        <ResendCode onResend={resend} />
+        <button type="button" onClick={() => go('email')} className={`min-h-[48px] cursor-pointer text-xl ${linkClass}`}>
+          Usar outro e-mail
+        </button>
       </div>
-      <button onClick={() => window.location.href = '/'} className="mt-4 text-slate-600 hover:text-slate-900 cursor-pointer">← Voltar para início</button>
-      </div>
-    </div>
+    </AuthStepTemplate>
   )
 }
