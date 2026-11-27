@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- `AuthStepTemplate`: o "Voltar" deixou de ser link sublinhado (seta e texto saíam com sublinhados separados) e virou botão secundário com ícone, igual aos outros "Voltar" do app
+
 ### Added
 - Cadastro/edição de vagas para recrutador (`JobForm`): prévia ao vivo com o `JobCard` do candidato, habilidades em chips (`SkillsInput`), salário com máscara BRL e "A combinar", modalidade/contratação/status via `Dropdown` com dicas, validação no campo (cliente e 422 do servidor), aviso de alterações não salvas (`useUnsavedChangesGuard` + `ConfirmModal`)
 - Bloco "Dados da empresa" (`CompanyForm`, `PUT /companies/me`) na primeira vaga e no 409 `company_required`; não cria mais uma empresa "Empresa" a cada vaga
