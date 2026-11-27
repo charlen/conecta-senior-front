@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Added
+- Páginas `/privacidade` (Política de Privacidade, LGPD) e `/termos` (Termos de Uso), públicas inclusive para usuários logados
+- `LegalPageTemplate` (template) com sumário navegável, botão Voltar e tipografia 60+
+- `LegalLinks` (molecule) no rodapé da landing e nas páginas legais
+- Conteúdo legal tipado em `src/content/legal.ts` (`src/types/legal.ts`)
+- Aviso de consentimento com links para Termos e Privacidade no passo de e-mail do cadastro
+
 ### Fixed
 - `HomePage` e `MinhasVagasPage`: tipagem de `Company.CompanyName` ao mapear vagas da API (erro TS2339)
 - `RevisaoPage`: período da experiência derivado de `inicio`/`fim` (campo `periodo` inexistente em `Experiencia`)

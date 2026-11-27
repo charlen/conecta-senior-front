@@ -1,3 +1,4 @@
+import { LegalLinks } from '../components/molecules/LegalLinks'
 import { Button } from '../components/atoms/Button'
 
 export function WelcomePage() {
@@ -89,8 +90,7 @@ export function WelcomePage() {
           </div>
         </div>
 
-
-
+        <LegalLinks className="justify-center md:justify-start pt-8" />
       </div>
 
     </div>

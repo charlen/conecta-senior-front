@@ -18,13 +18,14 @@ Ver `PRINCIPLES.md` para modo de trabalho, qualidade e governança.
 src/
   components/
     atoms/        Button, Input, Textarea, Label, Container, Heading, Pill, Text
-    molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader, BarraProgresso
+    molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader, BarraProgresso, LegalLinks
     organisms/    RegistrationForm, InterviewStep, WelcomeSection
-    templates/    PageTemplate, StepTemplate, HeroStepTemplate, HeroPageTemplate
+    templates/    PageTemplate, StepTemplate, HeroStepTemplate, HeroPageTemplate, LegalPageTemplate
+  content/       legal.ts (textos da Política de Privacidade e Termos de Uso)
   contexts/      FlowContext, AuthContext
   hooks/         useFlow, useRascunhoPerfil
   mocks/         data.ts
-  pages/         WelcomePage, RegistrationPage, InterviewPage, ResumePage, PreferencesPage, JobsPage, MatchingPage, DashboardPage, WizardPage, CurriculoPage, VozPage, RevisaoPage, ConfirmadoPage, HomePage, PerfilPage
+  pages/         WelcomePage, RegistrationPage, InterviewPage, ResumePage, PreferencesPage, JobsPage, MatchingPage, DashboardPage, WizardPage, CurriculoPage, VozPage, RevisaoPage, ConfirmadoPage, HomePage, PerfilPage, PrivacidadePage, TermosPage
   services/      mockApi.ts, authApi.ts
   styles/        tokens.css
   index.css      Tailwind entry
@@ -43,6 +44,7 @@ src/
 - Páginas seguem `StepTemplate` ou `HeroStepTemplate` com barra de progresso e layout fluido duas colunas
 - Landing inicial em `WelcomePage` com layout duas colunas
 - Vagas em cards Tailwind com badges e tag de compatibilidade
+- Páginas legais públicas: `/privacidade` e `/termos` (conteúdo em `src/content/legal.ts`, e-mail de contato em `LEGAL_CONTACT_EMAIL`)
 - Rotas onboarding: `/comecar/metodo`, `/comecar/voz`, `/comecar/curriculo`, `/comecar/passo/:n`, `/comecar/revisao`, `/comecar/confirmado`
 
 ## Governança de artefatos

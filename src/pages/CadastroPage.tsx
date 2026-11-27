@@ -113,6 +113,12 @@ export default function CadastroPage() {
                 <Label htmlFor="email">E-mail</Label>
                 <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
               </div>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                Ao continuar, você concorda com os{' '}
+                <a href="/termos" target="_blank" rel="noopener" className="underline underline-offset-4 text-primary">Termos de Uso</a>{' '}
+                e com a{' '}
+                <a href="/privacidade" target="_blank" rel="noopener" className="underline underline-offset-4 text-primary">Política de Privacidade</a>.
+              </p>
               <Button type="submit" variant="primary" className="w-full" disabled={loading}>
                 {loading ? 'Verificando...' : 'Continuar'}
               </Button>
