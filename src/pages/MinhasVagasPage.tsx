@@ -38,7 +38,7 @@ export default function MinhasVagasPage() {
           salary_min: (j.salary_min as number) ?? (j.SalaryMin as number),
           salary_max: (j.salary_max as number) ?? (j.SalaryMax as number),
           status: (j.status as string) ?? (j.Status as string),
-          company: (j.company as string) ?? (j.Company?.CompanyName as string) ?? '',
+          company: (j.company as string) ?? ((j.Company as { CompanyName?: string } | undefined)?.CompanyName) ?? '',
         }))
         setJobs(all)
       })

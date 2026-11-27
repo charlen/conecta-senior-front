@@ -294,3 +294,13 @@ Solicitação natural para comparar e criar plano de ajuste para deixar as pági
 
 **Resumo geral**
 Todas as solicitações foram interpretadas por linguagem natural, traduzidas para especificações técnicas concretas, implementadas com validação de lint/build, documentadas em tarefas e commits, e alinhadas às diretrizes de acessibilidade WCAG para usuários 60+.
+
+---
+
+## 2026-11-26 Correção de erros de tipo (Claude Code)
+
+**O que foi pedido:** analisar os 3 repos do conecta-senior e começar os ajustes para entrega do trabalho.
+**Como foi pedido:** linguagem natural, em sessão com Claude Code (Opus) no VS Code.
+**O que foi entregue:**
+- Corrigidos 3 erros de `tsc --noEmit` que o build do Vite não acusava (`HomePage`, `MinhasVagasPage`, `RevisaoPage`)
+- Validação: `tsc --noEmit`, `npm run lint` e `npm run build` sem erros

@@ -14,7 +14,7 @@ export default function RevisaoPage() {
     window.location.href = '/comecar/confirmado'
   }
 
-  const experiencias = ai?.parsed?.experience || rascunho.perfil.experiencias.map(e=>({company:e.empresa, role:e.cargo, period:e.periodo}))
+  const experiencias = ai?.parsed?.experience || rascunho.perfil.experiencias.map(e=>({company:e.empresa, role:e.cargo, period:[e.inicio, e.fim].filter(Boolean).join(" – ")}))
   const formacao = ai?.parsed?.education || rascunho.perfil.formacao.map(f=>({institution:f.instituicao, degree:f.curso}))
   const habilidades = ai?.parsed?.skills || rascunho.perfil.habilidades
 
