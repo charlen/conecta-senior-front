@@ -90,3 +90,11 @@ Modelo de registro:
 - Todos os endpoints protegidos exigem Bearer token via middleware AuthRequired.
 - Backend usa JWT com expiração 24h.
 - Confirmação de e-mail envia link para https://senior-conecta.zoryuz.com/confirm?token=...
+
+## Perfil do candidato (canônico)
+
+| Endpoint | Uso | Entrada | Saída | Status |
+|---|---|---|---|---|
+| `GET /profiles/me` | Revisão e Meu Perfil | Bearer | `{ id, user_id, complete, missing[], profile }` | existente (ampliado) |
+| `PUT /profiles/me` | Salvar perfil completo | `CandidateProfile` | 200 `{...}` ou 422 `{ fields: [{field, message}] }` | novo |
+| `POST /profiles/:id/resumes` | Upload de PDF | multipart `file` | `{ id, parsed, resume, profile_draft }` (draft não é salvo) | existente (ampliado) |

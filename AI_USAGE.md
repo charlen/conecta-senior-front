@@ -316,3 +316,13 @@ Todas as solicitações foram interpretadas por linguagem natural, traduzidas pa
 - Termos de Uso com compromissos das empresas (vagas reais, não discriminação etária, sem cobrança do candidato)
 - Template, molecule, rotas públicas, links na landing e aviso de consentimento no cadastro
 - Validação: `tsc --noEmit`, `npm run lint` e `npm run build` sem erros
+
+---
+
+## 2026-11-26 Perfil canônico editável (Claude Code)
+
+**O que foi pedido:** salvar, exibir e editar manualmente o perfil estruturado do candidato, vindo do PDF ou do wizard.
+**Como foi pedido:** linguagem natural, em sessão com Claude Code (Opus) no VS Code.
+**O que foi entregue:**
+- Revisão e Meu Perfil reescritos sobre o editor único
+- Tipos/serviço/hook dedicados, sem `fetch` nos componentes

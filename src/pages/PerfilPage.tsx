@@ -1,91 +1,47 @@
-import { useEffect, useState } from 'react'
-import { Heading } from '../components/atoms/Heading'
-import { Input } from '../components/atoms/Input'
-import { Label } from '../components/atoms/Label'
+import { PageTemplate } from '../components/templates/PageTemplate'
+import { ProfileEditor } from '../components/organisms/ProfileEditor'
+import { Alerta } from '../components/molecules/Alerta'
 import { Button } from '../components/atoms/Button'
-import type { Profile } from '../types/profile'
+import { Spinner } from '../components/atoms/Spinner'
+import { useCandidateProfile } from '../hooks/useCandidateProfile'
 
 export default function PerfilPage() {
-  const [profile, setProfile] = useState<Profile | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
-  const [bio, setBio] = useState('')
-  const [saving, setSaving] = useState(false)
-
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (!token) {
-      window.location.href = '/'
-      return
-    }
-    fetch(`${import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'}/profiles/me`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(r => r.json())
-      .then(data => {
-        setProfile(data)
-        setName(data.name || '')
-        setPhone(data.phone || '')
-        setBio(data.bio || '')
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
-  }, [])
-
-  const handleSave = async () => {
-    const token = localStorage.getItem('token')
-    if (!token) return
-    setSaving(true)
-    try {
-      await fetch(`${import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'}/profiles/me`, {
-        method: 'PATCH',
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name, phone, bio })
-      })
-      window.location.href = '/vagas'
-    } catch {
-      // ignore
-    }
-    setSaving(false)
-  }
-
-  if (loading) return <div className="p-8">Carregando...</div>
+  const { profile, setProfile, errors, status, message, save } = useCandidateProfile()
 
   return (
-    <div className="min-h-screen bg-slate-50 p-0 md:p-8">
-      <div className="max-w-3xl mx-auto">
-        <Heading className="text-3xl mb-6 px-6 md:px-0">Meu Perfil</Heading>
-        <div className="bg-white rounded-none md:rounded-3xl p-6 shadow-none md:shadow-sm border-0 md:border border-slate-200 space-y-6">
-          <div className="flex flex-col items-center gap-4 mb-4">
-            <img src="https://i.pravatar.cc/150?img=12" alt="Foto" className="w-28 h-28 rounded-full object-cover border-4 border-[#2563eb]/20" />
-            <Button variant="secondary" className="w-full">Atualizar foto</Button>
-          </div>
-          <div>
-            <Label>Nome</Label>
-            <Input value={name} onChange={e => setName(e.target.value)} placeholder="Seu nome completo" />
-          </div>
-          <div>
-            <Label>E-mail</Label>
-            <Input value={profile?.email || ''} readOnly />
-          </div>
-          <div>
-            <Label>Telefone</Label>
-            <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="(11) 99999-9999" />
-          </div>
-          <div>
-            <Label>Experiência profissional</Label>
-            <Input value={bio} onChange={e => setBio(e.target.value)} placeholder="Ex: 30 anos em..." />
-          </div>
-          <div className="flex flex-col md:flex-row gap-3">
-            <Button variant="primary" className="w-full md:flex-1" onClick={handleSave} disabled={saving}>{saving ? 'Salvando...' : 'Salvar e voltar'}</Button>
-            <Button variant="secondary" className="w-full md:flex-1" onClick={() => window.location.href = '/comecar/metodo'}>Continuar preenchimento</Button>
-          </div>
+    <PageTemplate>
+      <div className="space-y-8">
+        <header className="space-y-3">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900">Meu perfil</h1>
+          <p className="text-xl md:text-2xl text-slate-700 leading-relaxed">
+            É com estas informações que encontramos as vagas mais compatíveis com você.
+          </p>
+        </header>
+
+        {status === 'loading' && (
+          <div className="flex items-center gap-4 text-xl" role="status"><Spinner /> Carregando seu perfil...</div>
+        )}
+        {status === 'saved' && <Alerta tipo="sucesso">Perfil salvo! As vagas compatíveis já consideram as mudanças.</Alerta>}
+        {message && <Alerta tipo="erro">{message}</Alerta>}
+
+        {profile && (
+          <>
+            <div className="flex flex-col gap-4 md:flex-row">
+              <Button variant="secondary" className="md:flex-1" onClick={() => (window.location.href = '/comecar/curriculo')}>
+                Atualizar com um novo currículo (PDF)
+              </Button>
+            </div>
+            <ProfileEditor value={profile} onChange={setProfile} errors={errors} />
+          </>
+        )}
+
+        <div className="flex flex-col-reverse gap-4 md:flex-row md:justify-between">
+          <Button variant="secondary" onClick={() => (window.location.href = '/vagas')}>Voltar para as vagas</Button>
+          <Button variant="primary" onClick={save} disabled={!profile || status === 'saving'}>
+            {status === 'saving' ? 'Salvando...' : 'Salvar alterações'}
+          </Button>
         </div>
       </div>
-    </div>
+    </PageTemplate>
   )
 }

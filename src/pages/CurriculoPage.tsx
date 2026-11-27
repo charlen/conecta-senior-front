@@ -1,3 +1,4 @@
+import { PROFILE_DRAFT_KEY } from '../utils/profileMapping'
 import { useState } from 'react'
 import { Heading } from '../components/atoms/Heading'
 import { Text } from '../components/atoms/Text'
@@ -56,26 +57,14 @@ export default function CurriculoPage() {
       })
       if (!res.ok) throw new Error('Falha ao processar currículo')
       const data: ResumeResponse = await res.json()
-      // Salvar dados da IA separadamente
+      // Análise da IA (resumo exibido na revisão)
       localStorage.setItem('cs_resume_ai', JSON.stringify(data))
-      // Preencher rascunho com dados extraídos via localStorage
-      const rascunhoRaw = localStorage.getItem('cs_rascunho_perfil')
-      const rascunho = rascunhoRaw ? JSON.parse(rascunhoRaw) : { perfil: { dadosBasicos: {}, experiencias: [], formacao: [], habilidades: [] } }
-      if (data.parsed) {
-        rascunho.perfil.dadosBasicos.nomeCompleto = data.parsed.name || ''
-        rascunho.perfil.habilidades = data.parsed.skills || []
-        rascunho.perfil.experiencias = (data.parsed.experience || []).map(e => ({
-          empresa: e.company || '',
-          cargo: e.role || '',
-          inicio: e.period || ''
-        }))
-        rascunho.perfil.formacao = (data.parsed.education || []).map(e => ({
-          instituicao: e.institution || '',
-          curso: e.degree || ''
-        }))
-        rascunho.perfil.sobreMim = data.resume.profile_summary || ''
+      // Rascunho canônico já mesclado com o perfil salvo; só é gravado ao confirmar na revisão
+      if (data.profile_draft) {
+        localStorage.setItem(PROFILE_DRAFT_KEY, JSON.stringify(data.profile_draft))
+      } else {
+        localStorage.removeItem(PROFILE_DRAFT_KEY)
       }
-      localStorage.setItem('cs_rascunho_perfil', JSON.stringify(rascunho))
       setProgresso('revisao')
       window.location.href = '/comecar/revisao'
     } catch (err: unknown) {

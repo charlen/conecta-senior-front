@@ -1,92 +1,77 @@
-import { Heading } from '../components/atoms/Heading'
-import { Text } from '../components/atoms/Text'
+import { PageTemplate } from '../components/templates/PageTemplate'
+import { ProfileEditor } from '../components/organisms/ProfileEditor'
+import { Alerta } from '../components/molecules/Alerta'
 import { Button } from '../components/atoms/Button'
+import { Spinner } from '../components/atoms/Spinner'
+import { useCandidateProfile } from '../hooks/useCandidateProfile'
 import { useRascunhoPerfil } from '../hooks/useRascunhoPerfil'
+import { PROFILE_DRAFT_KEY, fromWizardDraft, mergeDraft, wizardHasData } from '../utils/profileMapping'
+import { profileApi } from '../services/profileApi'
+import type { CandidateProfile } from '../types/candidate'
 import type { ResumeResponse } from '../types/resume'
 
+const RESUME_AI_KEY = 'cs_resume_ai'
+
+function readJSON<T>(key: string): T | null {
+  try {
+    const raw = localStorage.getItem(key)
+    return raw ? (JSON.parse(raw) as T) : null
+  } catch {
+    return null
+  }
+}
+
 export default function RevisaoPage() {
-  const { rascunho, salvarPerfil } = useRascunhoPerfil()
-  const aiRaw = localStorage.getItem('cs_resume_ai')
-  const ai = aiRaw ? JSON.parse(aiRaw) as ResumeResponse : null
+  const { rascunho } = useRascunhoPerfil()
+  const ai = readJSON<ResumeResponse>(RESUME_AI_KEY)
+
+  const { profile, setProfile, errors, status, message, save } = useCandidateProfile(saved => {
+    const pdfDraft = readJSON<Partial<CandidateProfile>>(PROFILE_DRAFT_KEY)
+    if (pdfDraft) return profileApi.withDefaults(pdfDraft)
+    if (wizardHasData(rascunho.perfil)) return mergeDraft(saved, fromWizardDraft(rascunho.perfil))
+    return saved
+  })
 
   const confirmar = async () => {
-    await salvarPerfil()
-    window.location.href = '/comecar/confirmado'
+    if (await save()) {
+      localStorage.removeItem(PROFILE_DRAFT_KEY)
+      window.location.href = '/comecar/confirmado'
+    }
   }
 
-  const experiencias = ai?.parsed?.experience || rascunho.perfil.experiencias.map(e=>({company:e.empresa, role:e.cargo, period:[e.inicio, e.fim].filter(Boolean).join(" – ")}))
-  const formacao = ai?.parsed?.education || rascunho.perfil.formacao.map(f=>({institution:f.instituicao, degree:f.curso}))
-  const habilidades = ai?.parsed?.skills || rascunho.perfil.habilidades
-
   return (
-    <div className="min-h-screen bg-surface p-6">
-      <div className="max-w-3xl mx-auto">
-        <Heading>Revisão do perfil</Heading>
-        <Text className="mt-2">Confira os dados antes de confirmar</Text>
-        <div className="bg-white rounded-xl p-6 mt-4 space-y-6">
-          <section>
-            <Heading className="text-xl mb-3">Dados básicos</Heading>
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div><span className="text-gray-500">Nome</span><p className="font-medium">{rascunho.perfil.dadosBasicos.nomeCompleto || '-'}</p></div>
-              <div><span className="text-gray-500">Cidade</span><p className="font-medium">{rascunho.perfil.dadosBasicos.cidade}</p></div>
-              <div><span className="text-gray-500">Estado</span><p className="font-medium">{rascunho.perfil.dadosBasicos.estado}</p></div>
-              <div><span className="text-gray-500">Telefone</span><p className="font-medium">{rascunho.perfil.dadosBasicos.telefone}</p></div>
-            </div>
-          </section>
+    <PageTemplate>
+      <div className="space-y-8">
+        <header className="space-y-3">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900">Confira seu perfil</h1>
+          <p className="text-xl md:text-2xl text-slate-700 leading-relaxed">
+            Veja se está tudo certo. Você pode corrigir qualquer informação antes de salvar.
+          </p>
+        </header>
 
-          {ai && (
-            <section className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-              <Heading className="text-xl mb-3">Resumo profissional</Heading>
-              <p className="text-sm leading-relaxed mb-3">{ai.resume?.profile_summary || '-'}</p>
-              <p className="text-sm text-gray-700"><strong>O que faz:</strong> {ai.resume?.what_does || '-'}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {(ai.resume?.core_competencies || []).map((c: string,i: number)=><span key={i} className="px-2 py-1 bg-white rounded-full text-xs border">{c}</span>)}
-              </div>
-            </section>
-          )}
+        {status === 'loading' && (
+          <div className="flex items-center gap-4 text-xl" role="status"><Spinner /> Carregando seus dados...</div>
+        )}
 
-          <section>
-            <Heading className="text-xl mb-3">Experiência</Heading>
-            <div className="space-y-3">
-              {experiencias.map((exp: {role?: string; cargo?: string; company?: string; empresa?: string; period?: string; periodo?: string},i: number)=>(
-                <div key={i} className="border-l-2 border-primary pl-3">
-                  <p className="font-medium">{exp.role || exp.cargo} @ {exp.company || exp.empresa}</p>
-                  <p className="text-sm text-gray-600">{exp.period || exp.periodo}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+        {message && <Alerta tipo="erro">{message}</Alerta>}
 
-          <section>
-            <Heading className="text-xl mb-3">Formação</Heading>
-            <div className="space-y-2">
-              {formacao.map((f: {degree?: string; curso?: string; institution?: string; instituicao?: string},i: number)=>(
-                <div key={i}>
-                  <p className="font-medium">{f.degree || f.curso}</p>
-                  <p className="text-sm text-gray-600">{f.institution || f.instituicao}</p>
-                </div>
-              ))}
-            </div>
+        {ai?.resume?.profile_summary && (
+          <section className="rounded-3xl border-2 border-blue-200 bg-blue-50 p-6 md:p-8 space-y-3" aria-labelledby="sec-ia">
+            <h2 id="sec-ia" className="text-2xl font-bold text-slate-900">O que entendemos do seu currículo</h2>
+            <p className="text-xl leading-relaxed text-slate-800">{ai.resume.profile_summary}</p>
+            {ai.resume.value_proposition && <p className="text-xl leading-relaxed text-slate-700">{ai.resume.value_proposition}</p>}
           </section>
+        )}
 
-          <section>
-            <Heading className="text-xl mb-3">Habilidades</Heading>
-            <div className="flex flex-wrap gap-2">
-              {habilidades.map((h: string,i: number)=><span key={i} className="px-3 py-1 bg-gray-100 rounded-full text-sm">{h}</span>)}
-            </div>
-          </section>
+        {profile && <ProfileEditor value={profile} onChange={setProfile} errors={errors} />}
 
-          <section>
-            <Heading className="text-xl mb-3">Preferências</Heading>
-            <p className="text-sm">Tipo: <strong>{rascunho.perfil.preferencias.tipoVaga}</strong></p>
-            <p className="text-sm">Local: <strong>{rascunho.perfil.preferencias.localidade}</strong></p>
-          </section>
-        </div>
-        <div className="flex justify-between mt-6">
-          <Button variant="secondary" onClick={() => window.location.href = '/comecar/passo/6'}>Voltar</Button>
-          <Button variant="primary" onClick={confirmar}>Confirmar</Button>
+        <div className="flex flex-col-reverse gap-4 md:flex-row md:justify-between">
+          <Button variant="secondary" onClick={() => window.history.back()}>Voltar</Button>
+          <Button variant="primary" onClick={confirmar} disabled={!profile || status === 'saving'}>
+            {status === 'saving' ? 'Salvando...' : 'Salvar meu perfil'}
+          </Button>
         </div>
       </div>
-    </div>
+    </PageTemplate>
   )
 }
