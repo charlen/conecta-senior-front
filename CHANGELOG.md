@@ -3,6 +3,17 @@
 ## [Unreleased]
 
 ### Added
+- Cadastro/edição de vagas para recrutador (`JobForm`): prévia ao vivo com o `JobCard` do candidato, habilidades em chips (`SkillsInput`), salário com máscara BRL e "A combinar", modalidade/contratação/status via `Dropdown` com dicas, validação no campo (cliente e 422 do servidor), aviso de alterações não salvas (`useUnsavedChangesGuard` + `ConfirmModal`)
+- Bloco "Dados da empresa" (`CompanyForm`, `PUT /companies/me`) na primeira vaga e no 409 `company_required`; não cria mais uma empresa "Empresa" a cada vaga
+- Minhas vagas com `GET /companies/me/jobs`: painel com contadores, tabela (desktop) / cartões (celular), filtro por status (`JobStatusBadge`), nº de candidaturas, aviso "analisando para compatibilidade", "Ver candidatos" e "Editar"
+- Página `/minha-empresa` (dados da empresa e troca de senha) e `RecruiterPageTemplate` com cabeçalho EMPRESAS
+- Roteamento por papel (`utils/roles.ts`): empresa vive em `/minhas-vagas` e nunca abre telas de candidato (`/vagas`, `/meu-perfil`, `/comecar/*`); candidato vive em `/vagas`; destino pós-login/cadastro vem do `role` do JWT
+- Rótulos amigáveis para modalidade, contratação e status (`utils/jobLabels`), também no `JobCard` em `/vagas`
+
+### Changed
+- Páginas de vaga sem `fetch` direto (`companyJobsApi`); variantes `size="md"` em `Button`, `Dropdown`, `ProfileField` e `PasswordChangeForm` para o lado recrutador
+
+### Added
 - `Dropdown` (molecule): lista suspensa no tema, padrão WAI-ARIA "select-only combobox" — teclado completo (setas, Home/End, PageUp/PageDown, digitar para pular, Enter/Espaço, Esc, Tab), leitor de tela (`role=combobox`/`listbox`, `aria-activedescendant`, `aria-selected`), opções grandes (≥ 56px) com dica opcional e ✓ no selecionado, abre para cima quando falta espaço, fecha ao clicar fora
 
 ### Changed

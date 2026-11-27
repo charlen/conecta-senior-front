@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { homePathFor, roleFromToken } from '../utils/roles'
 import { Button } from '../components/atoms/Button'
 import { Alerta } from '../components/molecules/Alerta'
 import { CodeField } from '../components/molecules/CodeField'
@@ -75,7 +76,7 @@ export default function EntrarPage() {
     try {
       const data = await authApi.login({ email: value, password })
       setToken(data.token)
-      window.location.href = '/vagas'
+      window.location.href = homePathFor(roleFromToken(data.token))
     } catch {
       fail('password', 'E-mail ou senha incorretos. Confira e tente de novo, ou entre com um código por e-mail.')
       setLoading(false)
@@ -90,7 +91,7 @@ export default function EntrarPage() {
     try {
       const data = await authApi.verifyCode(email, code)
       setToken(data.token)
-      window.location.href = '/vagas'
+      window.location.href = homePathFor(roleFromToken(data.token))
     } catch (err) {
       const apiCode = err instanceof AuthApiError ? err.code : undefined
       fail(apiCode === 'invalid code' || apiCode === 'code expired' ? 'code' : 'general', (err as Error).message)

@@ -14,6 +14,12 @@ export type MatchedJob = {
   percent: number | null
   /** Whether the logged-in candidate already applied to this job */
   applied: boolean
+  /** Contract type enum (clt, pj...) — optional, older API versions omit it */
+  job_type?: string
+  /** Desired skills — optional, older API versions omit it */
+  skills?: string[]
+  /** Salary "a combinar" */
+  salary_negotiable?: boolean
 }
 
 export type MatchMeResponse = {

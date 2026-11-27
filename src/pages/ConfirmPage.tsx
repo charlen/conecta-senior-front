@@ -1,4 +1,5 @@
 import { HeroPageTemplate } from '../components/templates/HeroPageTemplate'
+import { homePathFor, roleFromToken } from '../utils/roles'
 import { useEffect, useState } from 'react'
 import { useFlow } from '../hooks/useFlow'
 import { Button } from '../components/atoms/Button'
@@ -23,7 +24,7 @@ export function ConfirmPage() {
     if (existingToken) {
       setStatus('success')
       setMsg('Conta já confirmada. Bem-vindo(a).')
-      window.location.href = '/vagas'
+      window.location.href = homePathFor(roleFromToken(localStorage.getItem('token')))
       return
     }
     fetch(`${API_URL}/users/confirm?token=${token}`)
@@ -34,7 +35,7 @@ export function ConfirmPage() {
         localStorage.setItem('user_id', data.user_id)
         setStatus('success')
         setMsg('Conta confirmada! Bem-vindo(a).')
-        window.location.href = '/vagas'
+        window.location.href = homePathFor(roleFromToken(localStorage.getItem('token')))
       })
       .catch(e => {
         // Se token já foi consumido, mas temos JWT salvo, trata como sucesso
@@ -42,7 +43,7 @@ export function ConfirmPage() {
         if (savedToken) {
           setStatus('success')
           setMsg('Conta já confirmada. Bem-vindo(a).')
-          window.location.href = '/vagas'
+          window.location.href = homePathFor(roleFromToken(localStorage.getItem('token')))
           return
         }
         setStatus('error')

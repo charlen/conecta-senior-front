@@ -29,7 +29,9 @@ import EditarVagaPage from './pages/EditarVagaPage'
 import CandidatosVagaPage from './pages/CandidatosVagaPage'
 import PrivacidadePage from './pages/PrivacidadePage'
 import TermosPage from './pages/TermosPage'
+import MinhaEmpresaPage from './pages/MinhaEmpresaPage'
 import { useFlow } from './hooks/useFlow'
+import { redirectFor } from './utils/roles'
 
 function FlowRouter() {
   const { step } = useFlow()
@@ -50,7 +52,7 @@ function FlowRouter() {
 
 function AppRoutes() {
   const path = window.location.pathname
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, role } = useAuth()
 
   // Legal pages are public for everyone, logged in or not
   if (path === '/privacidade') {
@@ -60,8 +62,10 @@ function AppRoutes() {
     return <TermosPage />
   }
 
-  if (isAuthenticated && path !== '/vagas' && path !== '/meu-perfil' && path !== '/minhas-vagas' && path !== '/vagas/nova' && !path.startsWith('/comecar') && !path.startsWith('/vagas/editar/') && !path.startsWith('/vagas/') ) {
-    window.location.href = '/vagas'
+  // Logged-in users stay in their role's area (company ≠ candidate)
+  const redirect = isAuthenticated ? redirectFor(path, role) : null
+  if (redirect) {
+    window.location.replace(redirect)
     return null
   }
 
@@ -103,6 +107,9 @@ function AppRoutes() {
   }
   if (path === '/minhas-vagas') {
     return <MinhasVagasPage />
+  }
+  if (path === '/minha-empresa') {
+    return <MinhaEmpresaPage />
   }
   if (path === '/vagas/nova') {
     return <IncluirVagaPage />

@@ -14,6 +14,8 @@ type DropdownProps = {
   onChange: (value: string) => void
   placeholder?: string
   disabled?: boolean
+  /** "lg" (default) for the 60+ screens; "md" for the denser recruiter screens */
+  size?: 'lg' | 'md'
   'aria-invalid'?: boolean
   'aria-describedby'?: string
   'aria-required'?: boolean
@@ -35,8 +37,10 @@ export function Dropdown({
   onChange,
   placeholder = 'Escolha uma opção',
   disabled,
+  size = 'lg',
   ...aria
 }: DropdownProps) {
+  const md = size === 'md'
   const autoId = useId()
   const buttonId = id ?? `dropdown-${autoId}`
   const listId = `${buttonId}-list`
@@ -176,12 +180,12 @@ export function Dropdown({
         disabled={disabled}
         onClick={() => (open ? setOpen(false) : openList())}
         onKeyDown={onKeyDown}
-        className={`flex w-full min-h-[64px] items-center justify-between gap-4 rounded-2xl border-2 bg-white px-4 py-3 text-left text-xl shadow-sm transition-all focus:outline-none focus:ring-4 focus:ring-primary/30 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
+        className={`flex w-full items-center justify-between gap-4 border-2 bg-white text-left shadow-sm ${md ? 'min-h-[44px] rounded-xl px-3 py-2 text-base' : 'min-h-[64px] rounded-2xl px-4 py-3 text-xl'} transition-all focus:outline-none focus:ring-4 focus:ring-primary/30 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
           invalid ? 'border-red-600 focus:border-red-600' : open ? 'border-primary' : 'border-slate-300 focus:border-primary'
         }`}
       >
         <span className={selected ? 'text-slate-900' : 'text-slate-500'}>{selected ? selected.label : placeholder}</span>
-        <svg aria-hidden="true" viewBox="0 0 24 24" className={`h-7 w-7 shrink-0 text-slate-600 transition-transform ${open ? 'rotate-180' : ''}`}>
+        <svg aria-hidden="true" viewBox="0 0 24 24" className={`${md ? 'h-5 w-5' : 'h-7 w-7'} shrink-0 text-slate-600 transition-transform ${open ? 'rotate-180' : ''}`}>
           <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
@@ -193,7 +197,7 @@ export function Dropdown({
           role="listbox"
           aria-labelledby={buttonId}
           tabIndex={-1}
-          className={`absolute left-0 right-0 z-30 ${dropUp ? 'bottom-full mb-2' : 'top-full mt-2'} max-h-[22rem] overflow-y-auto rounded-2xl border-2 border-slate-200 bg-white p-2 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)]`}
+          className={`absolute left-0 right-0 z-30 ${dropUp ? 'bottom-full mb-2' : 'top-full mt-2'} max-h-[22rem] overflow-y-auto ${md ? 'rounded-xl p-1' : 'rounded-2xl p-2'} border-2 border-slate-200 bg-white shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)]`}
         >
           {options.map((o, i) => {
             const isSelected = i === selectedIndex
@@ -207,16 +211,16 @@ export function Dropdown({
                 onMouseEnter={() => setActive(i)}
                 onMouseDown={e => e.preventDefault()}
                 onClick={() => choose(i)}
-                className={`flex min-h-[56px] cursor-pointer items-center justify-between gap-4 rounded-xl px-4 py-3 text-xl ${
+                className={`flex cursor-pointer items-center justify-between gap-4 rounded-xl ${md ? 'min-h-[44px] px-3 py-2 text-base' : 'min-h-[56px] px-4 py-3 text-xl'} ${
                   isActive ? 'bg-primary/10 text-slate-900' : 'text-slate-800'
                 } ${isSelected ? 'font-semibold' : ''}`}
               >
                 <span>
                   {o.label}
-                  {o.hint && <span className="block text-lg font-normal text-slate-600">{o.hint}</span>}
+                  {o.hint && <span className={`block font-normal text-slate-600 ${md ? 'text-sm' : 'text-lg'}`}>{o.hint}</span>}
                 </span>
                 {isSelected && (
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-7 w-7 shrink-0 text-primary">
+                  <svg aria-hidden="true" viewBox="0 0 24 24" className={`${md ? 'h-5 w-5' : 'h-7 w-7'} shrink-0 text-primary`}>
                     <path d="M5 12l5 5L20 7" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 )}

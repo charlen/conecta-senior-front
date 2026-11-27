@@ -390,3 +390,13 @@ Todas as solicitações foram interpretadas por linguagem natural, traduzidas pa
 **O que foi entregue:**
 - Molecule `Dropdown` acessível (WAI-ARIA combobox) substituindo os 5 `<select>` nativos
 - Teste Cypress de mouse, teclado (digitação para pular, Enter, Esc), clique fora e valor salvo; verificação de abertura para cima por medição no navegador
+
+---
+
+## 2026-11-27 Lado empresa para recrutador e separação de papéis (Claude Code, agente em paralelo)
+
+**O que foi pedido:** melhorar o cadastro de vagas (público recrutador, não 60+) e garantir que empresa não caia nos fluxos de candidato.
+**Como foi pedido:** linguagem natural; subagente em worktree isolada contra um contrato de API fixado antes, revisão e integração pela sessão principal.
+**O que foi entregue:**
+- `JobForm` com prévia ao vivo, `CompanyForm`, Minhas vagas, `/minha-empresa`, roteamento por papel
+- 35 testes vitest, 22 cenários Cypress (desktop e celular) com API simulada
