@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+- `HomePage` e `MinhasVagasPage`: tipagem de `Company.CompanyName` ao mapear vagas da API (erro TS2339)
+- `RevisaoPage`: período da experiência derivado de `inicio`/`fim` (campo `periodo` inexistente em `Experiencia`)
+
 ### Added
 - Documentação de Operações de produção em AGENTS.md: procedimento de purge Cloudflare com zona `caa770491f641bf280d7eac3843f6e84` e uso de `CLOUDFLARE_PURGE_TOKEN` via `~/.zshrc`
 - Wizard manual com barra de progresso, navegação Voltar/Continuar, validação gentil e “Adicionar outra” para experiências e formação

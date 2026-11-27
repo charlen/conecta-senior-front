@@ -62,7 +62,7 @@ export function HomePage() {
           id: (j.id as string) ?? (j.ID as string),
           title: (j.title as string) ?? (j.Title as string),
           description: (j.description as string) ?? (j.Description as string),
-          company: (j.company as string) ?? (j.Company?.CompanyName as string) ?? '',
+          company: (j.company as string) ?? ((j.Company as { CompanyName?: string } | undefined)?.CompanyName) ?? '',
           location: (j.location as string) ?? (j.Location as string),
           modality: (j.modality as string) ?? (j.Modality as string),
           salary_min: (j.salary_min as number) ?? (j.SalaryMin as number),
