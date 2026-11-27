@@ -44,6 +44,7 @@ src/
 - Páginas seguem `StepTemplate` ou `HeroStepTemplate` com barra de progresso e layout fluido duas colunas
 - Landing inicial em `WelcomePage` com layout duas colunas
 - Vagas em cards Tailwind com badges e tag de compatibilidade
+- Diálogos de confirmação sempre via `ConfirmModal` (molecule); ações destrutivas usam `tone="danger"`. Nunca usar `window.confirm`
 - Perfil do candidato: modelo canônico em `src/types/candidate.ts` (espelha `internal/domain/candidate` do backend); edição sempre via `ProfileEditor` e `PUT /profiles/me`
 - Páginas legais públicas: `/privacidade` e `/termos` (conteúdo em `src/content/legal.ts`, e-mail de contato em `LEGAL_CONTACT_EMAIL`)
 - Rotas onboarding: `/comecar/metodo`, `/comecar/voz`, `/comecar/curriculo`, `/comecar/passo/:n`, `/comecar/revisao`, `/comecar/confirmado`

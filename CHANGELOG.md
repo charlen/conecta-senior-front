@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Changed
+- `ConfirmModal` (molecule) acessível: `role="alertdialog"`, foco preso no diálogo, Esc e clique fora cancelam, foco devolvido ao fechar, rótulos configuráveis e `tone="danger"` (botão vermelho, foco inicial em Cancelar)
+- `Button` (atom) com `forwardRef`
+- `ProfileEditor`: remover experiência, formação ou habilidade pede confirmação no `ConfirmModal` (itens recém-adicionados e vazios saem direto)
+
 ### Added
 - Editor único de perfil (`ProfileEditor` organism + `ProfileField` molecule) acessível 60+: obrigatório/opcional sinalizado, erros por campo com foco, experiências/formação com adicionar/remover, habilidades em chips, UF em lista
 - `/comecar/revisao` e `/meu-perfil` usam o perfil canônico (`types/candidate.ts`, `services/profileApi.ts`, `hooks/useCandidateProfile.ts`) e salvam via `PUT /profiles/me`
