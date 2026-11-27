@@ -43,6 +43,12 @@ export function CandidateMatchCard({ candidate: c, jobTitle, position }: Candida
           <Avatar src={c.photo_url || null} name={name} size="md" />
           <div className="min-w-0">
             <p className="text-lg text-slate-500">{position}º mais compatível</p>
+            {c.applied && (
+              <p className="mt-1 mb-2 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1 text-lg font-semibold text-emerald-900">
+                <span aria-hidden="true">✓</span>
+                Candidatou-se{c.applied_at ? ` em ${new Date(c.applied_at).toLocaleDateString('pt-BR')}` : ''}
+              </p>
+            )}
             <h2 id={headingId} className="text-2xl md:text-3xl font-bold text-slate-900 break-words">{name}</h2>
             {c.headline && <p className="text-xl text-slate-700">{c.headline}</p>}
             {location && <p className="text-xl text-slate-600">{location}</p>}

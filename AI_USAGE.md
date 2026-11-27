@@ -369,3 +369,14 @@ Todas as solicitações foram interpretadas por linguagem natural, traduzidas pa
 - Cadastro e login redesenhados ("uma coisa por tela", código com reenvio e contagem, erros no campo)
 - Tela de candidatos por vaga para empresas, com contato por WhatsApp/telefone/e-mail
 - Validação: tsc, lint, build, vitest (10 testes) e Cypress com API simulada em desktop e celular
+
+---
+
+## 2026-11-27 Ajustes dos achados (Claude Code)
+
+**O que foi pedido:** resolver os pontos em aberto apontados pelos agentes.
+**Como foi pedido:** linguagem natural, em sessão com Claude Code (Opus) no VS Code.
+**O que foi entregue:**
+- Fluxo de candidatura (candidato) e visão de inscritos (empresa)
+- Senha mínima unificada, fallback de decodificação de foto
+- Verificação com Cypress e API simulada (3 cenários)

@@ -28,6 +28,7 @@ export default function CandidatosVagaPage() {
   const [error, setError] = useState<{ message: string; status: number } | null>(null)
   const [loading, setLoading] = useState(true)
   const [minPercent, setMinPercent] = useState(0)
+  const [onlyApplied, setOnlyApplied] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -48,8 +49,8 @@ export default function CandidatosVagaPage() {
   }, [load])
 
   const visible = useMemo(
-    () => (data?.candidates ?? []).filter(c => c.percent >= minPercent),
-    [data, minPercent]
+    () => (data?.candidates ?? []).filter(c => c.percent >= minPercent && (!onlyApplied || c.applied)),
+    [data, minPercent, onlyApplied]
   )
   const jobTitle = data?.job.title || 'Vaga'
   const jobMeta = [data?.job.location, data?.job.modality].filter(Boolean).join(' · ')
@@ -69,6 +70,15 @@ export default function CandidatosVagaPage() {
           {jobMeta && <p className="text-xl text-slate-600">{jobMeta}</p>}
           {data && data.vector_ready && (
             <p className="text-2xl text-slate-700" data-testid="candidates-count">{countLabel(data.total)}</p>
+          )}
+          {data && data.vector_ready && (
+            <p className="text-xl font-semibold text-emerald-800" data-testid="applicants-count">
+              {data.applicants_total === 0
+                ? 'Ninguém se candidatou ainda. Abaixo estão os perfis mais compatíveis com a vaga.'
+                : data.applicants_total === 1
+                  ? '1 pessoa se candidatou a esta vaga.'
+                  : `${data.applicants_total} pessoas se candidataram a esta vaga.`}
+            </p>
           )}
           {data && data.total > 0 && (
             <p className="text-lg text-slate-500">
@@ -133,14 +143,20 @@ export default function CandidatosVagaPage() {
                   {f.label}
                 </Button>
               ))}
+              <Button aria-pressed={onlyApplied} variant={onlyApplied ? 'primary' : 'secondary'} className="!px-6"
+                onClick={() => setOnlyApplied(v => !v)}>
+                Só quem se candidatou
+              </Button>
             </div>
             {visible.map((c, i) => (
               <CandidateMatchCard key={c.profile_id} candidate={c} jobTitle={jobTitle} position={i + 1} />
             ))}
             {visible.length === 0 && (
               <div className="bg-white rounded-3xl border-2 border-slate-200 p-8 text-center space-y-4">
-                <p className="text-2xl font-bold text-slate-900">Nenhum candidato com {minPercent}% ou mais</p>
-                <Button variant="secondary" onClick={() => setMinPercent(0)}>Mostrar todos</Button>
+                <p className="text-2xl font-bold text-slate-900">
+                  {onlyApplied ? 'Ninguém se candidatou com esse filtro' : `Nenhum candidato com ${minPercent}% ou mais`}
+                </p>
+                <Button variant="secondary" onClick={() => { setMinPercent(0); setOnlyApplied(false) }}>Mostrar todos</Button>
               </div>
             )}
           </section>

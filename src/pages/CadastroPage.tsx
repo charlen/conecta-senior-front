@@ -15,7 +15,7 @@ import { AuthApiError, authApi } from '../services/authApi'
 type Step = 'tipo' | 'email' | 'senha' | 'codigo'
 type Field = 'email' | 'password' | 'confirm' | 'code'
 
-const MIN_PASSWORD = 6
+const MIN_PASSWORD = 8 // mesma regra do backend (cadastro e troca de senha)
 const linkClass = 'font-semibold text-primary underline underline-offset-4 hover:text-primary-dark'
 
 export default function CadastroPage() {

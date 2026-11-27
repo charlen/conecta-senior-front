@@ -25,6 +25,10 @@ export type JobCandidate = {
   /** Compatibility 0–100 */
   percent: number
   score: number
+  /** Candidate applied to this job */
+  applied: boolean
+  /** ISO date of the application, when applied */
+  applied_at?: string
 }
 
 export type JobCandidatesJob = {
@@ -40,5 +44,7 @@ export type JobCandidatesResponse = {
   /** false while the job still has no embedding (no ranking possible yet) */
   vector_ready: boolean
   total: number
+  /** How many people applied to this job (regardless of filters) */
+  applicants_total: number
   candidates: JobCandidate[]
 }
