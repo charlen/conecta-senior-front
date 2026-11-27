@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Fixed
+- `WelcomePage` no celular: o botão do topo apontava para a âncora inexistente `#auth` e não levava a lugar nenhum; agora é só "Entrar" e abre `/entrar` (o cadastro segue em "Começar minha jornada")
 - `AuthStepTemplate`: o "Voltar" deixou de ser link sublinhado (seta e texto saíam com sublinhados separados) e virou um botão discreto com ícone de seta (sem borda nem sombra, fundo leve no hover/foco), alvo de 56px
 
 ### Added
