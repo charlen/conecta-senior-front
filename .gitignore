@@ -41,3 +41,6 @@ vite.config.*.ts
 
 # TypeScript
 *.tsbuildinfo
+
+# Worktrees temporárias de agentes do Claude Code
+.claude/worktrees/
