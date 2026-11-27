@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- Foto de perfil enviada direto do navegador para o S3 privado via URL assinada (`profileApi.uploadPhoto`: presign → PUT no S3 → confirmação); exibição usa `photo_url` assinada vinda do perfil. Removido `usePhotoUrl` (blob com header de auth)
+
 ### Added
 - Foto de perfil: `Avatar` (atom, iniciais como alternativa), `PhotoEditor` (organism) com recorte quadrado 512px no navegador (`utils/image.ts`, remove EXIF/GPS), troca e remoção com confirmação
 - Troca de senha: `PasswordChangeForm` (organism) com senha atual **ou** código por e-mail ("Não lembro minha senha atual"), mostrar senhas e erros por campo

@@ -51,6 +51,8 @@ export type ProfileResponse = {
   user_id: string
   /** 0 when there is no photo; changes whenever the photo changes */
   photo_version: number
+  /** Short-lived presigned S3 URL (empty when there is no photo); use directly in <img src> */
+  photo_url: string
   complete: boolean
   missing: FieldError[]
   profile: CandidateProfile
