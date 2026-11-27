@@ -9,7 +9,6 @@ import { Alerta } from '../molecules/Alerta'
 import { Button } from '../atoms/Button'
 import { Spinner } from '../atoms/Spinner'
 import { Avatar } from '../atoms/Avatar'
-import { usePhotoUrl } from '../../hooks/usePhotoUrl'
 import { PhotoEditor } from './PhotoEditor'
 import { PasswordChangeForm } from './PasswordChangeForm'
 import {
@@ -51,8 +50,7 @@ const period = (e: CandidateExperience) => {
 const join = (...parts: string[]) => parts.map(p => p.trim()).filter(Boolean).join(' · ')
 
 export function ProfileReviewFlow({ mode, seed, onFinish, header, footer }: ProfileReviewFlowProps) {
-  const { profile, errors, status, message, save, clearFeedback, profileId, photoVersion, setPhotoVersion } = useCandidateProfile(seed)
-  const photoUrl = usePhotoUrl(profileId, photoVersion)
+  const { profile, errors, status, message, save, clearFeedback, photoUrl, setPhotoUrl } = useCandidateProfile(seed)
   const [flash, setFlash] = useState<string | null>(null)
   const [view, setView] = useState<View>({ type: 'summary' })
   const [working, setWorking] = useState<CandidateProfile | null>(null)
@@ -141,8 +139,8 @@ export function ProfileReviewFlow({ mode, seed, onFinish, header, footer }: Prof
         </h1>
         {view.type === 'photo' ? (
           <PhotoEditor name={profile.full_name} currentUrl={photoUrl}
-            onSaved={v => { setPhotoVersion(v); done('Pronto, sua foto foi atualizada.') }}
-            onRemoved={() => { setPhotoVersion(0); done('Sua foto foi removida.') }}
+            onSaved={url => { setPhotoUrl(url); done('Pronto, sua foto foi atualizada.') }}
+            onRemoved={() => { setPhotoUrl(null); done('Sua foto foi removida.') }}
             onCancel={() => setView({ type: 'summary' })} />
         ) : (
           <PasswordChangeForm email={profile.email} onDone={() => done('Pronto, sua senha foi trocada. Use a nova senha no próximo acesso.')}

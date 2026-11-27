@@ -67,20 +67,25 @@ export const profileApi = {
 
   withDefaults,
 
-  /** Object URL for a profile photo (requires auth header, so it cannot be a plain <img src>). */
-  async photoUrl(profileId: string): Promise<string | null> {
-    const res = await fetch(`${API_URL}/profiles/${profileId}/photo`, { headers: authHeaders() })
-    if (!res.ok) return null
-    return URL.createObjectURL(await res.blob())
-  },
+  /**
+   * Upload direto para o S3 privado: 1) a API gera a URL assinada de PUT,
+   * 2) o navegador envia a foto, 3) a API confere e registra só a chave.
+   */
+  async uploadPhoto(photo: Blob): Promise<{ photo_url: string; photo_version: number }> {
+    const presign = await fetch(`${API_URL}/profiles/me/photo/upload-url`, { method: 'POST', headers: authHeaders() })
+    if (!presign.ok) throw await errorFrom(presign, 'Não conseguimos preparar o envio da foto. Tente novamente.')
+    const { upload_url, key, content_type } = (await presign.json()) as { upload_url: string; key: string; content_type: string }
 
-  async uploadPhoto(photo: Blob): Promise<number> {
-    const form = new FormData()
-    form.append('file', photo, 'foto.jpg')
-    const res = await fetch(`${API_URL}/profiles/me/photo`, { method: 'PUT', headers: authHeaders(), body: form })
-    if (!res.ok) throw await errorFrom(res, 'Não conseguimos enviar a foto. Tente novamente.')
-    const data = (await res.json()) as { photo_version: number }
-    return data.photo_version
+    const put = await fetch(upload_url, { method: 'PUT', headers: { 'Content-Type': content_type }, body: photo })
+    if (!put.ok) throw new FieldRequestError('O envio da foto falhou. Verifique sua internet e tente novamente.')
+
+    const confirm = await fetch(`${API_URL}/profiles/me/photo`, {
+      method: 'PUT',
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key })
+    })
+    if (!confirm.ok) throw await errorFrom(confirm, 'Não conseguimos salvar a foto. Tente novamente.')
+    return (await confirm.json()) as { photo_url: string; photo_version: number }
   },
 
   async deletePhoto(): Promise<void> {

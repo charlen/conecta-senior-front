@@ -98,3 +98,14 @@ Modelo de registro:
 | `GET /profiles/me` | Revisão e Meu Perfil | Bearer | `{ id, user_id, complete, missing[], profile }` | existente (ampliado) |
 | `PUT /profiles/me` | Salvar perfil completo | `CandidateProfile` | 200 `{...}` ou 422 `{ fields: [{field, message}] }` | novo |
 | `POST /profiles/:id/resumes` | Upload de PDF | multipart `file` | `{ id, parsed, resume, profile_draft }` (draft não é salvo) | existente (ampliado) |
+
+## Foto de perfil (S3 privado, URL assinada)
+
+| Endpoint | Uso | Entrada | Saída |
+|---|---|---|---|
+| `POST /profiles/me/photo/upload-url` | Preparar envio | Bearer | `{ upload_url, key, content_type, expires_in }` |
+| `PUT <upload_url>` (S3) | Enviar a foto direto do navegador | corpo JPEG, `Content-Type: image/jpeg` | 200 |
+| `PUT /profiles/me/photo` | Confirmar | `{ key }` | `{ photo_url, photo_version }` ou 422 |
+| `DELETE /profiles/me/photo` | Remover | Bearer | `{ photo_url: "", photo_version: 0 }` |
+| `GET /profiles/me` | Exibir | Bearer | inclui `photo_url` (assinada, 1h) |
+| `PUT /users/me/password` | Trocar senha | `{ current_password \| code, new_password }` | `{ ok }` / 401 / 422 com `field` |

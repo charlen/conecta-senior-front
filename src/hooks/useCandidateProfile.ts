@@ -14,7 +14,7 @@ export function useCandidateProfile(seed?: (saved: CandidateProfile) => Candidat
   const [status, setStatus] = useState<Status>('loading')
   const [message, setMessage] = useState<string | null>(null)
   const [profileId, setProfileId] = useState<string | null>(null)
-  const [photoVersion, setPhotoVersion] = useState(0)
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null)
 
   useEffect(() => {
     let active = true
@@ -23,7 +23,7 @@ export function useCandidateProfile(seed?: (saved: CandidateProfile) => Candidat
       .then(res => {
         if (!active) return
         setProfileId(res.id)
-        setPhotoVersion(res.photo_version ?? 0)
+        setPhotoUrl(res.photo_url || null)
         setProfile(seed ? seed(res.profile) : res.profile)
         setStatus('ready')
       })
@@ -75,5 +75,5 @@ export function useCandidateProfile(seed?: (saved: CandidateProfile) => Candidat
     setStatus(s => (s === 'saved' ? 'ready' : s))
   }, [])
 
-  return { profile, setProfile, errors, status, message, save, clearFeedback, profileId, photoVersion, setPhotoVersion }
+  return { profile, setProfile, errors, status, message, save, clearFeedback, profileId, photoUrl, setPhotoUrl }
 }

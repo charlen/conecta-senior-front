@@ -9,7 +9,7 @@ import { profileApi } from '../../services/profileApi'
 type PhotoEditorProps = {
   name: string
   currentUrl: string | null
-  onSaved: (version: number) => void
+  onSaved: (photoUrl: string) => void
   onRemoved: () => void
   onCancel: () => void
 }
@@ -39,7 +39,7 @@ export function PhotoEditor({ name, currentUrl, onSaved, onRemoved, onCancel }: 
     setBusy(true)
     setError(null)
     try {
-      onSaved(await profileApi.uploadPhoto(preview.blob))
+      onSaved((await profileApi.uploadPhoto(preview.blob)).photo_url)
     } catch (e) {
       setError((e as Error).message)
     } finally {
