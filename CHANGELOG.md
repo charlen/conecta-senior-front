@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 ### Fixed
-- `AuthStepTemplate`: o "Voltar" deixou de ser link sublinhado (seta e texto saíam com sublinhados separados) e virou botão secundário com ícone, igual aos outros "Voltar" do app
+- `AuthStepTemplate`: o "Voltar" deixou de ser link sublinhado (seta e texto saíam com sublinhados separados) e virou um botão discreto com ícone de seta (sem borda nem sombra, fundo leve no hover/foco), alvo de 56px
 
 ### Added
 - Cadastro/edição de vagas para recrutador (`JobForm`): prévia ao vivo com o `JobCard` do candidato, habilidades em chips (`SkillsInput`), salário com máscara BRL e "A combinar", modalidade/contratação/status via `Dropdown` com dicas, validação no campo (cliente e 422 do servidor), aviso de alterações não salvas (`useUnsavedChangesGuard` + `ConfirmModal`)

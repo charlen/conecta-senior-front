@@ -32,7 +32,7 @@ export function AuthStepTemplate({ title, description, step, onBack, backLabel =
           <button
             type="button"
             onClick={onBack}
-            className="inline-flex min-h-[56px] cursor-pointer items-center gap-3 rounded-2xl border-2 border-slate-300 bg-white px-5 text-xl font-semibold text-slate-800 shadow-sm hover:bg-slate-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
+            className="-ml-3 inline-flex min-h-[56px] cursor-pointer items-center gap-2 rounded-2xl px-3 text-xl font-semibold text-primary hover:bg-primary/10 hover:text-primary-dark focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
           >
             <svg aria-hidden="true" viewBox="0 0 24 24" className="h-7 w-7 shrink-0">
               <path d="M19 12H5m0 0l6-6m-6 6l6 6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
