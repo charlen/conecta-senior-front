@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type { CandidateEducation, CandidateExperience, CandidateProfile } from '../../types/candidate'
 import { emptyEducation, emptyExperience } from '../../types/candidate'
 import { useCandidateProfile } from '../../hooks/useCandidateProfile'
@@ -8,6 +8,10 @@ import { ConfirmModal } from '../molecules/ConfirmModal'
 import { Alerta } from '../molecules/Alerta'
 import { Button } from '../atoms/Button'
 import { Spinner } from '../atoms/Spinner'
+import { Avatar } from '../atoms/Avatar'
+import { usePhotoUrl } from '../../hooks/usePhotoUrl'
+import { PhotoEditor } from './PhotoEditor'
+import { PasswordChangeForm } from './PasswordChangeForm'
 import {
   EducationFields, ExperienceFields, PersonalFields, PreferencesFields, ProfessionFields, SkillsFields,
   jobTypeLabel, modalityLabel
@@ -18,6 +22,8 @@ type View =
   | { type: 'section'; key: 'personal' | 'profession' | 'skills' | 'preferences' }
   | { type: 'experience'; index: number | null }
   | { type: 'education'; index: number | null }
+  | { type: 'photo' }
+  | { type: 'password' }
 
 type Removal = { kind: 'experience' | 'education'; index: number; label: string }
 
@@ -25,6 +31,10 @@ type ProfileReviewFlowProps = {
   mode: 'onboarding' | 'profile'
   seed?: (saved: CandidateProfile) => CandidateProfile
   onFinish?: () => void
+  /** Page intro shown only on the summary (focused screens show just their own title) */
+  header?: ReactNode
+  /** Extra actions shown only on the summary */
+  footer?: ReactNode
 }
 
 const sectionTitles = {
@@ -40,8 +50,10 @@ const period = (e: CandidateExperience) => {
 }
 const join = (...parts: string[]) => parts.map(p => p.trim()).filter(Boolean).join(' · ')
 
-export function ProfileReviewFlow({ mode, seed, onFinish }: ProfileReviewFlowProps) {
-  const { profile, errors, status, message, save, clearFeedback } = useCandidateProfile(seed)
+export function ProfileReviewFlow({ mode, seed, onFinish, header, footer }: ProfileReviewFlowProps) {
+  const { profile, errors, status, message, save, clearFeedback, profileId, photoVersion, setPhotoVersion } = useCandidateProfile(seed)
+  const photoUrl = usePhotoUrl(profileId, photoVersion)
+  const [flash, setFlash] = useState<string | null>(null)
   const [view, setView] = useState<View>({ type: 'summary' })
   const [working, setWorking] = useState<CandidateProfile | null>(null)
   const [item, setItem] = useState<CandidateExperience | CandidateEducation | null>(null)
@@ -67,6 +79,7 @@ export function ProfileReviewFlow({ mode, seed, onFinish }: ProfileReviewFlowPro
 
   const open = (next: View) => {
     clearFeedback()
+    setFlash(null)
     setWorking(profile)
     if (next.type === 'experience') setItem(next.index === null ? emptyExperience() : profile.experiences[next.index])
     if (next.type === 'education') setItem(next.index === null ? emptyEducation() : profile.education[next.index])
@@ -113,6 +126,30 @@ export function ProfileReviewFlow({ mode, seed, onFinish }: ProfileReviewFlowPro
 
   const finish = async () => {
     if (await save(profile)) onFinish?.()
+  }
+
+  // ---------- Photo / password (own screens) ----------
+  if (view.type === 'photo' || view.type === 'password') {
+    const done = (msg: string) => {
+      setFlash(msg)
+      setView({ type: 'summary' })
+    }
+    return (
+      <div className="space-y-8">
+        <h1 ref={headingRef} tabIndex={-1} className="text-4xl md:text-5xl font-extrabold text-slate-900 focus:outline-none">
+          {view.type === 'photo' ? 'Sua foto' : 'Trocar senha'}
+        </h1>
+        {view.type === 'photo' ? (
+          <PhotoEditor name={profile.full_name} currentUrl={photoUrl}
+            onSaved={v => { setPhotoVersion(v); done('Pronto, sua foto foi atualizada.') }}
+            onRemoved={() => { setPhotoVersion(0); done('Sua foto foi removida.') }}
+            onCancel={() => setView({ type: 'summary' })} />
+        ) : (
+          <PasswordChangeForm email={profile.email} onDone={() => done('Pronto, sua senha foi trocada. Use a nova senha no próximo acesso.')}
+            onCancel={() => setView({ type: 'summary' })} />
+        )}
+      </div>
+    )
   }
 
   // ---------- Focused editor (one thing per page) ----------
@@ -162,9 +199,11 @@ export function ProfileReviewFlow({ mode, seed, onFinish }: ProfileReviewFlowPro
   // ---------- Summary ("confira seu perfil") ----------
   return (
     <div className="space-y-8">
+      {header}
       <h2 ref={headingRef} tabIndex={-1} className="sr-only">Resumo do perfil</h2>
 
       {status === 'saved' && <Alerta tipo="sucesso">Pronto, alterações salvas.</Alerta>}
+      {flash && <Alerta tipo="sucesso">{flash}</Alerta>}
       {message && <Alerta tipo="erro">{message}</Alerta>}
 
       {missing.length === 0 ? (
@@ -183,6 +222,12 @@ export function ProfileReviewFlow({ mode, seed, onFinish }: ProfileReviewFlowPro
       )}
 
       <SummaryCard id="card-personal" title="Seus dados" missing={missingIn('personal')} onEdit={() => open({ type: 'section', key: 'personal' })}>
+        <div className="mb-4 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+          <Avatar src={photoUrl} name={profile.full_name} size="lg" />
+          <Button type="button" variant="secondary" onClick={() => open({ type: 'photo' })}>
+            {photoUrl ? 'Alterar foto' : 'Adicionar foto'}
+          </Button>
+        </div>
         <dl>
           <SummaryRow label="Nome" value={profile.full_name} />
           <SummaryRow label="E-mail" value={profile.email} />
@@ -271,6 +316,12 @@ export function ProfileReviewFlow({ mode, seed, onFinish }: ProfileReviewFlowPro
         </dl>
       </SummaryCard>
 
+      {mode === 'profile' && (
+        <SummaryCard id="card-password" title="Senha de acesso" onEdit={() => open({ type: 'password' })} editLabel="Trocar senha">
+          <p>Com a senha você entra direto, sem esperar o código por e-mail.</p>
+        </SummaryCard>
+      )}
+
       {mode === 'onboarding' && (
         <div className="flex flex-col-reverse gap-4 pt-4 md:flex-row md:justify-between">
           <Button type="button" variant="secondary" onClick={() => window.history.back()}>Voltar</Button>
@@ -279,6 +330,8 @@ export function ProfileReviewFlow({ mode, seed, onFinish }: ProfileReviewFlowPro
           </Button>
         </div>
       )}
+
+      {footer}
 
       <ConfirmModal
         open={removal !== null}

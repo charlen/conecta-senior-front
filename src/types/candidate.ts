@@ -49,6 +49,8 @@ export type FieldError = {
 export type ProfileResponse = {
   id: string
   user_id: string
+  /** 0 when there is no photo; changes whenever the photo changes */
+  photo_version: number
   complete: boolean
   missing: FieldError[]
   profile: CandidateProfile

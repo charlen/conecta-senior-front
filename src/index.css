@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* Tailwind 4 só lê o tailwind.config.js (cores primary, success, error...) com @config */
+@config "../tailwind.config.js";
 
 :root {
   color-scheme: light;

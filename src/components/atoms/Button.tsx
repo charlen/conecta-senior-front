@@ -8,7 +8,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   { variant = 'secondary', className = '', ...props },
   ref
 ) {
-  const base = 'appearance-none px-8 py-4 text-xl font-semibold rounded-2xl transition-all min-h-[56px] shadow-sm focus:outline-none focus:ring-4 focus:ring-[#2563eb]/30 cursor-pointer'
+  const base = 'appearance-none px-8 py-4 text-xl font-semibold rounded-2xl transition-all min-h-[56px] shadow-sm focus:outline-none focus:ring-4 focus:ring-[#2563eb]/30 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:active:scale-100'
   const variantClass =
     variant === 'primary'
       ? 'bg-[#2563eb] text-white hover:brightness-95 active:scale-[0.98] border-0'

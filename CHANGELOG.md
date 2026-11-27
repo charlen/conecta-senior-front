@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Added
+- Foto de perfil: `Avatar` (atom, iniciais como alternativa), `PhotoEditor` (organism) com recorte quadrado 512px no navegador (`utils/image.ts`, remove EXIF/GPS), troca e remoção com confirmação
+- Troca de senha: `PasswordChangeForm` (organism) com senha atual **ou** código por e-mail ("Não lembro minha senha atual"), mostrar senhas e erros por campo
+- Cartão "Senha de acesso" e foto no cartão "Seus dados" em `/meu-perfil`
+
+### Fixed
+- Cores do tema (`primary`, `success`, `error`, `surface`...) nunca eram aplicadas: Tailwind 4 só lê `tailwind.config.js` com `@config` em `index.css`. A escala de fontes customizada foi removida do config para não inverter `text-2xl` > `text-3xl`
+- `Button` (atom) com estilo de desabilitado
+- Cabeçalho e rodapé da página aparecem só no resumo do perfil (telas focadas mostram apenas o próprio título)
+
 ### Changed
 - Perfil (revisão do onboarding e `/meu-perfil`) reestruturado para 60+: resumo em cartões somente leitura com "Alterar" por seção, faixa com o que falta para completar, obrigatórios primeiro e opcionais em "Quer completar mais?"; edição de uma seção (ou de uma experiência/formação) por vez em tela focada, com "Sair sem salvar?" ao cancelar com alterações
 - `ProfileEditor` substituído por `ProfileReviewFlow` + `ProfileSectionFields` (organisms) e `SummaryCard` (molecule)
