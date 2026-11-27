@@ -12,6 +12,8 @@ export type MatchedJob = {
   status: string
   /** Compatibility 0–100; null when matching is unavailable or the job has no vector yet */
   percent: number | null
+  /** Whether the logged-in candidate already applied to this job */
+  applied: boolean
 }
 
 export type MatchMeResponse = {

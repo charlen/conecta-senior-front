@@ -6,7 +6,8 @@ import { ConfirmModal } from '../components/molecules/ConfirmModal'
 import { JobCard } from '../components/molecules/JobCard'
 import { Avatar } from '../components/atoms/Avatar'
 import { useAuth } from '../contexts/AuthContext'
-import { jobsApi } from '../services/jobsApi'
+import { jobsApi, ApplyError } from '../services/jobsApi'
+import { Alerta } from '../components/molecules/Alerta'
 import type { Profile } from '../types/profile'
 import type { MatchedJob } from '../types/job'
 
@@ -19,6 +20,33 @@ export function HomePage() {
   const [jobsError, setJobsError] = useState<string | null>(null)
   const { setToken, token, role } = useAuth()
   const [confirmOpen, setConfirmOpen] = useState(false)
+  const [pendingApply, setPendingApply] = useState<{ job: MatchedJob; action: 'apply' | 'withdraw' } | null>(null)
+  const [busyJobId, setBusyJobId] = useState<string | null>(null)
+  const [applyFeedback, setApplyFeedback] = useState<{ tone: 'sucesso' | 'erro'; text: string; completeProfile?: boolean } | null>(null)
+
+  const confirmApply = async () => {
+    if (!pendingApply) return
+    const { job, action } = pendingApply
+    setPendingApply(null)
+    setBusyJobId(job.id)
+    setApplyFeedback(null)
+    try {
+      if (action === 'apply') await jobsApi.apply(job.id)
+      else await jobsApi.withdraw(job.id)
+      setJobs(prev => prev.map(j => (j.id === job.id ? { ...j, applied: action === 'apply' } : j)))
+      setApplyFeedback({
+        tone: 'sucesso',
+        text: action === 'apply'
+          ? `Pronto! Sua candidatura para "${job.title}" foi enviada. A empresa já pode ver seu perfil.`
+          : `Sua candidatura para "${job.title}" foi cancelada.`
+      })
+    } catch (err) {
+      const e = err as ApplyError
+      setApplyFeedback({ tone: 'erro', text: e.message, completeProfile: e.incompleteProfile })
+    } finally {
+      setBusyJobId(null)
+    }
+  }
 
   const handleLogout = () => {
     setToken(null)
@@ -145,12 +173,42 @@ export function HomePage() {
                 {jobs.length === 0 ? 'Nenhuma vaga aberta no momento. Volte em breve!' : 'Nenhuma vaga encontrada para essa busca.'}
               </p>
             )}
+            {applyFeedback && (
+              <Alerta tipo={applyFeedback.tone}>
+                {applyFeedback.text}
+                {applyFeedback.completeProfile && (
+                  <Button variant="primary" className="mt-4 w-full md:w-auto" onClick={() => (window.location.href = '/meu-perfil')}>
+                    Completar meu perfil
+                  </Button>
+                )}
+              </Alerta>
+            )}
             {visibleJobs.map(j => (
-              <JobCard key={j.id} job={j} />
+              <JobCard
+                key={j.id}
+                job={j}
+                busy={busyJobId === j.id}
+                onApply={job => setPendingApply({ job, action: 'apply' })}
+                onWithdraw={job => setPendingApply({ job, action: 'withdraw' })}
+              />
             ))}
           </div>
         </section>
       </main>
+      <ConfirmModal
+        open={pendingApply !== null}
+        tone={pendingApply?.action === 'withdraw' ? 'danger' : 'default'}
+        title={pendingApply?.action === 'withdraw' ? 'Desistir desta candidatura?' : 'Candidatar-se a esta vaga?'}
+        message={
+          pendingApply?.action === 'withdraw'
+            ? `A empresa deixará de ver você como candidato para "${pendingApply.job.title}".`
+            : `${pendingApply?.job.company || 'A empresa'} vai ver seu perfil, com seu nome, telefone e e-mail, para entrar em contato sobre "${pendingApply?.job.title ?? ''}".`
+        }
+        confirmLabel={pendingApply?.action === 'withdraw' ? 'Sim, desistir' : 'Sim, quero me candidatar'}
+        cancelLabel={pendingApply?.action === 'withdraw' ? 'Não, manter' : 'Agora não'}
+        onConfirm={confirmApply}
+        onCancel={() => setPendingApply(null)}
+      />
       <ConfirmModal
         open={confirmOpen}
         title="Sair"

@@ -3,6 +3,14 @@
 ## [Unreleased]
 
 ### Added
+- Candidatura de verdade em `/vagas`: "Candidatar-me" abre `ConfirmModal` explicando o que a empresa verá; depois o card mostra "Você se candidatou a esta vaga" e "Desistir da candidatura" (confirmação `danger`). Perfil incompleto (422) mostra "Completar meu perfil" (`jobsApi.apply`/`withdraw`)
+- Empresa em `/vagas/:id/candidatos`: contagem de quem se candidatou, selo "Candidatou-se em dd/mm/aaaa" e filtro "Só quem se candidatou"
+
+### Changed
+- Senha mínima do cadastro passa a 8 caracteres (igual ao backend e à troca de senha)
+- Recorte da foto com alternativa via `<img>` quando `createImageBitmap` falha (Safari, HEIC de iPhone)
+
+### Added
 - `/vagas` usa `GET /match/me` (`services/jobsApi.ts`): vagas ordenadas da mais para a menos compatível, selo grande "87% compatível com você" no novo molecule `JobCard` (com faixa salarial), aviso "Completar meu perfil" quando o matching ainda não está disponível e estados de carregando/erro/vazio
 - Página `/vagas/:id/candidatos` (`CandidatosVagaPage`, organism `CandidateMatchCard`): empresa vê candidatos ordenados por compatibilidade, com filtro (Todos / 60%+ / 80%+), habilidades, experiências principais e contato por WhatsApp, telefone e e-mail (`utils/contact.ts` com testes); serviço `companyJobsApi.ts`
 - Cadastro (`/cadastro`) e login (`/entrar`) redesenhados para 60+ no padrão "uma coisa por tela": título em forma de pergunta, "Passo X de Y", um botão principal e "Voltar" sempre visível (`AuthStepTemplate`)

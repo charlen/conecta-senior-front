@@ -37,7 +37,9 @@ function normalizeCandidate(c: Partial<JobCandidate>): JobCandidate {
     phone: c.phone ?? '',
     photo_url: c.photo_url ?? '',
     percent: c.percent ?? 0,
-    score: c.score ?? 0
+    score: c.score ?? 0,
+    applied: Boolean(c.applied),
+    applied_at: c.applied_at
   }
 }
 
@@ -55,6 +57,7 @@ export const companyJobsApi = {
       job: { id: jobId, title: '', location: '', modality: '', status: '', ...data.job },
       vector_ready: data.vector_ready ?? true,
       total: data.total ?? candidates.length,
+      applicants_total: data.applicants_total ?? candidates.filter(c => c.applied).length,
       candidates
     }
   }

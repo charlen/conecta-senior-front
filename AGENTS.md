@@ -48,8 +48,8 @@ src/
 - Vagas em cards Tailwind com badges e tag de compatibilidade
 - Diálogos de confirmação sempre via `ConfirmModal` (molecule); ações destrutivas usam `tone="danger"`. Nunca usar `window.confirm`
 - Perfil do candidato: modelo canônico em `src/types/candidate.ts` (espelha `internal/domain/candidate` do backend); exibido como resumo em cartões (`ProfileReviewFlow`, padrão "confira suas respostas") e editado uma seção por vez em tela focada; cada "Salvar" faz `PUT /profiles/me` (backend aceita perfil incompleto e bloqueia só valores inválidos)
-- Vagas do candidato (`/vagas`): ordenadas por compatibilidade via `GET /match/me` (`jobsApi`)
-- Lado empresa: `/minhas-vagas` → "Ver candidatos" → `/vagas/:id/candidatos` (lista por compatibilidade via `GET /jobs/:id/candidates`, contato via WhatsApp/tel/mailto)
+- Vagas do candidato (`/vagas`): ordenadas por compatibilidade via `GET /match/me` (`jobsApi`); candidatura com confirmação via `POST/DELETE /jobs/:id/apply`
+- Lado empresa: `/minhas-vagas` → "Ver candidatos" → `/vagas/:id/candidatos` (lista por compatibilidade via `GET /jobs/:id/candidates`, selo e filtro de quem se candidatou, contato via WhatsApp/tel/mailto)
 - Autenticação (`/cadastro`, `/entrar`) usa `AuthStepTemplate`: uma pergunta por tela, "Passo X de Y", erros no campo via `ProfileField`/`useFieldError`; chamadas só via `authApi`
 - Páginas legais públicas: `/privacidade` e `/termos` (conteúdo em `src/content/legal.ts`, e-mail de contato em `LEGAL_CONTACT_EMAIL`)
 - Rotas onboarding: `/comecar/metodo`, `/comecar/voz`, `/comecar/curriculo`, `/comecar/passo/:n`, `/comecar/revisao`, `/comecar/confirmado`
