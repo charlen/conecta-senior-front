@@ -3,6 +3,7 @@ import type { CandidateEducation, CandidateExperience, CandidateProfile, FieldEr
 import { UFS, emptyEducation, emptyExperience } from '../../types/candidate'
 import { ProfileField, inputClass } from '../molecules/ProfileField'
 import { Button } from '../atoms/Button'
+import { ConfirmModal } from '../molecules/ConfirmModal'
 
 type ProfileEditorProps = {
   value: CandidateProfile
@@ -13,8 +14,16 @@ type ProfileEditorProps = {
 const sectionClass = 'space-y-6 rounded-3xl border-2 border-slate-200 bg-white p-6 md:p-8'
 const sectionTitle = 'text-2xl md:text-3xl font-bold text-slate-900'
 
+type PendingRemoval =
+  | { kind: 'experience'; index: number; label: string }
+  | { kind: 'education'; index: number; label: string }
+  | { kind: 'skill'; skill: string; label: string }
+
+const describe = (...parts: string[]) => parts.map(p => p.trim()).filter(Boolean).join(' em ')
+
 export function ProfileEditor({ value, onChange, errors = [] }: ProfileEditorProps) {
   const [newSkill, setNewSkill] = useState('')
+  const [pending, setPending] = useState<PendingRemoval | null>(null)
   const errorFor = (field: string) => errors.find(e => e.field === field)?.message
 
   const set = <K extends keyof CandidateProfile>(key: K, v: CandidateProfile[K]) => onChange({ ...value, [key]: v })
@@ -23,6 +32,40 @@ export function ProfileEditor({ value, onChange, errors = [] }: ProfileEditorPro
     set('experiences', value.experiences.map((e, idx) => (idx === i ? { ...e, ...patch } : e)))
   const setEducation = (i: number, patch: Partial<CandidateEducation>) =>
     set('education', value.education.map((e, idx) => (idx === i ? { ...e, ...patch } : e)))
+
+  const requestRemoveExperience = (i: number) => {
+    const e = value.experiences[i]
+    const label = describe(e.role, e.company)
+    if (!label && !e.description.trim() && !e.start.trim()) {
+      set('experiences', value.experiences.filter((_, idx) => idx !== i))
+      return
+    }
+    setPending({ kind: 'experience', index: i, label: label || `Experiência ${i + 1}` })
+  }
+
+  const requestRemoveEducation = (i: number) => {
+    const e = value.education[i]
+    const label = describe(e.course, e.institution)
+    if (!label && !e.end_year.trim()) {
+      set('education', value.education.filter((_, idx) => idx !== i))
+      return
+    }
+    setPending({ kind: 'education', index: i, label: label || `Formação ${i + 1}` })
+  }
+
+  const confirmRemoval = () => {
+    if (!pending) return
+    if (pending.kind === 'experience') set('experiences', value.experiences.filter((_, idx) => idx !== pending.index))
+    if (pending.kind === 'education') set('education', value.education.filter((_, idx) => idx !== pending.index))
+    if (pending.kind === 'skill') set('skills', value.skills.filter(s => s !== pending.skill))
+    setPending(null)
+  }
+
+  const removalTitle = {
+    experience: 'Remover esta experiência?',
+    education: 'Remover esta formação?',
+    skill: 'Remover esta habilidade?'
+  }
 
   const addSkill = () => {
     const s = newSkill.trim()
@@ -118,7 +161,7 @@ export function ProfileEditor({ value, onChange, errors = [] }: ProfileEditorPro
             <ProfileField id={`exp-${i}-desc`} label="O que você fazia">
               {a => <textarea {...a} className={`${inputClass()} min-h-[140px]`} value={exp.description} onChange={e => setExperience(i, { description: e.target.value })} />}
             </ProfileField>
-            <Button type="button" variant="secondary" onClick={() => set('experiences', value.experiences.filter((_, idx) => idx !== i))}>
+            <Button type="button" variant="secondary" onClick={() => requestRemoveExperience(i)}>
               Remover esta experiência
             </Button>
           </fieldset>
@@ -144,7 +187,7 @@ export function ProfileEditor({ value, onChange, errors = [] }: ProfileEditorPro
             <ProfileField id={`edu-${i}-year`} label="Ano de conclusão">
               {a => <input {...a} inputMode="numeric" className={inputClass()} value={edu.end_year} onChange={e => setEducation(i, { end_year: e.target.value })} />}
             </ProfileField>
-            <Button type="button" variant="secondary" onClick={() => set('education', value.education.filter((_, idx) => idx !== i))}>
+            <Button type="button" variant="secondary" onClick={() => requestRemoveEducation(i)}>
               Remover esta formação
             </Button>
           </fieldset>
@@ -161,7 +204,7 @@ export function ProfileEditor({ value, onChange, errors = [] }: ProfileEditorPro
           {value.skills.map(skill => (
             <li key={skill} className="flex items-center gap-2 rounded-full bg-slate-100 pl-5 pr-2 text-xl">
               {skill}
-              <button type="button" aria-label={`Remover ${skill}`} onClick={() => set('skills', value.skills.filter(s => s !== skill))}
+              <button type="button" aria-label={`Remover ${skill}`} onClick={() => setPending({ kind: 'skill', skill, label: skill })}
                 className="h-12 w-12 rounded-full text-2xl hover:bg-slate-200 focus:outline-none focus:ring-4 focus:ring-primary/30 cursor-pointer">
                 ×
               </button>
@@ -207,6 +250,17 @@ export function ProfileEditor({ value, onChange, errors = [] }: ProfileEditorPro
             onChange={e => set('preferences', { ...value.preferences, availability: e.target.value })} />}
         </ProfileField>
       </section>
+
+      <ConfirmModal
+        open={pending !== null}
+        tone="danger"
+        title={pending ? removalTitle[pending.kind] : ''}
+        message={pending ? `"${pending.label}" será removida do seu perfil. A mudança só vale depois que você salvar.` : ''}
+        confirmLabel="Sim, remover"
+        cancelLabel="Não, manter"
+        onConfirm={confirmRemoval}
+        onCancel={() => setPending(null)}
+      />
     </div>
   )
 }

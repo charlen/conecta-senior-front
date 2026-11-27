@@ -326,3 +326,13 @@ Todas as solicitações foram interpretadas por linguagem natural, traduzidas pa
 **O que foi entregue:**
 - Revisão e Meu Perfil reescritos sobre o editor único
 - Tipos/serviço/hook dedicados, sem `fetch` nos componentes
+
+---
+
+## 2026-11-26 Confirmação ao remover itens do perfil (Claude Code)
+
+**O que foi pedido:** impedir remoção de informações do perfil sem confirmação, usando a modal personalizada do tema (criar seguindo atomic design se não existisse).
+**Como foi pedido:** linguagem natural, em sessão com Claude Code (Opus) no VS Code.
+**O que foi entregue:**
+- Evolução do `ConfirmModal` existente (sem criar componente duplicado), compatível com o uso na `HomePage`
+- Confirmação nas remoções do `ProfileEditor` com mensagem nomeando o item
