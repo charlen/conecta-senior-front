@@ -3,6 +3,7 @@ import { Button } from '../components/atoms/Button'
 import { Input } from '../components/atoms/Input'
 import { Heading } from '../components/atoms/Heading'
 import { ConfirmModal } from '../components/molecules/ConfirmModal'
+import { Avatar } from '../components/atoms/Avatar'
 import { useAuth } from '../contexts/AuthContext'
 import type { Profile } from '../types/profile'
 
@@ -91,7 +92,7 @@ export function HomePage() {
         <aside id="perfil" className="md:col-span-1 space-y-6">
           <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
             <div className="flex flex-col items-center gap-4">
-              <img src="https://i.pravatar.cc/150?img=12" alt="Foto" className="w-28 h-28 rounded-full object-cover border-4 border-[#2563eb]/20" />
+              <Avatar src={profile?.photo_url || null} name={profile?.name || ''} size="lg" />
             </div>
             <div className="mt-6 space-y-4">
               <div className="text-center">
