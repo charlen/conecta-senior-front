@@ -18,8 +18,8 @@ Ver `PRINCIPLES.md` para modo de trabalho, qualidade e governança.
 src/
   components/
     atoms/        Button, Input, Textarea, Label, Container, Heading, Pill, Text
-    molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader, BarraProgresso, LegalLinks, ProfileField
-    organisms/    RegistrationForm, InterviewStep, WelcomeSection, ProfileEditor
+    molecules/    ButtonRow, Card, ChipButton, ChipGroup, FormField, StepHeader, BarraProgresso, LegalLinks, ProfileField, SummaryCard
+    organisms/    RegistrationForm, InterviewStep, WelcomeSection, ProfileReviewFlow, ProfileSectionFields
     templates/    PageTemplate, StepTemplate, HeroStepTemplate, HeroPageTemplate, LegalPageTemplate
   content/       legal.ts (textos da Política de Privacidade e Termos de Uso)
   contexts/      FlowContext, AuthContext
@@ -45,7 +45,7 @@ src/
 - Landing inicial em `WelcomePage` com layout duas colunas
 - Vagas em cards Tailwind com badges e tag de compatibilidade
 - Diálogos de confirmação sempre via `ConfirmModal` (molecule); ações destrutivas usam `tone="danger"`. Nunca usar `window.confirm`
-- Perfil do candidato: modelo canônico em `src/types/candidate.ts` (espelha `internal/domain/candidate` do backend); edição sempre via `ProfileEditor` e `PUT /profiles/me`
+- Perfil do candidato: modelo canônico em `src/types/candidate.ts` (espelha `internal/domain/candidate` do backend); exibido como resumo em cartões (`ProfileReviewFlow`, padrão "confira suas respostas") e editado uma seção por vez em tela focada; cada "Salvar" faz `PUT /profiles/me` (backend aceita perfil incompleto e bloqueia só valores inválidos)
 - Páginas legais públicas: `/privacidade` e `/termos` (conteúdo em `src/content/legal.ts`, e-mail de contato em `LEGAL_CONTACT_EMAIL`)
 - Rotas onboarding: `/comecar/metodo`, `/comecar/voz`, `/comecar/curriculo`, `/comecar/passo/:n`, `/comecar/revisao`, `/comecar/confirmado`
 
