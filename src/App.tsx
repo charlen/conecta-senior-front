@@ -26,6 +26,7 @@ import PerfilPage from './pages/PerfilPage'
 import MinhasVagasPage from './pages/MinhasVagasPage'
 import IncluirVagaPage from './pages/IncluirVagaPage'
 import EditarVagaPage from './pages/EditarVagaPage'
+import CandidatosVagaPage from './pages/CandidatosVagaPage'
 import PrivacidadePage from './pages/PrivacidadePage'
 import TermosPage from './pages/TermosPage'
 import { useFlow } from './hooks/useFlow'
@@ -109,8 +110,8 @@ function AppRoutes() {
   if (path.startsWith('/vagas/editar/')) {
     return <EditarVagaPage />
   }
-  if (path.startsWith('/vagas/') && path.split('/').length >= 3) {
-    return <div className="min-h-screen bg-slate-50 p-6"><div className="max-w-2xl mx-auto"><h1 className="text-2xl font-bold">Candidatos</h1><p className="text-slate-600 mt-4">Em breve.</p></div></div>
+  if (/^\/vagas\/[^/]+\/candidatos\/?$/.test(path)) {
+    return <CandidatosVagaPage />
   }
   if (path.startsWith('/comecar/passo/')) {
     return <WizardPage />

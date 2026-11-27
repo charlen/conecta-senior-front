@@ -89,7 +89,7 @@ export default function MinhasVagasPage() {
               </div>
               <div className="mt-4 flex gap-3">
                 <Button variant="secondary" onClick={() => window.location.href = `/vagas/editar/${j.id}`}>Editar</Button>
-                <Button variant="secondary" onClick={() => window.location.href = `/vagas/${j.id}/candidatos`}>Candidatos</Button>
+                <Button variant="primary" onClick={() => window.location.href = `/vagas/${j.id}/candidatos`}>Ver candidatos</Button>
               </div>
             </div>
           ))}

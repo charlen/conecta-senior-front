@@ -357,3 +357,15 @@ Todas as solicitações foram interpretadas por linguagem natural, traduzidas pa
 **O que foi entregue:**
 - Telas focadas de foto e senha integradas ao fluxo do perfil
 - Correção do tema Tailwind 4 (`@config`) descoberta na verificação visual com Cypress
+
+---
+
+## 2026-11-27 Matching real, cadastro 60+ e candidatos por vaga (Claude Code, agentes em paralelo)
+
+**O que foi pedido:** atacar em paralelo as três frentes que faltavam para a apresentação.
+**Como foi pedido:** linguagem natural; a sessão principal disparou 3 subagentes em worktrees isoladas (portas e bancos descartáveis próprios), revisou, integrou e consolidou a documentação.
+**O que foi entregue:**
+- `/vagas` com % real (`GET /match/me`), incluindo correção do bug de leitura de `float4[]` no backend que deixava o matching sem funcionar
+- Cadastro e login redesenhados ("uma coisa por tela", código com reenvio e contagem, erros no campo)
+- Tela de candidatos por vaga para empresas, com contato por WhatsApp/telefone/e-mail
+- Validação: tsc, lint, build, vitest (10 testes) e Cypress com API simulada em desktop e celular
