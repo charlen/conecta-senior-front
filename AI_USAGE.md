@@ -400,3 +400,12 @@ Todas as solicitações foram interpretadas por linguagem natural, traduzidas pa
 **O que foi entregue:**
 - `JobForm` com prévia ao vivo, `CompanyForm`, Minhas vagas, `/minha-empresa`, roteamento por papel
 - 35 testes vitest, 22 cenários Cypress (desktop e celular) com API simulada
+
+---
+
+## 2026-11-27 Botão "Entrar" no celular (Claude Code)
+
+**O que foi pedido:** no celular, o botão do topo da página inicial não levava nem ao cadastro nem ao login; deixar só "Entrar", abrindo a página de login.
+**Como foi pedido:** linguagem natural, em sessão com Claude Code no servidor de casa.
+**O que foi entregue:**
+- `WelcomePage`: botão mobile renomeado para "Entrar" e apontando para `/entrar` (antes `#auth`, âncora inexistente)
