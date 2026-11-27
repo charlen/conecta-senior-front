@@ -304,3 +304,15 @@ Todas as solicitações foram interpretadas por linguagem natural, traduzidas pa
 **O que foi entregue:**
 - Corrigidos 3 erros de `tsc --noEmit` que o build do Vite não acusava (`HomePage`, `MinhasVagasPage`, `RevisaoPage`)
 - Validação: `tsc --noEmit`, `npm run lint` e `npm run build` sem erros
+
+---
+
+## 2026-11-26 Páginas de Privacidade e Termos (Claude Code)
+
+**O que foi pedido:** criar as páginas `/privacidade` e `/termos`, necessárias para a aprovação do SES em produção e para adequação à LGPD.
+**Como foi pedido:** linguagem natural, em sessão com Claude Code (Opus) no VS Code.
+**O que foi entregue:**
+- Política de Privacidade baseada nos dados realmente tratados pelo backend (perfil, currículo, voz, embeddings, e-mails transacionais)
+- Termos de Uso com compromissos das empresas (vagas reais, não discriminação etária, sem cobrança do candidato)
+- Template, molecule, rotas públicas, links na landing e aviso de consentimento no cadastro
+- Validação: `tsc --noEmit`, `npm run lint` e `npm run build` sem erros

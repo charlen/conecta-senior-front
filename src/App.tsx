@@ -26,6 +26,8 @@ import PerfilPage from './pages/PerfilPage'
 import MinhasVagasPage from './pages/MinhasVagasPage'
 import IncluirVagaPage from './pages/IncluirVagaPage'
 import EditarVagaPage from './pages/EditarVagaPage'
+import PrivacidadePage from './pages/PrivacidadePage'
+import TermosPage from './pages/TermosPage'
 import { useFlow } from './hooks/useFlow'
 
 function FlowRouter() {
@@ -48,6 +50,14 @@ function FlowRouter() {
 function AppRoutes() {
   const path = window.location.pathname
   const { isAuthenticated } = useAuth()
+
+  // Legal pages are public for everyone, logged in or not
+  if (path === '/privacidade') {
+    return <PrivacidadePage />
+  }
+  if (path === '/termos') {
+    return <TermosPage />
+  }
 
   if (isAuthenticated && path !== '/vagas' && path !== '/meu-perfil' && path !== '/minhas-vagas' && path !== '/vagas/nova' && !path.startsWith('/comecar') && !path.startsWith('/vagas/editar/') && !path.startsWith('/vagas/') ) {
     window.location.href = '/vagas'
