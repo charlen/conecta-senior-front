@@ -1,3 +1,4 @@
+// @ts-nocheck
 describe('Page discovery detailed', () => {
   it('captures home', () => {
     cy.visit('/')

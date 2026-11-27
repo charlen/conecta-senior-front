@@ -1,8 +1,6 @@
-import { useFlow } from '../hooks/useFlow'
 import { Button } from '../components/atoms/Button'
 
 export function WelcomePage() {
-  const { nextStep } = useFlow()
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row antialiased font-sans">
@@ -10,6 +8,12 @@ export function WelcomePage() {
       
       {/* Lado Esquerdo - Painel Hero com Imagem e Texto Totalmente Integrados */}
       <div className="w-full md:w-5/12 min-h-[60vh] md:min-h-screen relative flex flex-col justify-end p-8 md:p-12 lg:p-16 text-white overflow-hidden bg-slate-900">
+        {/* Botões mobile no topo da primeira div */}
+        <div className="md:hidden absolute top-4 left-4 right-4 z-20">
+          <Button variant="primary" onClick={() => window.location.href = '#auth'} className="w-full text-xl py-4 px-6 rounded-2xl bg-[#2563eb]/90 backdrop-blur-md">
+            Entrar / Cadastrar
+          </Button>
+        </div>
         
         {/* A Imagem de Fundo Ocupando Todo o Painel */}
         <img 
@@ -19,8 +23,8 @@ export function WelcomePage() {
         />
         
         {/* Filtro Cinematográfico e Camada de Degradê Duplo para Legibilidade */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-950/10 mix-blend-multiply opacity-95 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 via-transparent to-transparent opacity-60 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/60 to-slate-950/10 mix-blend-multiply opacity-95 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-t from-blue-900/50 via-transparent to-transparent opacity-60 pointer-events-none" />
 
         {/* Conteúdo flutuando sobre a imagem */}
         <div className="relative z-10 space-y-6 md:space-y-8">
@@ -44,8 +48,20 @@ export function WelcomePage() {
       </div>
 
       {/* Lado Direito - Área de Ação Principal */}
-      <div className="w-full md:w-7/12 flex flex-col justify-between p-8 md:p-12 lg:p-16 bg-white">
+      <div className="w-full md:w-7/12 flex flex-col justify-between p-8 md:p-12 lg:p-16 bg-white relative">
         
+        {/* Botões topo direito - Desktop */}
+        <div className="hidden md:flex absolute top-8 right-8 gap-3">
+          <Button variant="secondary" onClick={() => window.location.href = '/entrar'} className="text-lg py-3 px-6 rounded-xl">
+            Entrar
+          </Button>
+          <Button variant="primary" onClick={() => window.location.href = '/cadastro'} className="text-lg py-3 px-6 rounded-xl">
+            Cadastrar
+          </Button>
+        </div>
+
+
+
         {/* Div invisível para ajudar no alinhamento vertical flex-col no desktop */}
         <div className="hidden md:block" />
 
@@ -65,7 +81,7 @@ export function WelcomePage() {
           <div className="pt-2">
             <Button 
               variant="primary" 
-              onClick={nextStep} 
+              onClick={() => window.location.href = '/cadastro'} 
               className="w-full text-xl md:text-2xl py-4 md:py-5 shadow-lg shadow-blue-100 rounded-2xl font-bold transition-all"
             >
               Começar minha jornada
@@ -73,13 +89,7 @@ export function WelcomePage() {
           </div>
         </div>
 
-        {/* Disclaimer Refinado integrado como nota de rodapé discreta */}
-        <div className="mt-8 md:mt-0 pt-6 border-t border-slate-100 flex items-center gap-2.5 text-slate-400 text-sm md:text-base">
-          <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
-          <p>
-            <span className="font-semibold text-slate-500">Versão MVP:</span> Ambiente de demonstração com vagas e perfis ilustrativos.
-          </p>
-        </div>
+
 
       </div>
 

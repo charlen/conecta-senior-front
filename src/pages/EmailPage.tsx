@@ -2,11 +2,46 @@ import { HeroPageTemplate } from '../components/templates/HeroPageTemplate'
 import { useFlow } from '../hooks/useFlow'
 import { Button } from '../components/atoms/Button'
 import { Input } from '../components/atoms/Input'
+import { useState } from 'react'
+
+const API_URL = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
 
 export function EmailPage() {
-  const { state, updateEmail, nextStep } = useFlow()
+  const { state, updateEmail } = useFlow()
   const email = state.email || ''
   const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const handleContinue = async () => {
+    if (!isValid) return
+    setLoading(true)
+    setError('')
+    try {
+      // Verifica se usuário existe, se não, cria com senha temporária e envia código
+      const res = await fetch(`${API_URL}/users/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: 'Temp@1234', role: 'candidate' })
+      })
+      const data = await res.json()
+      if (!res.ok && data.error !== 'user already exists') {
+        throw new Error(data.error || 'Erro ao registrar')
+      }
+      // Solicita código de verificação
+      await fetch(`${API_URL}/users/request-code`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+      // Redireciona para página de verificação de código
+      window.location.href = `/verificar?email=${encodeURIComponent(email)}`
+    } catch (e: unknown) {
+      setError((e as Error).message || 'Erro ao registrar')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <HeroPageTemplate
@@ -26,13 +61,14 @@ export function EmailPage() {
             className="text-xl"
           />
           <p className="text-slate-600 mt-3 text-lg">
-            Mock: neste momento aceitamos qualquer e-mail. Em breve verificaremos cadastro e pediremos senha.
+            Enviaremos um código de verificação para este e-mail.
           </p>
+          {error && <p className="text-red-600 mt-3 text-lg">{error}</p>}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button variant="primary" onClick={nextStep} className="w-full sm:flex-1 text-xl py-5" disabled={!isValid}>
-            Continuar
+          <Button variant="primary" onClick={handleContinue} className="w-full sm:flex-1 text-xl py-5" disabled={!isValid || loading}>
+            {loading ? 'Enviando...' : 'Continuar'}
           </Button>
         </div>
       </div>

@@ -1,0 +1,101 @@
+import { useEffect, useState } from 'react'
+import { Button } from '../components/atoms/Button'
+import { Heading } from '../components/atoms/Heading'
+import { useAuth } from '../contexts/AuthContext'
+
+type Job = {
+  id: string
+  title?: string
+  description?: string
+  location?: string
+  modality?: string
+  salary_min?: number
+  salary_max?: number
+  status?: string
+  company?: string
+}
+
+export default function MinhasVagasPage() {
+  const { token, userName, userEmail } = useAuth()
+  const [jobs, setJobs] = useState<Job[]>([])
+  const [company, setCompany] = useState<{name?: string; email?: string}>({})
+  const [profile, setProfile] = useState<{name?: string; email?: string}>({})
+  const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
+
+  useEffect(() => {
+    if (!token) return
+    fetch(`${API}/jobs`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(r => r.json())
+      .then(data => {
+        const all = (data.jobs || []).map((j: Record<string, unknown>) => ({
+          id: (j.id as string) ?? (j.ID as string),
+          title: (j.title as string) ?? (j.Title as string),
+          description: (j.description as string) ?? (j.Description as string),
+          location: (j.location as string) ?? (j.Location as string),
+          modality: (j.modality as string) ?? (j.Modality as string),
+          salary_min: (j.salary_min as number) ?? (j.SalaryMin as number),
+          salary_max: (j.salary_max as number) ?? (j.SalaryMax as number),
+          status: (j.status as string) ?? (j.Status as string),
+          company: (j.company as string) ?? ((j.Company as { CompanyName?: string } | undefined)?.CompanyName) ?? '',
+        }))
+        setJobs(all)
+      })
+      .catch(() => {})
+    fetch(`${API}/profiles/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(r => r.json())
+      .then(data => setCompany({ name: data.companyName || data.name || userName, email: data.email || userEmail }))
+      .catch(() => {})
+    fetch(`${API}/profiles/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(r => r.json())
+      .then(data => setProfile({ name: data.name, email: data.email }))
+      .catch(() => {})
+  }, [token, userName, userEmail])
+
+  return (
+    <div className="min-h-screen bg-slate-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <button onClick={() => window.location.href = '/vagas'} className="p-2 rounded-full hover:bg-slate-200 cursor-pointer">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <Heading className="text-2xl">Conecta Sênior</Heading>
+          </div>
+          <Button variant="primary" onClick={() => window.location.href = '/vagas/nova'}>Incluir vaga</Button>
+        </div>
+        <div className="flex items-center gap-4 mb-6">
+          <img src="https://i.pravatar.cc/80?img=12" alt="Empresa" className="w-16 h-16 rounded-full object-cover border-4 border-[#2563eb]/20" />
+          <div>
+            <Heading className="text-3xl">{profile.name || company.name || userName || (userEmail ? userEmail.split('@')[0] : 'Empresa')}</Heading>
+            <p className="text-slate-600">{profile.email || company.email || userEmail || ''}</p>
+          </div>
+        </div>
+        <div className="space-y-4">
+          {jobs.map(j => (
+            <div key={j.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+              <h3 className="text-xl font-bold">{j.title} {j.company ? `— ${j.company}` : ''}</h3>
+              <p className="text-slate-600 mt-2">{j.description}</p>
+              <div className="mt-3 flex flex-wrap gap-2 text-sm text-slate-700">
+                {j.location && <span className="px-3 py-1 bg-slate-100 rounded-full">{j.location}</span>}
+                {j.modality && <span className="px-3 py-1 bg-slate-100 rounded-full">{j.modality}</span>}
+                {j.status && <span className={`px-3 py-1 rounded-full ${j.status === 'open' ? 'bg-emerald-50 text-emerald-800' : 'bg-slate-100 text-slate-700'}`}>{j.status}</span>}
+                {(j.salary_min || j.salary_max) && <span className="px-3 py-1 bg-slate-100 rounded-full">R$ {j.salary_min ?? ''} - {j.salary_max ?? ''}</span>}
+              </div>
+              <div className="mt-4 flex gap-3">
+                <Button variant="secondary" onClick={() => window.location.href = `/vagas/editar/${j.id}`}>Editar</Button>
+                <Button variant="secondary" onClick={() => window.location.href = `/vagas/${j.id}/candidatos`}>Candidatos</Button>
+              </div>
+            </div>
+          ))}
+          {jobs.length === 0 && <p className="text-slate-600 text-center py-12">Nenhuma vaga cadastrada.</p>}
+        </div>
+      </div>
+    </div>
+  )
+}

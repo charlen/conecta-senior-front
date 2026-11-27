@@ -145,6 +145,130 @@ Solicitação natural de padronização de nomenclatura de código para inglês 
 - `AI_USAGE.md` atualizado com Fase 9
 - Instruções de governança adicionadas ao `AGENTS.md` para atualizar artefatos a cada pedido
 
+## Fase 10 - Wizard manual com barra de progresso
+
+**O que foi pedido**
+Implementar Wizard manual com barra de progresso, navegação Voltar/Continuar, validação gentil e “Adicionar outra” para experiências e formação.
+
+**Como foi pedido**
+Contexto de continuidade do Wizard, com estado Done/In Progress, e pedido para inserir passos restantes sem sobrescrever.
+
+**O que foi entregue**
+- Tarefa 759 criada e concluída
+- `WizardPage.tsx` com `BarraProgresso`, `Button`, `Heading`, imports de `Input`, `Label`, `Textarea`, `useRascunhoPerfil`
+- `renderStep` com switch para passos 1-6
+- Componentes `StepDadosBasicos`, `StepExperiencias`, `StepFormacao`, `StepHabilidades`, `StepPreferencias`, `StepSobreMim`
+- Rota `/comecar/passo/:n` em `App.tsx`
+- Commit `feat: Tarefa 4 Wizard manual` e push
+- Tarefa marcada como done no board
+
+## Fase 11 - Envio de currículo em PDF
+
+**O que foi pedido**
+Página `/comecar/curriculo` com upload drag-and-drop, validação tipo/tamanho, tela progresso “Lendo seu currículo”, parse PDF, preenchimento de rascunho e fallback para preenchimento manual.
+
+**Como foi pedido**
+Continuidade do Wizard, tarefa 760.
+
+**O que foi entregue**
+- `CurriculoPage.tsx` com drag-and-drop, validação PDF ≤10MB, estado de carregamento
+- Rota `/comecar/curriculo` em `App.tsx`
+- Commit `feat: Tarefa 5 Envio de currículo PDF` e push
+- Tarefa 760 marcada como done
+
+## Fase 12 - Preenchimento por voz com adapters STT/TTS/Talker
+
+**O que foi pedido**
+Investigar titan-gateway que roteia 0.15→0.60 para STT/TTS/talker Llama3.1/3.2 e criar adapters limpos no conecta-senior-backend.
+
+**Como foi pedido**
+Análise do projeto titan-gateway e criação de adapters.
+
+**O que foi entregue**
+- Tarefa 761 concluída
+- Investigação de `config/routes.yaml`: `/api/talk` → 192.168.0.60:11434, `/api/stt` → 8073, `/api/tts` → 8072
+- `internal/voice/interfaces.go`, `adapters/stt_adapter.go`, `tts_adapter.go`, `talker_adapter.go`
+- `internal/voice/service.go` e `handlers/voice_handler.go`
+- Rotas `/voice/transcribe`, `/voice/synthesize`, `/voice/talk` no backend
+- `VozPage.tsx` com gravação, STT e talker, rota `/comecar/voz`
+- Commits e push em backend e front
+- Tarefa 761 marcada como done
+
+## Fase 13 - Revisão e confirmação
+
+**O que foi pedido**
+Página `/comecar/revisao` com resumo do rascunho, edição inline e botão Confirmar.
+
+**Como foi pedido**
+Continuidade do fluxo onboarding, tarefa 762.
+
+**O que foi entregue**
+- `RevisaoPage.tsx` com resumo de dados básicos, experiências, formação, habilidades, preferências e sobre
+- Botão Confirmar persiste via `useRascunhoPerfil` e redireciona para `/comecar/confirmado`
+- Rota `/comecar/revisao` em `App.tsx`
+- Commit `feat: Tarefa 7 Revisão e confirmação` e push
+- Tarefa 762 marcada como done
+
+## Fase 14 - Confirmação final
+
+**O que foi pedido**
+Página `/comecar/confirmado` com mensagem de sucesso e CTA para vagas.
+
+**Como foi pedido**
+Continuidade do fluxo, tarefa 763.
+
+**O que foi entregue**
+- `ConfirmadoPage.tsx` com mensagem de sucesso e botão “Ver vagas”
+- Rota `/comecar/confirmado` em `App.tsx`
+- Commit `feat: Tarefa 8 Confirmação final` e push
+- Tarefa 763 marcada como done
+
+## Fase 15 - Documentação de artefatos
+
+**O que foi pedido**
+Atualizar `AGENTS.md` e `CHANGELOG.md` para refletir as 8 tarefas concluídas.
+
+**Como foi pedido**
+Solicitação explícita de atualização de artefatos.
+
+**O que foi entregue**
+- `AGENTS.md` atualizado com estrutura atual, hooks `useRascunhoPerfil`, páginas onboarding e rotas
+- `CHANGELOG.md` [Unreleased] com Wizard, páginas onboarding, hook, adapters STT/TTS/Talker
+- Commit `docs: atualizar AGENTS.md e CHANGELOG.md com onboarding` e push
+- Validação `npm run build` e `npm run lint` sem erros
+
+## Fase 16 - Correção de import do tipo Profile em HomePage
+
+**O que foi pedido**
+Fixar erro TS "Cannot find name 'Profile'" em `src/pages/HomePage.tsx` linha 11.
+
+**Como foi pedido**
+Solicitação natural para corrigir código com conteúdo do arquivo fornecido e problema descrito.
+
+**O que foi entregue**
+- Identificado tipo `Profile` em `src/types/profile.ts` já utilizado em `PerfilPage.tsx`
+- Adicionado `import type { Profile } from '../types/profile'` em `HomePage.tsx`
+- Validação `npm run lint` e `npm run build` sem erros
+- `CHANGELOG.md` atualizado com Fixed
+- `AI_USAGE.md` atualizado com Fase 16
+- `AGENTS.md` mantido consistente com estrutura atual
+
+## Fase 11 - Documentação de purge Cloudflare e governança de produção
+
+**O que foi pedido**
+Salvar procedimento de purge da Cloudflare em AGENTS.md para não perder novamente, após correção de db error no fluxo de confirmação por e-mail.
+
+**Como foi pedido**
+Solicitação natural para registrar passo-a-passo de purge usando token `CLOUDFLARE_PURGE_TOKEN` em `~/.zshrc`, zona `caa770491f641bf280d7eac3843f6e84`, com curl para `senior-conecta.zoryuz.com` e `conecta-senior.zoryuz.com`.
+
+**O que foi entregue**
+- Verificação de token via `source ~/.zshrc && printenv | grep CLOUDFLARE`
+- Listagem de zona via API Cloudflare confirmando ID `caa770491f641bf280d7eac3843f6e84`
+- Execução de purge por arquivos específicos e purge total da zona, ambos retornando `{"success":true}`
+- Atualização de `AGENTS.md` com seção Operações de produção / Purge Cloudflare
+- Atualização de `CHANGELOG.md` com registro de documentação
+- Atualização de `AI_USAGE.md` com Fase 11
+
 ## Fase 10 - Fluidez visual inspirada na WelcomePage
 
 **O que foi pedido**
@@ -170,3 +294,13 @@ Solicitação natural para comparar e criar plano de ajuste para deixar as pági
 
 **Resumo geral**
 Todas as solicitações foram interpretadas por linguagem natural, traduzidas para especificações técnicas concretas, implementadas com validação de lint/build, documentadas em tarefas e commits, e alinhadas às diretrizes de acessibilidade WCAG para usuários 60+.
+
+---
+
+## 2026-11-26 Correção de erros de tipo (Claude Code)
+
+**O que foi pedido:** analisar os 3 repos do conecta-senior e começar os ajustes para entrega do trabalho.
+**Como foi pedido:** linguagem natural, em sessão com Claude Code (Opus) no VS Code.
+**O que foi entregue:**
+- Corrigidos 3 erros de `tsc --noEmit` que o build do Vite não acusava (`HomePage`, `MinhasVagasPage`, `RevisaoPage`)
+- Validação: `tsc --noEmit`, `npm run lint` e `npm run build` sem erros

@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+### Fixed
+- `HomePage` e `MinhasVagasPage`: tipagem de `Company.CompanyName` ao mapear vagas da API (erro TS2339)
+- `RevisaoPage`: período da experiência derivado de `inicio`/`fim` (campo `periodo` inexistente em `Experiencia`)
+
+### Added
+- Documentação de Operações de produção em AGENTS.md: procedimento de purge Cloudflare com zona `caa770491f641bf280d7eac3843f6e84` e uso de `CLOUDFLARE_PURGE_TOKEN` via `~/.zshrc`
+- Wizard manual com barra de progresso, navegação Voltar/Continuar, validação gentil e “Adicionar outra” para experiências e formação
+- Páginas onboarding: WizardPage, CurriculoPage, VozPage, RevisaoPage, ConfirmadoPage
+- Rotas `/comecar/metodo`, `/comecar/voz`, `/comecar/curriculo`, `/comecar/passo/:n`, `/comecar/revisao`, `/comecar/confirmado`
+- Hook `useRascunhoPerfil` com persistência em localStorage
+- Adapters backend para STT/TTS/Talker via titan-gateway (0.15→0.60)
+- Handlers `/voice/transcribe`, `/voice/synthesize`, `/voice/talk` no conecta-senior-backend
+
+### Fixed
+- `src/pages/HomePage.tsx`: import do tipo `Profile` adicionado de `../types/profile` para corrigir erro TS "Cannot find name 'Profile'"
+
 ### Added
 - Internacionalização dos nomes de código para inglês
   - Páginas: CadastroPage → RegistrationPage, EntrevistaPage → InterviewPage, CurriculoPage → ResumePage, PreferenciasPage → PreferencesPage, VagasPage → JobsPage, PainelPage → DashboardPage
