@@ -1,113 +1,118 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from '../components/atoms/Button'
-import { Input } from '../components/atoms/Input'
-import { Label } from '../components/atoms/Label'
-import { Heading } from '../components/atoms/Heading'
-import { useAuth } from '../contexts/AuthContext'
-import { Dropdown } from '../components/molecules/Dropdown'
+import { Spinner } from '../components/atoms/Spinner'
+import { ConfirmModal } from '../components/molecules/ConfirmModal'
+import { JobStatusBadge } from '../components/molecules/JobStatusBadge'
+import { JobForm } from '../components/organisms/JobForm'
+import { RecruiterPageTemplate } from '../components/templates/RecruiterPageTemplate'
+import { useUnsavedChangesGuard } from '../hooks/useUnsavedChangesGuard'
+import { companyJobsApi, CompanyApiError } from '../services/companyJobsApi'
+import type { CompanyJob, JobInput } from '../types/companyJob'
+import { applicantsLabel, formatJobDate } from '../utils/jobLabels'
+import { jobToForm } from '../utils/jobValidation'
+
+/** Reads the job id from /vagas/editar/:id. */
+function jobIdFromPath(path: string): string {
+  return decodeURIComponent(path.split('/vagas/editar/')[1]?.split('/')[0] ?? '')
+}
 
 export default function EditarVagaPage() {
-  const { token } = useAuth()
-  const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
-  const id = window.location.pathname.split('/vagas/editar/')[1]
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [location, setLocation] = useState('')
-  const [modality, setModality] = useState('')
-  const [salaryMin, setSalaryMin] = useState('')
-  const [salaryMax, setSalaryMax] = useState('')
-  const [status, setStatus] = useState('open')
-  const [loading, setLoading] = useState(false)
+  const jobId = jobIdFromPath(window.location.pathname)
+  const [job, setJob] = useState<CompanyJob | null>(null)
+  const [companyName, setCompanyName] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<{ message: string; status: number } | null>(null)
+  const [dirty, setDirty] = useState(false)
+  const guard = useUnsavedChangesGuard(dirty)
 
-  useEffect(() => {
-    if (!token || !id) return
-    fetch(`${API}/jobs/${id}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => r.json())
-      .then(data => {
-        const j = data.job || data
-        setTitle(j.title ?? j.Title ?? '')
-        setDescription(j.description ?? j.Description ?? '')
-        setLocation(j.location ?? j.Location ?? '')
-        setModality(j.modality ?? j.Modality ?? '')
-        setSalaryMin(j.salary_min ?? j.SalaryMin ?? '')
-        setSalaryMax(j.salary_max ?? j.SalaryMax ?? '')
-        setStatus(j.status ?? j.Status ?? 'open')
-      })
-      .catch(() => {})
-  }, [token, id])
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const load = useCallback(async () => {
     setLoading(true)
+    setError(null)
     try {
-      const res = await fetch(`${API}/jobs/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({
-          title,
-          description,
-          location,
-          modality,
-          salary_min: salaryMin ? Number(salaryMin) : null,
-          salary_max: salaryMax ? Number(salaryMax) : null,
-          status
-        })
-      })
-      if (!res.ok) throw new Error('Falha ao atualizar')
-      window.location.href = '/minhas-vagas'
+      const [{ job, owned }, company] = await Promise.all([
+        companyJobsApi.getJob(jobId),
+        companyJobsApi.getCompany().catch(() => null)
+      ])
+      if (!owned) {
+        setError({ message: 'Esta vaga pertence a outra empresa. Só quem publicou pode editá-la.', status: 403 })
+        return
+      }
+      setJob(job)
+      setCompanyName(company?.company_name ?? '')
+    } catch (err) {
+      const status = err instanceof CompanyApiError ? err.status : 0
+      setError({ message: err instanceof Error ? err.message : 'Não conseguimos carregar esta vaga.', status })
     } finally {
       setLoading(false)
     }
+  }, [jobId])
+
+  useEffect(() => {
+    void load()
+  }, [load])
+
+  const initial = useMemo(() => (job ? jobToForm(job) : null), [job])
+
+  const submit = async (input: JobInput) => {
+    await companyJobsApi.updateJob(jobId, input)
+    guard.leave(`/minhas-vagas?salva=${encodeURIComponent(jobId)}`)
   }
 
+  const candidatesHref = `/vagas/${encodeURIComponent(jobId)}/candidatos`
+
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <div className="max-w-2xl mx-auto bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
-        <Heading className="text-3xl mb-6">Editar vaga</Heading>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="title">Título</Label>
-            <Input id="title" value={title} onChange={e => setTitle(e.target.value)} required />
-          </div>
-          <div>
-            <Label htmlFor="description">Descrição</Label>
-            <textarea id="description" value={description} onChange={e => setDescription(e.target.value)} className="w-full border rounded-xl p-3" rows={6} required />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="location">Localização</Label>
-              <Input id="location" value={location} onChange={e => setLocation(e.target.value)} />
-            </div>
-            <div>
-              <Label htmlFor="modality">Modalidade</Label>
-              <Input id="modality" value={modality} onChange={e => setModality(e.target.value)} placeholder="Presencial/Remoto/Híbrido" />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="salaryMin">Salário mínimo</Label>
-              <Input id="salaryMin" type="number" value={salaryMin} onChange={e => setSalaryMin(e.target.value)} />
-            </div>
-            <div>
-              <Label htmlFor="salaryMax">Salário máximo</Label>
-              <Input id="salaryMax" type="number" value={salaryMax} onChange={e => setSalaryMax(e.target.value)} />
-            </div>
-          </div>
-          <div>
-            <Label htmlFor="status">Status</Label>
-            <Dropdown id="status" value={status} onChange={setStatus}
-              options={[
-                { value: 'open', label: 'Aberta', hint: 'Recebe candidaturas' },
-                { value: 'freeze', label: 'Congelada', hint: 'Pausada, sem novas candidaturas' },
-                { value: 'close', label: 'Fechada', hint: 'Encerrada' }
-              ]} />
-          </div>
-          <div className="flex gap-3">
-            <Button type="button" variant="secondary" onClick={() => window.location.href = '/minhas-vagas'}>Voltar</Button>
-            <Button type="submit" variant="primary" disabled={loading}>{loading ? 'Salvando...' : 'Salvar'}</Button>
-          </div>
-        </form>
+    <RecruiterPageTemplate current="" onNavigate={guard.navigate} width="wide">
+      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="min-w-0">
+          <a href="/minhas-vagas" onClick={e => { e.preventDefault(); guard.navigate('/minhas-vagas') }}
+            className="text-sm font-semibold text-primary hover:underline focus:outline-none focus:ring-4 focus:ring-primary/30 rounded">
+            ← Minhas vagas
+          </a>
+          <h1 className="mt-2 text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 break-words">
+            {job ? `Editar: ${job.title}` : 'Editar vaga'}
+          </h1>
+          {job && (
+            <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-600">
+              <JobStatusBadge status={job.status} />
+              {job.created_at && <span>Publicada em {formatJobDate(job.created_at)}</span>}
+              <span>{applicantsLabel(job.applicants_count)}</span>
+            </p>
+          )}
+        </div>
+        {job && (
+          <Button size="md" variant="secondary" onClick={() => guard.navigate(candidatesHref)} className="w-full md:w-auto">
+            Ver candidatos
+          </Button>
+        )}
       </div>
-    </div>
+
+      {loading && (
+        <div className="flex items-center gap-3 py-16 justify-center text-base text-slate-700"><Spinner /> Carregando vaga…</div>
+      )}
+
+      {!loading && error && (
+        <div role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-5 space-y-3">
+          <p className="text-base font-semibold text-red-800">{error.message}</p>
+          <div className="flex flex-wrap gap-3">
+            {error.status !== 403 && error.status !== 404 && (
+              <Button size="md" variant="primary" onClick={() => void load()}>Tentar novamente</Button>
+            )}
+            <Button size="md" variant="secondary" onClick={() => (window.location.href = '/minhas-vagas')}>Ver minhas vagas</Button>
+          </div>
+        </div>
+      )}
+
+      {!loading && !error && initial && (
+        <JobForm
+          initial={initial}
+          companyName={companyName}
+          submitLabel="Salvar alterações"
+          onSubmit={submit}
+          onCancel={() => guard.navigate('/minhas-vagas')}
+          onDirtyChange={setDirty}
+        />
+      )}
+      <ConfirmModal {...guard.modal} />
+    </RecruiterPageTemplate>
   )
 }

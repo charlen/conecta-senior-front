@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { homePathFor, roleFromToken } from '../utils/roles'
 import { Button } from '../components/atoms/Button'
 import { Alerta } from '../components/molecules/Alerta'
 import { CartaoOpcao } from '../components/molecules/CartaoOpcao'
@@ -107,7 +108,7 @@ export default function CadastroPage() {
     try {
       const data = await authApi.verifyCode(email, code)
       setToken(data.token)
-      window.location.href = '/vagas'
+      window.location.href = homePathFor(roleFromToken(data.token))
     } catch (err) {
       const apiCode = err instanceof AuthApiError ? err.code : undefined
       fail(apiCode === 'invalid code' || apiCode === 'code expired' ? 'code' : 'general', (err as Error).message)

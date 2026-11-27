@@ -1,16 +1,11 @@
 import { Heading } from '../components/atoms/Heading'
 import { Text } from '../components/atoms/Text'
 import { Button } from '../components/atoms/Button'
-import { useAuth } from '../hooks/useAuth'
+import { homePathFor, roleFromToken } from '../utils/roles'
 
 export default function ConfirmadoPage() {
-  const { isAuthenticated } = useAuth()
   const handleContinue = () => {
-    if (isAuthenticated) {
-      window.location.href = '/'
-    } else {
-      window.location.href = '/vagas'
-    }
+    window.location.href = homePathFor(roleFromToken(localStorage.getItem('token')))
   }
   return (
     <div className="min-h-screen bg-surface p-6 flex items-center justify-center">

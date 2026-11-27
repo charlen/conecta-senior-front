@@ -1,109 +1,109 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '../components/atoms/Button'
-import { Input } from '../components/atoms/Input'
-import { Label } from '../components/atoms/Label'
-import { Heading } from '../components/atoms/Heading'
-import { useAuth } from '../contexts/AuthContext'
-import { Dropdown } from '../components/molecules/Dropdown'
+import { Spinner } from '../components/atoms/Spinner'
+import { ConfirmModal } from '../components/molecules/ConfirmModal'
+import { CompanyForm } from '../components/organisms/CompanyForm'
+import { JobForm } from '../components/organisms/JobForm'
+import { RecruiterPageTemplate } from '../components/templates/RecruiterPageTemplate'
+import { useUnsavedChangesGuard } from '../hooks/useUnsavedChangesGuard'
+import { companyJobsApi, CompanyApiError } from '../services/companyJobsApi'
+import type { Company, JobInput } from '../types/companyJob'
+import { EMPTY_JOB_FORM } from '../utils/jobValidation'
 
 export default function IncluirVagaPage() {
-  const { token } = useAuth()
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [location, setLocation] = useState('')
-  const [modality, setModality] = useState('')
-  const [salaryMin, setSalaryMin] = useState('')
-  const [salaryMax, setSalaryMax] = useState('')
-  const [status, setStatus] = useState('open')
-  const [loading, setLoading] = useState(false)
-  const API = import.meta.env.VITE_API_URL || 'https://senior-api.zoryuz.com'
+  const [company, setCompany] = useState<Company | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState('')
+  const [companyRequired, setCompanyRequired] = useState(false)
+  const [dirty, setDirty] = useState(false)
+  const companyRef = useRef<HTMLElement>(null)
+  const guard = useUnsavedChangesGuard(dirty)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const load = useCallback(async () => {
     setLoading(true)
+    setLoadError('')
     try {
-      // tenta obter company_id do usuário
-      let companyId = undefined
-      try {
-        const meRes = await fetch(`${API}/profiles/me`, { headers: { Authorization: `Bearer ${token}` } })
-        const me = await meRes.json()
-        companyId = me.company_id || me.companyId
-      } catch {
-        // ignore
-      }
-      if (!companyId) {
-        // fallback: cria empresa com nome do usuário
-        const createRes = await fetch(`${API}/companies`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ name: 'Empresa' })
-        })
-        const created = await createRes.json()
-        companyId = created.id
-      }
-      const res = await fetch(`${API}/jobs`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ title, description, company_id: companyId, location, modality, salary_min: salaryMin ? Number(salaryMin) : null, salary_max: salaryMax ? Number(salaryMax) : null, status })
-      })
-      if (!res.ok) {
-        const err = await res.text()
-        throw new Error(err || 'Falha ao criar vaga')
-      }
-      window.location.href = '/minhas-vagas'
+      setCompany(await companyJobsApi.getCompany())
+    } catch (err) {
+      setLoadError(err instanceof Error ? err.message : 'Não conseguimos carregar os dados da empresa.')
     } finally {
       setLoading(false)
     }
+  }, [])
+
+  useEffect(() => {
+    void load()
+  }, [load])
+
+  const revealCompany = () => {
+    setCompany(null)
+    setCompanyRequired(true)
+    companyRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+    setTimeout(() => document.getElementById('company-company_name')?.focus({ preventScroll: true }), 50)
+  }
+
+  const submit = async (input: JobInput) => {
+    if (!company) {
+      throw new CompanyApiError('Salve os dados da empresa antes de publicar a vaga.', 409, 'company_required')
+    }
+    const { id } = await companyJobsApi.createJob(input)
+    guard.leave(`/minhas-vagas?criada=${encodeURIComponent(id)}`)
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <div className="max-w-2xl mx-auto bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
-        <Heading className="text-3xl mb-6">Incluir vaga</Heading>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="title">Título</Label>
-            <Input id="title" value={title} onChange={e => setTitle(e.target.value)} required />
-          </div>
-          <div>
-            <Label htmlFor="description">Descrição</Label>
-            <textarea id="description" value={description} onChange={e => setDescription(e.target.value)} className="w-full border rounded-xl p-3" rows={6} required />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="location">Localização</Label>
-              <Input id="location" value={location} onChange={e => setLocation(e.target.value)} />
-            </div>
-            <div>
-              <Label htmlFor="modality">Modalidade</Label>
-              <Input id="modality" value={modality} onChange={e => setModality(e.target.value)} placeholder="Presencial/Remoto/Híbrido" />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="salaryMin">Salário mínimo</Label>
-              <Input id="salaryMin" type="number" value={salaryMin} onChange={e => setSalaryMin(e.target.value)} />
-            </div>
-            <div>
-              <Label htmlFor="salaryMax">Salário máximo</Label>
-              <Input id="salaryMax" type="number" value={salaryMax} onChange={e => setSalaryMax(e.target.value)} />
-            </div>
-          </div>
-          <div>
-            <Label htmlFor="status">Status</Label>
-            <Dropdown id="status" value={status} onChange={setStatus}
-              options={[
-                { value: 'open', label: 'Aberta', hint: 'Recebe candidaturas' },
-                { value: 'freeze', label: 'Congelada', hint: 'Pausada, sem novas candidaturas' },
-                { value: 'close', label: 'Fechada', hint: 'Encerrada' }
-              ]} />
-          </div>
-          <div className="flex gap-3">
-            <Button type="button" variant="secondary" onClick={() => window.location.href = '/minhas-vagas'}>Cancelar</Button>
-            <Button type="submit" variant="primary" disabled={loading}>{loading ? 'Salvando...' : 'Salvar vaga'}</Button>
-          </div>
-        </form>
+    <RecruiterPageTemplate current="/vagas/nova" onNavigate={guard.navigate} width="wide">
+      <div className="mb-6">
+        <a href="/minhas-vagas" onClick={e => { e.preventDefault(); guard.navigate('/minhas-vagas') }}
+          className="text-sm font-semibold text-primary hover:underline focus:outline-none focus:ring-4 focus:ring-primary/30 rounded">
+          ← Minhas vagas
+        </a>
+        <h1 className="mt-2 text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">Nova vaga</h1>
+        <p className="mt-1 text-base text-slate-600">Preencha os dados e confira à direita como os candidatos verão a vaga.</p>
       </div>
-    </div>
+
+      {loading && (
+        <div className="flex items-center gap-3 py-16 justify-center text-base text-slate-700"><Spinner /> Carregando…</div>
+      )}
+
+      {!loading && loadError && (
+        <div role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-5 space-y-3">
+          <p className="text-base font-semibold text-red-800">{loadError}</p>
+          <Button size="md" variant="secondary" onClick={() => void load()}>Tentar novamente</Button>
+        </div>
+      )}
+
+      {!loading && !loadError && (
+        <div className="space-y-6">
+          {!company && (
+            <section ref={companyRef} aria-labelledby="company-block-title" data-testid="company-block"
+              className={`scroll-mt-24 rounded-2xl border-2 bg-white p-5 md:p-6 shadow-sm ${companyRequired ? 'border-amber-500' : 'border-primary/40'}`}>
+              <p className="text-xs font-bold uppercase tracking-wide text-primary">Passo 1 de 2</p>
+              <h2 id="company-block-title" className="mt-1 text-lg font-bold text-slate-900">Dados da empresa</h2>
+              <p className="mt-1 mb-5 text-sm text-slate-600">
+                {companyRequired
+                  ? 'Para publicar a vaga, salve primeiro os dados da sua empresa. O que você preencheu na vaga continua aqui.'
+                  : 'Antes da primeira vaga, conte qual é a sua empresa. Você só precisa fazer isso uma vez.'}
+              </p>
+              <CompanyForm onSaved={c => { setCompany(c); setCompanyRequired(false) }} />
+            </section>
+          )}
+          {company && (
+            <p className="text-sm text-slate-600" data-testid="company-name">
+              Publicando como <strong className="text-slate-900">{company.company_name}</strong>
+            </p>
+          )}
+          <JobForm
+            initial={EMPTY_JOB_FORM}
+            companyName={company?.company_name}
+            submitLabel="Publicar vaga"
+            onSubmit={submit}
+            onCancel={() => guard.navigate('/minhas-vagas')}
+            onDirtyChange={setDirty}
+            onCompanyRequired={revealCompany}
+          />
+        </div>
+      )}
+      <ConfirmModal {...guard.modal} />
+    </RecruiterPageTemplate>
   )
 }
