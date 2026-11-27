@@ -35,6 +35,9 @@ export interface ResumeAnalysis {
 }
 
 export interface ResumeResponse {
+  id?: string;
   parsed: ParsedResume;
   resume: ResumeAnalysis;
+  /** Canonical profile draft (see types/candidate.ts), merged with the saved profile */
+  profile_draft?: import('./candidate').CandidateProfile;
 }

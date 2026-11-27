@@ -3,6 +3,11 @@
 ## [Unreleased]
 
 ### Added
+- Editor único de perfil (`ProfileEditor` organism + `ProfileField` molecule) acessível 60+: obrigatório/opcional sinalizado, erros por campo com foco, experiências/formação com adicionar/remover, habilidades em chips, UF em lista
+- `/comecar/revisao` e `/meu-perfil` usam o perfil canônico (`types/candidate.ts`, `services/profileApi.ts`, `hooks/useCandidateProfile.ts`) e salvam via `PUT /profiles/me`
+- Upload de PDF guarda o `profile_draft` do backend; wizard manual é convertido por `utils/profileMapping.ts`
+
+### Added
 - Páginas `/privacidade` (Política de Privacidade, LGPD) e `/termos` (Termos de Uso), públicas inclusive para usuários logados
 - `LegalPageTemplate` (template) com sumário navegável, botão Voltar e tipografia 60+
 - `LegalLinks` (molecule) no rodapé da landing e nas páginas legais
